@@ -1,0 +1,10 @@
+bot_Database.db
+spotify_Module/__pycache__/
+libraries/__pycache__/
+__pycache__/
+logs/
+*.py[cod]
+.vscode/
+.VSCodeCounter/
+bot_Keys.json
+test.py
