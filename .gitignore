@@ -8,3 +8,4 @@ logs/
 .VSCodeCounter/
 bot_Keys.json
 test.py
+bot_Database.db
