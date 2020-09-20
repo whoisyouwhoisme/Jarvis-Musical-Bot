@@ -33,6 +33,14 @@ def user_Leaving(chat_id):
 
 
 
+def auth_Complete(chat_id, user_Nickname):
+    """
+    Успешная авторизация
+    """
+    spotify_Bot.send_message(chat_id, f"Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\nSome useful commands: \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot, if you have any questions, you can contact the developer.", parse_mode="Markdown")
+
+
+
 def send_Developer_Contacts(chat_id):
     """
     Отправить контакты разработчика
@@ -90,7 +98,7 @@ def musicQuiz_Rules(chat_id):
     """
     Отправить пользователю правила игры в музыкальную викторину
     """
-    spotify_Bot.send_message(chat_id, "The *Music Quiz* consists of 10 songs from your top tracks for a certain period of time. \n\n*Rules of the game:* \n1. You are given a 30 second segment of a song. \n2. You are given 10 seconds to answer, if you did not answer in time - the answer will be considered incorrect. \n3. You are given four choices, one of which is correct. \n4. Don't cheat! 🤔 \n\nYou can exit the game by entering the command */menu*", parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, "The *Music Quiz* consists of 10 songs from your music library. \n\n*Rules of the game:* \n1. You are given a 30 second segment of a song. \n2. You are given 10 seconds to answer, if you did not answer in time - the answer will be considered incorrect. \n3. You are given four choices, one of which is correct. \n4. Don't cheat! 🤔 \n\nYou can exit the game by entering the command */menu*", parse_mode="Markdown")
 
 
 
@@ -341,14 +349,6 @@ def denied_Work_Reason(chat_id):
     Пока выполняется работа, вы не можете использовать эту функцию
     """
     spotify_Bot.send_message(chat_id, "At the moment, you can not use this function, please wait.", parse_mode="Markdown")
-
-
-
-def auth_Complete(chat_id, user_Nickname):
-    """
-    Успешная авторизация
-    """
-    spotify_Bot.send_message(chat_id, f"Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected!", parse_mode="Markdown")
 
 
 
