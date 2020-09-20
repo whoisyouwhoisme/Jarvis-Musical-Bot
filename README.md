@@ -45,4 +45,17 @@ Authorization practically does not collect any private data, except user nicknam
     $ python auth_Server.py
 
 ## Screenshots
-![Alt text](/Jarvis-Musical-Bot/screenshots/now playing.png?raw=true)
+###### Now Playing
+![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/now%20playing.png?raw=true "Now Playing")
+###### Super Shuffle
+![Super Shuffle](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/super%20shuffle.png?raw=true "Super Shuffle")
+###### Top Artists List
+![Top Artists](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20artists%20display.png?raw=true "Top Artists")
+###### Top Tracks List
+![Top Tracks List](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20tracks%20display.png?raw=true "Top Tracks List")
+###### Top Tracks Playlist
+![Top Tracks Playlist](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20tracks%20playlist.png?raw=true "Top Tracks Playlist")
+###### YouTube Clips
+![YouTube Clips](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/youtube%20clip.png?raw=true "YouTube Clips")
+###### Music Quiz
+![Music Quiz](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/music%20quiz.png?raw=true "Music Quiz")
