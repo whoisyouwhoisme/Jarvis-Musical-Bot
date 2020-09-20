@@ -37,7 +37,7 @@ def auth_Complete(chat_id, user_Nickname):
     """
     Успешная авторизация
     """
-    spotify_Bot.send_message(chat_id, f"Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\nSome useful commands: \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot, if you have any questions, you can contact the developer.", parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, f"Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.", parse_mode="Markdown")
 
 
 
@@ -248,10 +248,10 @@ def musicQuiz_Incorrect_Answer(chat_id, musicQuiz_Round_Stats):
 
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
-    message_Text = f"🔴 *Unfortunately, no!* \n\nThis is: *{right_Answer}* \n\nAnswer Time: *{took_Time_Answer}s*"
+    message_Text = f"🔴 <b>Unfortunately, no!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>"
 
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
-    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="HTML")
 
 
 
@@ -262,10 +262,10 @@ def musicQuiz_Correct_Answer(chat_id, musicQuiz_Round_Stats):
 
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
-    message_Text = f"🟢 *Great!* \n\nThis is: *{right_Answer}* \n\nAnswer Time: *{took_Time_Answer}s*"
+    message_Text = f"🟢 <b>Great!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>"
 
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
-    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="HTML")
 
 
 
@@ -276,10 +276,10 @@ def musicQuiz_Answer_Timeout(chat_id, musicQuiz_Round_Stats):
 
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
-    message_Text = f"🔴 *Unfortunately, the time to answer the question has run out!* \n\nThis is: *{right_Answer}* \n\nAnswer Time: *{took_Time_Answer}s*"
+    message_Text = f"🔴 <b>Unfortunately, the time to answer the question has run out!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>"
 
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
-    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, message_Text, reply_markup=markup, parse_mode="HTML")
 
 
 
