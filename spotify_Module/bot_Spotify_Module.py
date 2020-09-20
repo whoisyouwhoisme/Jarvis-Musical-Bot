@@ -491,12 +491,14 @@ def chat_Messages_Handler(message):
             elif message.text == "Super Shuffle": #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
                 database_Manager.write_User_Position(user_ID, "user_Super_Shuffle")
+                bot_Spotify_Sender.superShuffle_Description(user_ID)
                 bot_Spotify_Sender.shuffle_Tracks_Count(user_ID)
                 logger.info(f"Sending Super Shuffle Selector For User {user_ID}")
 
             elif message.text == "Your Tops": #Пункт топов
                 logger.info(f"User {user_ID} Entered To Your Tops")
                 database_Manager.write_User_Position(user_ID, "user_Your_Tops")
+                bot_Spotify_Sender.yourTops_Description(user_ID)
                 bot_Spotify_Sender.tops_Type_Select(user_ID)
                 logger.info(f"Sending Your Tops Selector For User {user_ID}")
 

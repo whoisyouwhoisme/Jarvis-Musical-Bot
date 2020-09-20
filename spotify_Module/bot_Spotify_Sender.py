@@ -53,6 +53,22 @@ def send_Developer_Contacts(chat_id):
 
 
 
+def superShuffle_Description(chat_id):
+    """
+    Описание функции супер-шаффл
+    """
+    spotify_Bot.send_message(chat_id, "Due to unknown reasons, the shuffle in *Spotify* is sometimes not random. \nThe *Super Shuffle* is designed to fix this. \n\nThe *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. You can delete these playlists and create new ones every day. \n\n*The minimum number of songs in the Liked Songs section should be 100.*", parse_mode="Markdown")
+
+
+
+def yourTops_Description(chat_id):
+    """
+    Описание функции ваши-топы
+    """
+    spotify_Bot.send_message(chat_id, "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nFor the *Top Songs*, I can suggest you create a playlist from these songs.", parse_mode="Markdown")
+
+
+
 def controls_Main_Menu(chat_id):
     """
     Клавиатура основного меню
