@@ -2,24 +2,28 @@
     "keyboard_Buttons": {
 
         "menu_Buttons": {
-            "now_Playing": "Сейчас играет",
-            "player_Controls": "Управление плеером",
+            "now_Playing": "Сейчас Играет",
             "super_Shuffle": "Супер Шаффл",
-            "your_Tops": "Твои Топы",
-            "specials": "Разное",
-            "settings": "Настройки",
-            "create_Playlist": "Создать Плейлист",
-            "add_To_Queue": "Добавить в очередь"
+            "your_Tops": "Ваши Топы",
+            "other": "Остальное",
+            "youtube_Clip": "YouTube Клип",
+            "musicQuiz": "Музыкальная Викторина",
+            "back_To_Menu": "Назад в Меню",
+            "songs": "Песни",
+            "artists": "Исполнители",
+            "liked_Songs": "Любимые Песни",
+            "top_Songs": "Топ Песни",
+            "yes_Create_Playlist": "Да, создать Плейлист",
+            "no_Thanks": "Нет, Спасибо"
         },
 
         "time_Buttons": {
             "4_Weeks": "4 Недели",
             "6_Months": "6 Месяцев",
-            "all_Time": "Все время"
+            "all_Time": "Все Время"
         },
 
         "offset_Size": {
-            "50_Tracks": "50 Песен",
             "100_Tracks": "100 Песен",
             "200_Tracks": "200 Песен",
             "all_Offset": "Все песни"
@@ -27,16 +31,81 @@
     },
 
     "chat_Messages": {
-        "proceed_To_Auth": "Привет, я *Джарвис*, Твой персональный Spotify бот. \n\nПохоже, ты еще не вошел в свой *Spotify* аккаунт. Пожалуйста, авторизуйся. \n\n*Ты можешь отключить бота в любой момент, используя /logout команду.*",
 
-        "get_Astray": "Если ты заблудился, используй команду */menu* чтобы вернуться в главное меню.",
+        "errors": {
+            "cannot_Authorize": "*I cannot authorize you on Spotify.* \n\nMaybe you have blocked the bot in your *Spotify* account, use the /logout command and log in again.",
 
-        "welcome_Message": "Добро пожаловать на борт, *{user_Nickname}!* \n\nТвой *Spotify* аккаунт успешно подключен!",
+            "servers_Link_Error": "Unable to connect to *Spotify* servers. \n\nPerhaps this is *Spotify* server error, and you need to wait.",
+    
+            "unknown_Error": "*Unknown error.* If the error persists, contact the developer via the */contacts* command",
+    
+            "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
 
-        "where_Put_Songs": "Что ты хочешь сделать с этими песнями?",
+            "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
 
-        "playlist_Being_Prepared": "Твой плейлист создается, пожалуйста, подожди.",
+            "now_Playing_Error": "*This song does not contain all the metadata*, so the information cannot be displayed."
+        },
 
-        "playlist_Ready": "Твой плейлист готов, ты можешь найти его по названию *{playlist_Name}*."
+        "notifications": {
+            "nowplaying_Nothing": "At the moment, nothing is playing.",
+
+            "playlist_Preparing": "*Your playlist is being prepared, please wait.* It might take a couple of minutes.",
+
+            "astray_Notification": "If you suddenly get astray, you can use the */menu* command to return to the main menu.",
+    
+            "function_On_Way": "This feature will be available soon, stay tuned."
+        },
+
+        "yourTops": {
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nFor the *Top Songs*, I can suggest you create a playlist from these songs.",
+
+            "top_Songs_Header": "Here's your top songs <b>(Displayed only 10 songs out of 50)</b>:",
+    
+            "top_Songs_Footer": "Do I need to create a playlist? <b>(The playlist will contain 50 songs)</b>",
+    
+            "top_Artists_Header": "Here's your top artists <b>(Displayed only 10 artists out of 50)</b>:"
+        },
+
+        "superShuffle": {
+            "insufficient_Data_For_Shuffle": "*You don't have enough songs for Super Shuffle.* \n\nAdd more songs and this feature will be available (minimum 100 songs)",
+
+            "superShuffle_Description" : "The *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*"
+        },
+
+        "youTube": {
+            "searching_Clip": "*Your clip is being searched*, please wait."
+        },
+
+        "musicQuiz": {
+            "musicQuiz_Preparing": "*Your game session is being prepared*, please wait.",
+
+            "musicQuiz_Incorrect_Answer": "🔴 <b>Unfortunately, no!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>",
+    
+            "musicQuiz_Correct_Answer": "🟢 <b>Great!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>",
+    
+            "musicQuiz_Answer_Timeout": "🔴 <b>Unfortunately, the time to answer the question has run out!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer}s<b>",
+    
+            "musicQuiz_End": "*The quiz is over!* \n\nYour Result Is *{correct_Answers} / {total_Rounds}*",
+    
+            "musicQuiz_Error_NoTracks": "Due to the peculiarities of *Spotify*, could not create a game session.\n\n *Please try again*.",
+    
+            "musicQuiz_Error_RoundProcess": "*Sorry*, Music Quiz has encountered an internal error.\n\n *Try to start a new game*.",
+
+            "musicQuiz_Question": "Listen the song, and select an answer 🤔",
+
+            "insufficient_Data_For_MusicQuiz": "*You don't have enough songs for Music Quiz.* \n\nListen to more songs, and someday you can play a Music Quiz.",
+
+            "musicQuiz_Rules": "The *Music Quiz* consists of 10 songs from your music library. \n\n*Rules of the game:* \n1. You are given a 30 second segment of a song. \n2. You are given 10 seconds to answer, if you did not answer in time - the answer will be considered incorrect. \n3. You are given four choices, one of which is correct. \n4. Don't cheat! 🤔 \n\nYou can exit the game by entering the command */menu*"
+        },
+
+        "authorization": {
+            "spotify_Login_Offer": "Hi, i'm *Jarvis*, Your personal Spotify music bot. \n\nIt seems you are not signed in to your *Spotify* account. Please log in to your account. \n\n*You can disconnect your account at any time using the /logout command.*",
+
+            "user_Leaving": "I'm sorry that you are leaving. 😭 \nIf you have any problems, you can contact us via the /contacts command. \n\n*To completely disable the Jarvis, go to the Spotify website.*",
+    
+            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
+    
+            "developer_Contacts": "Are you having problems? Questions? You found a bug? \n\nThere are 2 ways to contact the developer. *Discord* and *VKontakte*."
+        }
     }
 }
