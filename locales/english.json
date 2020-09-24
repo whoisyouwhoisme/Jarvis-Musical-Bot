@@ -24,9 +24,9 @@
         },
 
         "offset_Size": {
-            "100_Tracks": "100 Tracks",
-            "200_Tracks": "200 Tracks",
-            "all_Offset": "All Tracks"
+            "100_Songs": "100 Songs",
+            "200_Songs": "200 Songs",
+            "all_Offset": "All Songs"
         }
     },
 
@@ -87,7 +87,7 @@
     
             "musicQuiz_End": "*The quiz is over!* \n\nYour Result Is *{correct_Answers} / {total_Rounds}*",
     
-            "musicQuiz_Error_NoTracks": "Due to the peculiarities of *Spotify*, could not create a game session.\n\n *Please try again*.",
+            "musicQuiz_Error_NoSongs": "Due to the peculiarities of *Spotify*, could not create a game session.\n\n *Please try again*.",
     
             "musicQuiz_Error_RoundProcess": "*Sorry*, Music Quiz has encountered an internal error.\n\n *Try to start a new game*.",
 
