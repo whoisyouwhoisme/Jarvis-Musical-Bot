@@ -57,7 +57,7 @@ def superShuffle_Description(chat_id):
     """
     Описание функции супер-шаффл
     """
-    spotify_Bot.send_message(chat_id, "Due to unknown reasons, the shuffle in *Spotify* is sometimes not random. \n\nThe *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*", parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, "The *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*", parse_mode="Markdown")
 
 
 
