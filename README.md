@@ -14,10 +14,11 @@ Authorization practically does not collect any private data, except user nicknam
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
 
 ## To install the bot:
-**1.** Install modules for the bot:
+**1.** Install modules for the bot (Requires Python3+):
 
     $ pip install pyTelegramBotAPI
     $ pip install Flask
+    $ pip install gevent
     $ pip install WSGIserver
     $ pip install google-api-python-client
 
