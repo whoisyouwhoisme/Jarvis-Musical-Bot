@@ -18,6 +18,10 @@ def logout_Command_Handler(message):
 def menu_Command_Handler(message):
     bot_Spotify_Module.menu_Command(message)
 
+@spotify_Bot.message_handler(commands=["language"]) #Слушатель команды Language
+def language_Command_Handler(message):
+    bot_Spotify_Module.language_Command(message)
+
 @spotify_Bot.message_handler(commands=["contacts"]) #Слушатель команды Contacts
 def contacts_Command_Handler(message):
     bot_Spotify_Module.contacts_Command(message)

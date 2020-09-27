@@ -124,6 +124,20 @@ def write_User_Position(user_Telegram_ID, user_Position):
 
 
 
+def write_User_Language(user_Telegram_ID, user_Language):
+    """
+    Записать язык пользователя
+
+    user_Telegram_ID - Telegram ID пользователя
+
+    user_Language - Язык пользователя
+    """
+    query_Arguments = (str(user_Language), int(user_Telegram_ID),)
+    register_Query = "UPDATE bot_Users SET language_Select = ? WHERE telegram_ID = ?"
+    post_Sql_Query(register_Query, query_Arguments)
+
+
+
 def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
     """
     Запись обновленного токена доступа Spotify в базу данных

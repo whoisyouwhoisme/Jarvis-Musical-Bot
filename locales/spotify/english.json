@@ -14,7 +14,13 @@
             "liked_Songs": "Liked Songs",
             "top_Songs": "Top Songs",
             "yes_Create_Playlist": "Yes, Create Playlist",
-            "no_Thanks": "No, Thanks"
+            "no_Thanks": "No, Thanks",
+            "open_On_Spotify": "Open on Spotify"
+        },
+
+        "service_Buttons": {
+            "authorize_Spotify": "Authorize on Spotify",
+            "disable_Jarvis": "Disable Jarvis on Spotify Website"
         },
 
         "time_Buttons": {
@@ -41,8 +47,6 @@
     
             "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
 
-            "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
-
             "now_Playing_Error": "*This song does not contain all the metadata*, so the information cannot be displayed."
         },
 
@@ -51,13 +55,27 @@
 
             "playlist_Preparing": "*Your playlist is being prepared, please wait.* It might take a couple of minutes.",
 
+            "language_Changed": "Language changed successfully.",
+
             "astray_Notification": "If you suddenly get astray, you can use the */menu* command to return to the main menu.",
+
+            "choose_Category": "Choose category",
+
+            "playlist_Ready": "Your playlist is ready!",
+
+            "now_Playing": "Now playing:",
     
             "function_On_Way": "This feature will be available soon, stay tuned."
         },
 
         "yourTops": {
             "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nFor the *Top Songs*, I can suggest you create a playlist from these songs.",
+
+            "select_Top_Time": "Over what period of time?",
+
+            "select_Top_Type": "Which Top do you want to see?",
+
+            "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
 
             "top_Songs_Header": "Here's your top songs <b>(Displayed only 10 songs out of 50)</b>:",
     
@@ -69,6 +87,8 @@
         "superShuffle": {
             "insufficient_Data_For_Shuffle": "*You don't have enough songs for Super Shuffle.* \n\nAdd more songs and this feature will be available (minimum 100 songs)",
 
+            "tracks_Count_Question": "How many songs should I add to the playlist?",
+
             "superShuffle_Description" : "The *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*"
         },
 
@@ -77,13 +97,15 @@
         },
 
         "musicQuiz": {
+            "quiz_Section": "Select a quiz section",
+
             "musicQuiz_Preparing": "*Your game session is being prepared*, please wait.",
 
-            "musicQuiz_Incorrect_Answer": "🔴 <b>Unfortunately, no!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer} seconds<b>",
+            "musicQuiz_Incorrect_Answer": "🔴 <b>Unfortunately, no!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} seconds</b>",
     
-            "musicQuiz_Correct_Answer": "🟢 <b>Great!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer} seconds<b>",
+            "musicQuiz_Correct_Answer": "🟢 <b>Great!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} seconds</b>",
     
-            "musicQuiz_Answer_Timeout": "🔴 <b>Unfortunately, the time to answer the question has run out!<b> \n\nThis is: <b>{right_Answer}<b> \n\nAnswer Time: <b>{took_Time_Answer} seconds<b>",
+            "musicQuiz_Answer_Timeout": "🔴 <b>Unfortunately, the time to answer the question has run out!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} seconds</b>",
     
             "musicQuiz_End": "*The quiz is over!* \n\nYour Result Is *{correct_Answers} / {total_Rounds}*",
     
@@ -99,13 +121,31 @@
         },
 
         "authorization": {
-            "spotify_Login_Offer": "Hi, i'm *Jarvis*, Your personal Spotify music bot. \n\nIt seems you are not signed in to your *Spotify* account. Please log in to your account. \n\n*You can disconnect your account at any time using the /logout command.*",
+            "spotify_Login_Offer": "Hi, i'm *Jarvis*, Your personal Spotify bot. \n\nIt seems you are not signed in to your *Spotify* account. Please log in to your account. \n\n*You can disconnect your account at any time using the /logout command.*",
+
+            "choose_Language": "Choose language \n\n*You can always change language via /language command*",
 
             "user_Leaving": "I'm sorry that you are leaving. 😭 \nIf you have any problems, you can contact us via the /contacts command. \n\n*To completely disable the Jarvis, go to the Spotify website.*",
     
-            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
+            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     
             "developer_Contacts": "Are you having problems? Questions? You found a bug? \n\nThere are 2 ways to contact the developer. *Discord* and *VKontakte*."
+        },
+
+        "metadata": {
+            "playlist_Name": "<b>Name:</b> ",
+
+            "playlist_Description": "<b>Description:</b> ",
+
+            "playlist_Total_Tracks": "<b>Songs:</b> ",
+
+            "player_Artist": "<b>Artist:</b> ",
+
+            "player_Album": "<b>Album:</b> ",
+
+            "player_Song": "<b>Song:</b> ",
+
+            "player_Duration": "<b>Duration:</b> "
         }
     }
 }

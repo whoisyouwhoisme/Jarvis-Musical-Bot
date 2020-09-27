@@ -3,10 +3,10 @@ import json
 import os
 import googleapiclient.discovery
 
-with open("bot_Keys.json") as json_File:
-    bot_Keys_File = json.load(json_File)
+with open("bot_Keys.json") as bot_Keys_File:
+    bot_Keys = json.load(bot_Keys_File)
 
-API_Key = bot_Keys_File["google"]["youTube_Key"]
+API_Key = bot_Keys["google"]["youTube_Key"]
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 api_service_name = "youtube"
