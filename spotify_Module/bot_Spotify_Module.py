@@ -331,7 +331,7 @@ def process_MusicQuiz_Round(user_ID, game_Round):
             if index not in key_Indexes:
                 key_Indexes.append(index)
 
-        for index in range(3): #Добавление 3 случачйных вариантов ответа в клавиатуру
+        for index in range(3): #Добавление 3 случайных вариантов ответа в клавиатуру
             answer_Item = key_Indexes[index]
             musicQuiz_Keyboard_Items.append(musicQuiz_User_Songs[user_ID]["other_Answers"][answer_Item])
 
