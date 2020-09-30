@@ -52,7 +52,7 @@ def search_In_Database(keyword_Search, search_Table, search_Row):
 
 
 
-def register_User(user_Telegram_ID, user_Unique_ID, reg_Timestamp):
+def register_User(user_Telegram_ID, user_Unique_ID, user_Language, reg_Timestamp):
     """
     Регистрация пользователя в базе данных, таблица bot_Users
 
@@ -60,11 +60,13 @@ def register_User(user_Telegram_ID, user_Unique_ID, reg_Timestamp):
 
     user_Unique_ID - Внутренний уникальный ID пользователя
 
+    user_Language - Язык пользователя
+
     reg_Timestamp - Временная метка регистрации пользователя
     """
     if not search_In_Database(user_Unique_ID, "bot_Users", "user_Unique_ID"):
-        query_Arguments = (str(user_Telegram_ID), str(user_Unique_ID), int(reg_Timestamp),)
-        register_Query = "INSERT INTO bot_Users (telegram_ID, user_Unique_ID, reg_Timestamp) VALUES (?, ?, ?)"
+        query_Arguments = (str(user_Telegram_ID), str(user_Unique_ID), str(user_Language), int(reg_Timestamp),)
+        register_Query = "INSERT INTO bot_Users (telegram_ID, user_Unique_ID, language_Select,reg_Timestamp) VALUES (?, ?, ?, ?)"
         post_Sql_Query(register_Query, query_Arguments)
 
 

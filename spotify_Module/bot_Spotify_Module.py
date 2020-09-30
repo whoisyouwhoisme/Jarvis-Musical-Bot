@@ -30,6 +30,7 @@ def get_User_Language(user_ID):
     Получить язык пользователя из базы данных
     """
     search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
+
     user_Language = search_Data[0][2]
 
     if user_Language:
@@ -46,10 +47,15 @@ def get_User_UniqueID(user_ID):
     """
     Получить уникальный ID пользователя из базы данных
     """
-    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-    user_UniqueID = search_Data[0][1]
-    logger.info(f"Get User Unique ID For User {user_ID}")
-    return user_UniqueID
+    try:
+        search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
+        user_UniqueID = search_Data[0][1]
+        logger.info(f"Get User Unique ID For User {user_ID}")
+        return user_UniqueID
+
+    except:
+        logger.error(f"CANNOT Get User Unique ID For User {user_ID}")
+        return None
 
 
 
@@ -118,9 +124,11 @@ def language_Command(message):
     Обработка команды смены языка
     """
     user_ID = message.from_user.id
-    logger.info(f"Sending Language Selector Keyboard For User {user_ID}")
-    bot_Spotify_Sender.language_Selector(user_ID, get_User_Language(user_ID))
-    database_Manager.write_User_Position(user_ID, "language_Select")
+    if check_Spotify_Login(user_ID):
+        user_ID = message.from_user.id
+        logger.info(f"Sending Language Selector Keyboard For User {user_ID}")
+        bot_Spotify_Sender.language_Selector(user_ID, get_User_Language(user_ID))
+        database_Manager.write_User_Position(user_ID, "language_Select")
 
 
 
@@ -477,11 +485,11 @@ def chat_Messages_Handler(message):
     user_ID = message.from_user.id
     logger.info(f"New Message: {message.text} From: {message.from_user.id}")
 
-    if not check_Bot_Reg(user_ID): #Если в базе данных его нет, предлагаем зарегистрироваться
+    if not check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
         reg_Timestamp = int(time.time())
         generated_Unique_ID = database_Manager.generate_Unique_ID()
-        database_Manager.register_User(user_ID, generated_Unique_ID, reg_Timestamp)
+        database_Manager.register_User(user_ID, generated_Unique_ID, "ENG", reg_Timestamp)
 
     if not check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
@@ -553,6 +561,37 @@ def chat_Messages_Handler(message):
                     bot_Spotify_Sender.now_Playing(user_ID, user_Data, language_Name=user_Language)
                     logger.info(f"Sending Now Playing For User {user_ID}")
 
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"]: #Пункт ютуб клипа
+                try:
+                    database_Manager.write_User_Position(user_ID, "work_In_Progress")
+                    bot_Spotify_Sender.search_Clip(user_ID, language_Name=user_Language)
+                    user_Data = spotify_Service.get_Clip_For_Current_Playing(get_User_UniqueID(user_ID))
+
+                except spotify_Exceptions.no_Playback:
+                    bot_Spotify_Sender.nowplaying_Nothing(user_ID, language_Name=user_Language)
+
+                except spotify_Exceptions.no_Data:
+                    bot_Spotify_Sender.now_Playing_Error(user_ID, language_Name=user_Language)
+
+                except spotify_Exceptions.oauth_Http_Error:
+                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+                    logger.error(f"HTTP ERROR OCCURED WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
+
+                except spotify_Exceptions.oauth_Connection_Error:
+                    bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+                    logger.error(f"CONNECTION ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
+
+                except:
+                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+                    logger.error(f"UNKNOWN ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
+
+                else:
+                    bot_Spotify_Sender.clip_Message(user_ID, user_Data, language_Name=user_Language)
+                    logger.info(f"Sending YouTube Clip For User {user_ID}")
+
+                finally:
+                    to_Main_Menu(user_ID)
+
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
                 database_Manager.write_User_Position(user_ID, "user_Super_Shuffle")
@@ -566,12 +605,13 @@ def chat_Messages_Handler(message):
                 bot_Spotify_Sender.yourTops_Description(user_ID, language_Name=user_Language)
                 bot_Spotify_Sender.tops_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Your Tops Selector For User {user_ID}")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["other"]: #Пунк разное
-                logger.info(f"User {user_ID} Entered To Other")
-                database_Manager.write_User_Position(user_ID, "user_Other_Main")
-                bot_Spotify_Sender.other_Menu(user_ID, language_Name=user_Language)
-                logger.info(f"Sending Other For User {user_ID}")
+            
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]: #Пункт музыкальной викторины
+                logger.info(f"User {user_ID} Entered To Music Quiz")
+                database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
+                bot_Spotify_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
+                bot_Spotify_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
+                logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
@@ -675,55 +715,6 @@ def chat_Messages_Handler(message):
                 create_Top_Playlist(user_ID, time_Range="long_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
-                to_Main_Menu(user_ID)
-
-            else:
-                bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
-
-
-        #ПУНКТ ОСТАЛЬНОГО
-
-
-        if user_Position_Cache == "user_Other_Main":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"]:
-                try:
-                    database_Manager.write_User_Position(user_ID, "work_In_Progress")
-                    bot_Spotify_Sender.search_Clip(user_ID, language_Name=user_Language)
-                    user_Data = spotify_Service.get_Clip_For_Current_Playing(get_User_UniqueID(user_ID))
-
-                except spotify_Exceptions.no_Playback:
-                    bot_Spotify_Sender.nowplaying_Nothing(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.no_Data:
-                    bot_Spotify_Sender.now_Playing_Error(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.oauth_Http_Error:
-                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
-                    logger.error(f"HTTP ERROR OCCURED WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                except spotify_Exceptions.oauth_Connection_Error:
-                    bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"CONNECTION ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                except:
-                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"UNKNOWN ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                else:
-                    bot_Spotify_Sender.clip_Message(user_ID, user_Data, language_Name=user_Language)
-                    logger.info(f"Sending YouTube Clip For User {user_ID}")
-
-                finally:
-                    to_Main_Menu(user_ID)
-            
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]:
-                logger.info(f"User {user_ID} Entered To Music Quiz")
-                database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
-                bot_Spotify_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
-                bot_Spotify_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
-                logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
                 to_Main_Menu(user_ID)
 
             else:
