@@ -735,6 +735,9 @@ def chat_Messages_Handler(message):
                 database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Time")
                 bot_Spotify_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
 
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
+                to_Main_Menu(user_ID)
+
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
