@@ -9,7 +9,7 @@ flask_App = flask.Flask(__name__)
 
 
 
-@flask_App.route('/spotify')
+@flask_App.route("/spotify")
 def spotify_Auth():
     try:
         auth_State = flask.request.args["state"]
