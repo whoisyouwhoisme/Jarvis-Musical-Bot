@@ -1,4 +1,3 @@
-import json
 import math
 import time
 import random
@@ -39,6 +38,13 @@ def get_Current_Playing(user_Unique_ID):
 
     try:
         playback_Data = {"artists":[]}
+
+        playback_Data["device_Info"] = {
+            "device_ID":user_Playback["device"]["id"],
+            "device_Name":user_Playback["device"]["name"],
+            "device_Type":user_Playback["device"]["type"]
+        }
+
         for artist in range(len(user_Playback["item"]["artists"])):
             playback_Data["artists"] += [user_Playback["item"]["artists"][artist]["name"]]
 
@@ -53,6 +59,31 @@ def get_Current_Playing(user_Unique_ID):
     
     else:
         return playback_Data
+
+
+
+def start_Playback(user_Unique_ID, playback_Context):
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
+
+    if user_Devices["devices"]: #Проверка наличия активного устройства
+        latest_User_Device = user_Devices["devices"][0]["id"]
+    else:
+        raise spotify_Exceptions.no_ActiveDevices
+
+    try:
+        spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Context)
+
+    except spotify_Exceptions.oauth_Http_Error as error:
+        if error.http_Code == 404:
+            raise spotify_Exceptions.no_ActiveDevices
+        
+        elif error.http_Code == 403:
+            raise spotify_Exceptions.premium_Required
+
+    else:
+        return True
 
 
 
@@ -103,6 +134,7 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
     playlist_Data["name"] = playlist_Info["name"]
     playlist_Data["description"] = playlist_Info["description"]
     playlist_Data["external_URL"] = playlist_Info["external_urls"]["spotify"]
+    playlist_Data["playlist_ID"] = "spotify:playlist:" + playlist_Info["id"]
     playlist_Data["total_Tracks"] = playlist_Info["tracks"]["total"]
     playlist_Data["image_URL"] = playlist_Info["images"][1]["url"]
 

@@ -12,13 +12,17 @@ class oauth_Http_Error(oauth_Exception):
     """
     Ошибка HTTP
     """
-    pass
+    def __init__(self, http_Code, http_Reason):
+        self.http_Code = http_Code
+        self.http_Reason = http_Reason
 
 class oauth_Unknown_Error(oauth_Exception):
     """
     Неизвестная ошибка
     """
     pass
+
+
 
 #SPOTIFY ERRORS
 class spotify_Exception(Exception):
@@ -60,6 +64,26 @@ class musicQuiz_Error_RoundProcess(spotify_Exception):
     """
     pass
 
+class premium_Required(spotify_Exception):
+    """
+    Требуется Premium подписка
+    """
+    pass
+
+class no_ActiveDevices(spotify_Exception):
+    """
+    Нет активных устройств
+    """
+    pass
+
+class playback_Error(spotify_Exception):
+    """
+    Нерабочие медиа-данные для запуска воспроизведения
+    """
+    pass
+
+
+
 #YOUTUBE ERRORS
 class youtube_Exception(Exception):
     pass
@@ -87,6 +111,8 @@ class youtube_Unknown_Error(Exception):
     Неизвестная ошибка
     """
     pass
+
+
 
 #HTTP ERRORS
 class http_Exception(Exception):

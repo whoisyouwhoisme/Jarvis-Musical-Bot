@@ -9,6 +9,9 @@ with open("bot_Keys.json") as json_File:
 spotify_Bot = telebot.TeleBot(bot_Keys_File["telegram"]["telegram_Key"])
 
 
+@spotify_Bot.callback_query_handler(func=lambda call: True) #Слушатель callback кнопок
+def get_Callback_Data(callback_Data):
+    bot_Spotify_Module.callback_Handler(callback_Data)
 
 @spotify_Bot.message_handler(commands=["logout"]) #Слушатель команды Logout
 def logout_Command_Handler(message):

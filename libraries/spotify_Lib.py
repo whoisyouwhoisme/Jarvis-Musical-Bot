@@ -21,7 +21,7 @@ def return_Request_Headers(auth_Token):
 
 def get_Request(request_Link, headers, data=None):
     """
-    Функция выполняет get запрос, в случае успеха возвращает ответ
+    Функция выполняет GET запрос, в случае успеха возвращает ответ
 
     В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
     """
@@ -33,7 +33,31 @@ def get_Request(request_Link, headers, data=None):
         raise spotify_Exceptions.oauth_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
+
+    except:
+        raise spotify_Exceptions.oauth_Unknown_Error
+
+    else:
+        return response
+
+
+
+def put_Request(request_Link, headers, data=None):
+    """
+    Функция выполняет PUT запрос, в случае успеха возвращает ответ
+
+    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    """
+    try:
+        response = requests.put(request_Link, headers=headers, data=data, timeout=(3, 5))
+        response.raise_for_status()
+
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
+        raise spotify_Exceptions.oauth_Connection_Error
+
+    except requests.exceptions.HTTPError:
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
 
     except:
         raise spotify_Exceptions.oauth_Unknown_Error
@@ -45,7 +69,7 @@ def get_Request(request_Link, headers, data=None):
 
 def post_Request(request_Link, headers, data=None):
     """
-    Функция выполняет post запрос, в случае успеха возвращает ответ
+    Функция выполняет POST запрос, в случае успеха возвращает ответ
 
     В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
     """
@@ -57,7 +81,7 @@ def post_Request(request_Link, headers, data=None):
         raise spotify_Exceptions.oauth_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
 
     except:
         raise spotify_Exceptions.oauth_Unknown_Error
@@ -192,6 +216,45 @@ def get_Playlist_Info(auth_Token, playlist_ID):
     """
     request_Headers = return_Request_Headers(auth_Token)
 
-    response = get_Request(f"https://api.spotify.com/v1/playlists/{playlist_ID}?fields=description%2Cname%2Cimages%2Cexternal_urls%2Ctracks(total)", headers=request_Headers)
+    response = get_Request(f"https://api.spotify.com/v1/playlists/{playlist_ID}?fields=description%2Cname%2Cid%2Cimages%2Cexternal_urls%2Ctracks(total)", headers=request_Headers)
 
     return response.json()
+
+
+
+def get_User_Devices(auth_Token):
+    """ 
+    Получить информацию о доступных устройствах пользователя, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/me/player/devices", headers=request_Headers)
+
+    return response.json()
+
+
+
+def start_Playback(auth_Token, device_ID, playback_Context):
+    """
+    Запустить новое проигрывание.
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    device_ID - ID устройства пользователя
+
+    playback_Context - Что требуется проигрывать (например spotify:playlist:0soXLPoBV9LGgpwCZOvVi5)
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+    request_Data = json.dumps({
+        "context_uri":playback_Context,
+    })
+
+    response = put_Request("https://api.spotify.com/v1/me/player/play", headers=request_Headers, data=request_Data)
+
+    return response

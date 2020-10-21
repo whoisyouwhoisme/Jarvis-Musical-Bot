@@ -481,6 +481,35 @@ logger.info("Spotify Module Ready")
 
 
 
+def callback_Handler(callback_Data):
+    user_ID = callback_Data.message.chat.id
+    logger.info(f"New Callback Data: {callback_Data.data} From: {callback_Data.message.chat.id}")
+
+    if check_Spotify_Login(user_ID):
+        user_Language = get_User_Language(user_ID) #Записать в словарь язык пользователя
+        callback_Request = callback_Data.data.split("???") #Парсим строку
+
+        if callback_Request[0] == "player":
+            if callback_Request[1] == "play":
+                try:
+                    spotify_Service.start_Playback(get_User_UniqueID(user_ID), callback_Request[2])
+                    
+                    bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
+
+                except spotify_Exceptions.no_ActiveDevices:
+                    bot_Spotify_Sender.no_ActiveDevices(user_ID, user_Language)
+
+                except spotify_Exceptions.premium_Required:
+                    bot_Spotify_Sender.premium_Required(user_ID, language_Name=user_Language)
+
+                except spotify_Exceptions.playback_Error:
+                    bot_Spotify_Sender.playback_Error(user_ID, language_Name=user_Language)
+
+                except:
+                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+
+
+
 def chat_Messages_Handler(message):
     user_ID = message.from_user.id
     logger.info(f"New Message: {message.text} From: {message.from_user.id}")

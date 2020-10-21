@@ -227,6 +227,39 @@ def insufficient_Data_For_Top(chat_id, language_Name):
 
 
 
+def no_ActiveDevices(chat_id, language_Name):
+    """
+    Нет активных устройств для начала воспроизведения
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_NoDevice"], parse_mode="Markdown")
+
+
+
+def premium_Required(chat_id, language_Name):
+    """
+    Для начала воспроизведения требуется премиум-подписка
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_PremiumRequired"], parse_mode="Markdown")
+
+
+
+def playback_Error(chat_id, language_Name):
+    """
+    Невозможно начать воспроизведение
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_RequestError"], parse_mode="Markdown")
+
+
+
+def playback_Started(chat_id, language_Name):
+    """
+    Воспроизведение началось
+    """
+    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playback_Started"]
+    spotify_Bot.send_message(chat_id, playback_Text, parse_mode="Markdown")
+
+
+
 def now_Playing_Error(chat_id, language_Name):
     """
     Недостаточно метаданных для отображения
@@ -402,8 +435,13 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     Плейлист готов
     """
     playlist_Keyboard = telebot.types.InlineKeyboardMarkup()
-    playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
-    playlist_Keyboard.add(playlist_Button)
+
+    play_Playlist_Data = "player???play???" + playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
+
+    play_Playlist = telebot.types.InlineKeyboardButton(text="Play on Spotify", callback_data=play_Playlist_Data)
+    open_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
+    playlist_Keyboard.add(play_Playlist)
+    playlist_Keyboard.add(open_Playlist)
 
     ready_Data = {}
     ready_Data["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Name"] + playlist_Data["name"] + "\n"

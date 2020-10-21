@@ -46,7 +46,13 @@
     
             "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
 
-            "now_Playing_Error": "*This song does not contain all the metadata*, so the information cannot be displayed."
+            "now_Playing_Error": "*This song does not contain all the metadata*, so the information cannot be displayed.",
+
+            "start_Playing_NoDevice": "*Unable to start playback.* No active devices.",
+
+            "start_Playing_PremiumRequired": "*Unable to start playback.* Spotify Premium subscription is required.",
+
+            "start_Playing_RequestError": "*Unable to start playback.* Unable to process media-request."
         },
 
         "notifications": {
@@ -63,6 +69,8 @@
             "playlist_Ready": "Your playlist is ready!",
 
             "now_Playing": "Now playing:",
+
+            "playback_Started": "*Playback has started.*",
     
             "function_On_Way": "This feature will be available soon, stay tuned."
         },
@@ -144,7 +152,9 @@
 
             "player_Song": "<b>Song:</b> ",
 
-            "player_Duration": "<b>Duration:</b> "
+            "player_Duration": "<b>Duration:</b> ",
+
+            "player_Device": "<b>Device:</b> "
         }
     }
 }
