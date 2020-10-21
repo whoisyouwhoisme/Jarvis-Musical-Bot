@@ -14,7 +14,8 @@
             "top_Songs": "Top Songs",
             "yes_Create_Playlist": "Yes, Create Playlist",
             "no_Thanks": "No, Thanks",
-            "open_On_Spotify": "Open on Spotify"
+            "open_On_Spotify": "Open on Spotify",
+            "play_On_Spotify": "Play on Spotify"
         },
 
         "service_Buttons": {

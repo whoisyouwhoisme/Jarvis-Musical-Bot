@@ -438,7 +438,7 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
 
     play_Playlist_Data = "player???play???" + playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
 
-    play_Playlist = telebot.types.InlineKeyboardButton(text="Play on Spotify", callback_data=play_Playlist_Data)
+    play_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=play_Playlist_Data)
     open_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
     playlist_Keyboard.add(play_Playlist)
     playlist_Keyboard.add(open_Playlist)

@@ -14,7 +14,8 @@
             "top_Songs": "Топ песни",
             "yes_Create_Playlist": "Да, создать плейлист",
             "no_Thanks": "Нет, спасибо",
-            "open_On_Spotify": "Открыть в Spotify"
+            "open_On_Spotify": "Открыть в Spotify",
+            "play_On_Spotify": "Играть в Spotify"
         },
 
         "service_Buttons": {
