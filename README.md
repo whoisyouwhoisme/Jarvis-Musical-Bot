@@ -12,6 +12,7 @@ Authorization practically does not collect any private data, except user nicknam
 - Your Tops. Displays the tops of songs / artists for a certain period of time. You can create a playlist from tops of top songs.
 - YouTube Clip. Search for a clip for the song currently playing. Just one button press.
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
+- Multi-Language. Support English and Russian languages.
 
 ## To install the bot:
 **1.** Install modules for the bot (Requires Python 3+):
@@ -46,6 +47,10 @@ Authorization practically does not collect any private data, except user nicknam
     $ python auth_Server.py
 
 ## Screenshots
+###### Authorization
+![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
+###### Language changing
+![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
 ###### Now Playing
 ![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/now%20playing.png?raw=true "Now Playing")
 ###### Super Shuffle
