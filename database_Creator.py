@@ -7,6 +7,7 @@ database_Cursor.execute("""CREATE TABLE bot_Users
                         (telegram_ID TEXT,
                         user_Unique_ID TEXT,
                         language_Select TEXT,
+                        bot_Version REAL,
                         user_Position TEXT,
                         reg_Timestamp INTEGER)
                         """)
@@ -19,6 +20,18 @@ database_Cursor.execute("""CREATE TABLE spotify_Users
                         spotify_Auth_Token TEXT,
                         spotify_Refresh_Token TEXT,
                         auth_Timestamp INTEGER,
+                        refresh_Timestamp INTEGER)
+                        """)
+
+database_Cursor.execute("""CREATE TABLE users_TopTracks
+                        (user_Unique_ID TEXT,
+                        topTracks_Data TEXT,
+                        refresh_Timestamp INTEGER)
+                        """)
+
+database_Cursor.execute("""CREATE TABLE users_TopArtists
+                        (user_Unique_ID TEXT,
+                        topArtists TEXT,
                         refresh_Timestamp INTEGER)
                         """)
 
