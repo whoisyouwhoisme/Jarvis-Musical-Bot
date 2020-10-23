@@ -239,12 +239,13 @@ def process_TopTracks_List(user_ID, list_Page):
         "items":{},
     }
 
-    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
+    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ! 
     for item in range(start_Index, stop_Index):
-        current_Page["items"][item] = {
-            "artists":top_Data["items"][item]["artists"],
-            "name":top_Data["items"][item]["name"]
-        }
+        if item < len(top_Data["items"]):
+            current_Page["items"][item] = {
+                "artists":top_Data["items"][item]["artists"],
+                "name":top_Data["items"][item]["name"]
+            }
 
     return current_Page
 
@@ -264,10 +265,11 @@ def process_TopArtists_List(user_ID, list_Page):
 
     start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
     for item in range(start_Index, stop_Index):
-        current_Page["items"][item] = {
-            "artist":top_Data["items"][item]["artist"],
-            "followers":top_Data["items"][item]["followers"]
-        }
+        if item < len(top_Data["items"]):
+            current_Page["items"][item] = {
+                "artist":top_Data["items"][item]["artist"],
+                "followers":top_Data["items"][item]["followers"]
+            }
 
     return current_Page
 
