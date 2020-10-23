@@ -197,9 +197,10 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
 
     for top_Item in top_Data["items"]: #Подготавливаем список песен
+        prefix = top_Data["items"][top_Item]["prefix"]
         artists = top_Data["items"][top_Item]["artists"]
         name = top_Data["items"][top_Item]["name"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} \n\n"
+        chat_Top_Data[top_Item] = f"<b>{prefix}{top_Item + 1}.</b> {artists} - {name} \n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
     if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
@@ -467,11 +468,11 @@ def function_On_Way(chat_id, language_Name):
 
 
 
-def jarvis_Updated(chat_id, language_Name):
+def jarvis_Updated(chat_id, language_Name, jarvis_Version):
     """
     Джарвис был обновлен
     """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["jarvis_Updated"], parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["jarvis_Updated"].format(jarvis_Version=jarvis_Version), parse_mode="Markdown")
 
 
 

@@ -239,10 +239,11 @@ def process_TopTracks_List(user_ID, list_Page):
         "items":{},
     }
 
-    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ! 
+    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
     for item in range(start_Index, stop_Index):
         if item < len(top_Data["items"]):
             current_Page["items"][item] = {
+                "prefix":top_Data["items"][item]["prefix"],
                 "artists":top_Data["items"][item]["artists"],
                 "name":top_Data["items"][item]["name"]
             }
@@ -640,7 +641,7 @@ def chat_Messages_Handler(message):
 
         if get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
             to_Main_Menu(user_ID)
-            bot_Spotify_Sender.jarvis_Updated(user_ID, language_Name=user_Language)
+            bot_Spotify_Sender.jarvis_Updated(user_ID, language_Name=user_Language, jarvis_Version=bot_Version)
             database_Manager.write_User_BotVersion(user_ID, bot_Version)
 
 
