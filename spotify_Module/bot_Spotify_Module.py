@@ -445,9 +445,7 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
     """
     try:
         database_Manager.write_User_Position(user_ID, "work_In_Progress")
-        user_Unique_ID = get_User_UniqueID(user_ID)
-        spotify_Service.check_User_Tops(user_Unique_ID, "tracks", time_Range)
-        musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range)
+        musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(get_User_UniqueID(user_ID), time_Range)
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -484,7 +482,7 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
             "total_Rounds":10,
         }
         database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, user_Language, 0)
+        process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
 
 
 
@@ -535,7 +533,7 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
             "total_Rounds":10,
         }
         database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, user_Language, 0)
+        process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
 
 
 

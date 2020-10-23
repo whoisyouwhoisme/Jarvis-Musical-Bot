@@ -175,29 +175,6 @@ def check_User_Liked_Songs(user_Unique_ID, minimum_Count):
 
 
 
-def check_User_Tops(user_Unique_ID, top_Type, time_Range):
-    """
-    Проверяет есть ли у пользователя полностью заполненный набор топа, в случае успеха возвращает True
-
-    В случае ошибки возвращает исключение no_Tops_Data (топ не полный)
-
-    user_Unique_ID - Внутренний уникальный ID пользователя
-
-    top_Type - Тип топа (tracks, artists)
-
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
-    """
-    check_Token_Lifetime(user_Unique_ID)
-    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, top_Type, 50, 0, time_Range)
-
-    if user_Top["total"] >= 50:
-        return True
-    else:
-        raise spotify_Exceptions.no_Tops_Data
-
-
-
 def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range="short_term"):
     """
     Получить список топ треков пользователя
@@ -328,6 +305,9 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "tracks", 50, 0, time_Range)
+
+    if not user_Top["total"] >= 50: #Проверка на наличие хотя бы одного элемента
+        raise spotify_Exceptions.no_Tops_Data
 
     top_Tracks = []
     for item in range(50): #Привести все элементы в человеческий вид
