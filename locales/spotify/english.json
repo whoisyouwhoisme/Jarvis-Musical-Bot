@@ -43,23 +43,23 @@
 
             "servers_Link_Error": "Unable to connect to *Spotify* servers. \n\nPerhaps this is *Spotify* server error, and you need to wait.",
     
-            "unknown_Error": "*Unknown error.* If the error persists, contact the developer via the */contacts* command",
+            "unknown_Error": "*Unknown error.* \n\nIf the error persists, contact the developer via the */contacts* command",
     
             "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
 
-            "now_Playing_Error": "*This song does not contain all the metadata*, so the information cannot be displayed.",
+            "now_Playing_Error": "*This song does not contain all the metadata* \n\nThe information cannot be displayed.",
 
-            "start_Playing_NoDevice": "*Unable to start playback.* No active devices.",
+            "start_Playing_NoDevice": "*Unable to start playback.* \n\nNo active devices.",
 
-            "start_Playing_PremiumRequired": "*Unable to start playback.* Spotify Premium subscription is required.",
+            "start_Playing_PremiumRequired": "*Unable to start playback.* \n\nSpotify Premium subscription is required.",
 
-            "start_Playing_RequestError": "*Unable to start playback.* Unable to process media-request."
+            "start_Playing_RequestError": "*Unable to start playback.* \n\nUnable to process media-request."
         },
 
         "notifications": {
             "nowplaying_Nothing": "At the moment, nothing is playing.",
 
-            "playlist_Preparing": "*Your playlist is being prepared, please wait.* It might take a couple of minutes.",
+            "playlist_Preparing": "*Your playlist is being prepared, please wait.* \n\nIt might take a couple of minutes.",
 
             "language_Changed": "Language changed successfully.",
 
