@@ -47,7 +47,7 @@
     
             "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
 
-            "now_Playing_Error": "*This song does not contain all the metadata* \n\nThe information cannot be displayed.",
+            "now_Playing_Error": "*This song does not contain all the metadata.* \n\nThe information cannot be displayed.",
 
             "start_Playing_NoDevice": "*Unable to start playback.* \n\nNo active devices.",
 
