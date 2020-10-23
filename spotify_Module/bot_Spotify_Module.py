@@ -252,6 +252,11 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
+    except:
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
+        logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
+        to_Main_Menu(user_ID)
+
     else:
         database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
         bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=language_Name)
@@ -321,6 +326,10 @@ def create_Top_Playlist(user_ID, language_Name):
     except spotify_Exceptions.oauth_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
+
+    except:
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
+        logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
