@@ -174,22 +174,19 @@ def tracks_Top(chat_id, top_Data, language_Name):
     """
     Вывод топа песен пользователя
     """
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"])
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data="interface???playlist???create???topTracksPlaylist")
+    keyboard.add(create_Playlist_Button)
 
     chat_Top_Data = {}
-    chat_Top_Data["header"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"] + "\n\n"
-    chat_Top_Data["footer"] = "\n" + language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Footer"]
-
-    chat_Top_Data["top_Summary"] = chat_Top_Data["header"]
+    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"] + "\n\n"
 
     for top_Item in range(10):
-        artists = top_Data[top_Item]["artists"]
-        name = top_Data[top_Item]["name"]
+        artists = top_Data["items"][top_Item]["artists"]
+        name = top_Data["items"][top_Item]["name"]
         chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} \n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
-    chat_Top_Data["top_Summary"] += chat_Top_Data["footer"]
     spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
 
 
@@ -202,8 +199,8 @@ def artists_Top(chat_id, top_Data, language_Name):
     chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"] + "\n\n"
 
     for top_Item in range(10):
-        name = top_Data[top_Item]["name"]
-        followers = top_Data[top_Item]["followers"]
+        name = top_Data["items"][top_Item]["name"]
+        followers = top_Data["items"][top_Item]["followers"]
         chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {name} - {followers} Followers \n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
@@ -413,12 +410,16 @@ def denied_Work_Reason(chat_id, language_Name):
 
 
 
-def playlist_Preparing(chat_id, language_Name):
+def playlist_Preparing(chat_id, language_Name, hide_Keyboard=True):
     """
     Плейлист готовится
     """
-    markup = telebot.types.ReplyKeyboardRemove(selective=False)
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Preparing"], reply_markup=markup, parse_mode="Markdown")
+    if hide_Keyboard:
+        markup = telebot.types.ReplyKeyboardRemove(selective=False)
+        spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Preparing"], reply_markup=markup, parse_mode="Markdown")
+
+    else:
+        spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Preparing"], parse_mode="Markdown")        
 
 
 
@@ -442,14 +443,14 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     """
     Плейлист готов
     """
-    playlist_Keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard = telebot.types.InlineKeyboardMarkup()
 
     play_Playlist_Data = "player???play???" + playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
 
     play_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=play_Playlist_Data)
     open_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
-    playlist_Keyboard.add(play_Playlist)
-    playlist_Keyboard.add(open_Playlist)
+    keyboard.add(play_Playlist)
+    keyboard.add(open_Playlist)
 
     ready_Data = {}
     ready_Data["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Name"] + playlist_Data["name"] + "\n"
@@ -460,7 +461,7 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     ready_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Ready"] + "\n\n" + ready_Data["playlist_Summary"]
     playlist_Cover = urllib.request.urlopen(playlist_Data["image_URL"]).read()
 
-    spotify_Bot.send_photo(chat_id, playlist_Cover, caption=ready_Text, reply_markup=playlist_Keyboard, parse_mode="HTML")
+    spotify_Bot.send_photo(chat_id, playlist_Cover, caption=ready_Text, reply_markup=keyboard, parse_mode="HTML")
 
 
 

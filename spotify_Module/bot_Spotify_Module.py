@@ -252,15 +252,13 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
-    except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
-        logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
-        to_Main_Menu(user_ID)
-
     else:
         database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
         bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
+
+    finally:
+        to_Main_Menu(user_ID)
 
 
 
@@ -295,13 +293,13 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
         database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
         bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
-    
+
     finally:
         to_Main_Menu(user_ID)
 
 
 
-def create_Top_Playlist(user_ID, language_Name, time_Range):
+def create_Top_Playlist(user_ID, language_Name):
     """
     Создать плейлист из топ треков для пользователя
 
@@ -312,7 +310,7 @@ def create_Top_Playlist(user_ID, language_Name, time_Range):
     try:
         in_Work(user_ID)
         user_Unique_ID = get_User_UniqueID(user_ID)
-        playlist_ID = spotify_Service.create_Top_Tracks_Playlist(user_Unique_ID, time_Range=time_Range)
+        playlist_ID = spotify_Service.create_Top_Tracks_Playlist(user_Unique_ID)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         logger.info(f"Creating Top Tracks Playlist For User {user_ID}")
 
@@ -323,10 +321,6 @@ def create_Top_Playlist(user_ID, language_Name, time_Range):
     except spotify_Exceptions.oauth_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
-
-    except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
-        logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
@@ -523,6 +517,12 @@ def callback_Handler(callback_Data):
 
                 except:
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        
+        elif callback_Request[0] == "interface":
+            if callback_Request[1] == "playlist":
+                if callback_Request[2] == "create":
+                    if callback_Request[3] == "topTracksPlaylist":
+                        create_Top_Playlist(user_ID, language_Name=user_Language)
 
 
 
@@ -710,15 +710,12 @@ def chat_Messages_Handler(message):
 
         if user_Position_Cache == "user_Top_Tracks_Time":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
-                database_Manager.write_User_Position(user_ID, "user_Top_Tracks_4Weeks")
                 user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="short_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
-                database_Manager.write_User_Position(user_ID, "user_Top_Tracks_6Months")
                 user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="medium_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
-                database_Manager.write_User_Position(user_ID, "user_Top_Tracks_AllTime")
                 user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
             else:
@@ -735,38 +732,6 @@ def chat_Messages_Handler(message):
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
                 user_Top_Artists(user_ID, language_Name=user_Language, time_Range="long_term")
-
-            else:
-                bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
-
-
-
-        if user_Position_Cache == "user_Top_Tracks_4Weeks":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="short_term")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
-                to_Main_Menu(user_ID)
-            
-            else:
-                bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
-
-        elif user_Position_Cache == "user_Top_Tracks_6Months":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="medium_term")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
-                to_Main_Menu(user_ID)
-
-            else:
-                bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
-
-        elif user_Position_Cache == "user_Top_Tracks_AllTime":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="long_term")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
-                to_Main_Menu(user_ID)
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
