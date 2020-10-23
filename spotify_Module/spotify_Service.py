@@ -213,6 +213,9 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "tracks", entities_Limit, offset, time_Range)
 
+    if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
+        raise spotify_Exceptions.no_Tops_Data
+
     current_Timestamp = int(time.time())
 
     top_Tracks = {
@@ -250,6 +253,9 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "artists", entities_Limit, offset, time_Range)
+
+    if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
+        raise spotify_Exceptions.no_Tops_Data
 
     current_Timestamp = int(time.time())
 

@@ -1,4 +1,5 @@
 import time
+import json
 import random
 from spotify_Module import localization
 from spotify_Module import bot_Spotify_Sender
@@ -232,7 +233,7 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        top_Data = spotify_Service.get_User_Top_Tracks(get_User_UniqueID(user_ID), entities_Limit=10, time_Range=time_Range)
+        top_Data = spotify_Service.get_User_Top_Tracks(get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
         logger.info(f"Get User Top Tracks For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -255,6 +256,7 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
         to_Main_Menu(user_ID)
 
     else:
+        database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
         bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
 
@@ -269,7 +271,7 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        top_Data = spotify_Service.get_User_Top_Artists(get_User_UniqueID(user_ID), entities_Limit=10, time_Range=time_Range)
+        top_Data = spotify_Service.get_User_Top_Artists(get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
         logger.info(f"Get User Top Artists For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -288,6 +290,7 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     else:
+        database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
         bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
     
@@ -668,10 +671,10 @@ def chat_Messages_Handler(message):
 
         if user_Position_Cache == "user_Super_Shuffle":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["offset_Size"]["100_Songs"]:
-                create_Super_Shuffle(user_ID, 100)
+                create_Super_Shuffle(user_ID, language_Name=user_Language, tracks_Count=100)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["offset_Size"]["200_Songs"]:
-                create_Super_Shuffle(user_ID, 200)
+                create_Super_Shuffle(user_ID, language_Name=user_Language, tracks_Count=200)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["offset_Size"]["all_Offset"]:
                 create_Super_Shuffle(user_ID, language_Name=user_Language)
