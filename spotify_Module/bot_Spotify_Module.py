@@ -133,6 +133,8 @@ def logout_Command(message):
         
         database_Manager.delete_User(user_Unique_ID, "bot_Users")
         database_Manager.delete_User(user_Unique_ID, "spotify_Users")
+        database_Manager.delete_User(user_Unique_ID, "users_TopTracks")
+        database_Manager.delete_User(user_Unique_ID, "users_TopArtists")
 
         logger.info(f"Logout Successful For User {user_ID}")
         bot_Spotify_Sender.user_Leaving(message.from_user.id, language_Name=user_Language)
