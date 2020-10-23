@@ -63,6 +63,17 @@ def get_Current_Playing(user_Unique_ID):
 
 
 def start_Playback(user_Unique_ID, playback_Context):
+    """
+    Начинает воспроизведение контента, в случае успеха возвращает True
+
+    В случае ошибки возвращает исключения:
+    no_ActiveDevices - Нет активных устройств
+    premium_Required - Требуется премиум-подписка
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    playback_Context - Контекст для проигрывания (плейлист, исполнитель)
+    """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
