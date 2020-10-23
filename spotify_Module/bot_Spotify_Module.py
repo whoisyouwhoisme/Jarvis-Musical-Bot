@@ -240,22 +240,18 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
 
     except spotify_Exceptions.no_Tops_Data:
         bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=language_Name)
-        to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
-        to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
-        to_Main_Menu(user_ID)
 
     except:
         bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
-        to_Main_Menu(user_ID)
 
     else:
         database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
