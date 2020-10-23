@@ -90,7 +90,7 @@
 
             "top_Songs_Header": "Here's your top songs <b>(Page {previous_Page} of {next_Page})</b>:",
     
-            "top_Artists_Header": "Here's your top artists <b>(Displayed only 10 artists out of 50)</b>:"
+            "top_Artists_Header": "Here's your top artists <b>(Page {previous_Page} of {next_Page})</b>:"
         },
 
         "superShuffle": {

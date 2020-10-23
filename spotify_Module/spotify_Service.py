@@ -275,7 +275,7 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
     for artist in range(entities_Limit):
         top_Artists["items"].append(
             {
-                "name":user_Top["items"][artist]["name"],
+                "artist":user_Top["items"][artist]["name"],
                 "followers":user_Top["items"][artist]["followers"]["total"],
                 "URI":user_Top["items"][artist]["uri"],
             }

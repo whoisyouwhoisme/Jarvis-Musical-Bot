@@ -177,12 +177,12 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???playlist???page???{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topTracks???page???{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???playlist???page???{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topTracks???page???{next_Page}")
 
-    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data="interface???playlist???create???topTracksPlaylist")
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data="interface???topTracks???createPlaylist")
 
     keyboard.add(create_Playlist_Button) #Кнопка создания плейлиста
 
@@ -209,20 +209,38 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
 
 
 
-def artists_Top(chat_id, top_Data, language_Name):
+def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     """
     Вывод топа исполнителей пользователя
     """
-    chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"] + "\n\n"
+    keyboard = telebot.types.InlineKeyboardMarkup()
 
-    for top_Item in range(10):
-        name = top_Data["items"][top_Item]["name"]
+    previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topArtists???page???{previous_Page}")
+
+    next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topArtists???page???{next_Page}")
+
+    if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
+        keyboard.add(previous_Page_Button, next_Page_Button)
+    elif not top_Data["current_Page"] <= 1:
+        keyboard.add(previous_Page_Button)
+    elif not top_Data["current_Page"] >= top_Data["max_Pages"]:
+        keyboard.add(next_Page_Button)
+
+    chat_Top_Data = {}
+    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+
+    for top_Item in top_Data["items"]:
+        artist = top_Data["items"][top_Item]["artist"]
         followers = top_Data["items"][top_Item]["followers"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {name} - {followers} Followers \n\n"
+        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers \n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
-    spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], parse_mode="HTML")
+    if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
+        spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
+    else:
+        spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
 
 
 

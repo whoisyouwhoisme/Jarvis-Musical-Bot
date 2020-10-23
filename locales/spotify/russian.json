@@ -90,7 +90,7 @@
 
             "top_Songs_Header": "Это твои Топ песни <b>(Страница {previous_Page} из {next_Page})</b>:",
     
-            "top_Artists_Header": "Это твои Топ исполнители <b>(Отображено 10 исполнителей из 50)</b>:"
+            "top_Artists_Header": "Это твои Топ исполнители <b>(Страница {previous_Page} из {next_Page})</b>:"
         },
 
         "superShuffle": {

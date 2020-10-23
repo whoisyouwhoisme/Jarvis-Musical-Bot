@@ -250,6 +250,29 @@ def process_TopTracks_List(user_ID, list_Page):
 
 
 
+def process_TopArtists_List(user_ID, list_Page):
+    database_User_Artists = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
+    user_Artists = database_User_Artists[0][1] #Достаем из базы данных кэшированный топ пользователя
+
+    top_Data = json.loads(user_Artists) #Десериализуем строку в словарь
+    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
+    current_Page = {
+        "current_Page":list_Page,
+        "max_Pages":max_Pages,
+        "items":{},
+    }
+
+    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
+    for item in range(start_Index, stop_Index):
+        current_Page["items"][item] = {
+            "artist":top_Data["items"][item]["artist"],
+            "followers":top_Data["items"][item]["followers"]
+        }
+
+    return current_Page
+
+
+
 def user_Top_Tracks(user_ID, language_Name, time_Range):
     """
     Создать топ треков для пользователя
@@ -316,7 +339,7 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
 
     else:
         database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
-        bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=language_Name)
+        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, 1), language_Name=language_Name)
         logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
 
     finally:
@@ -549,15 +572,20 @@ def callback_Handler(callback_Data):
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
         
         elif callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
-            if callback_Request[1] == "playlist":
-                if callback_Request[2] == "create":
-                    if callback_Request[3] == "topTracksPlaylist":
+            if callback_Request[1] == "topTracks":
+                if callback_Request[2] == "createPlaylist":
                         create_Top_Playlist(user_ID, language_Name=user_Language)
                 
                 elif callback_Request[2] == "page":
                     page_Number = int(callback_Request[3])
 
                     bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, page_Number), language_Name=user_Language, message_ID=message_ID)
+            
+            elif callback_Request[1] == "topArtists":
+                if callback_Request[2] == "page":
+                    page_Number = int(callback_Request[3])
+
+                    bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, page_Number), language_Name=user_Language, message_ID=message_ID)
 
 
 
