@@ -154,6 +154,34 @@ def write_User_BotVersion(user_Telegram_ID, bot_Version):
 
 
 
+def write_User_TopTracks(user_Unique_ID, top_Data):
+    """
+    Записать строку с топ песнями пользователя
+
+    user_Telegram_ID - Telegram ID пользователя
+
+    top_Data - Сериализованная строка топ песен
+    """
+    query_Arguments = (str(top_Data), int(user_Unique_ID),)
+    register_Query = "UPDATE spotify_Users SET topTracks_Data = ? WHERE user_Unique_ID = ?"
+    post_Sql_Query(register_Query, query_Arguments)
+
+
+
+def write_User_TopArtists(user_Unique_ID, top_Data):
+    """
+    Записать строку с топ исполнителями пользователя
+
+    user_Telegram_ID - Telegram ID пользователя
+
+    top_Data - Сериализованная строка топ исполнителей
+    """
+    query_Arguments = (str(top_Data), int(user_Unique_ID),)
+    register_Query = "UPDATE spotify_Users SET topArtists_Data = ? WHERE user_Unique_ID = ?"
+    post_Sql_Query(register_Query, query_Arguments)
+
+
+
 def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
     """
     Запись обновленного токена доступа Spotify в базу данных

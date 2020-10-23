@@ -213,7 +213,16 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "tracks", entities_Limit, offset, time_Range)
 
-    top_Tracks = {}
+    current_Timestamp = int(time.time())
+
+    top_Tracks = {
+        "top_Info":{
+            "entities_Limit":entities_Limit,
+            "offset":offset,
+            "time_Range":time_Range,
+            "timestamp":current_Timestamp,
+        }
+    }
     for item in range(entities_Limit):
         top_Tracks[item] = {
             "name":user_Top["items"][item]["name"],
@@ -242,7 +251,16 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "artists", entities_Limit, offset, time_Range)
 
-    top_Artists = {}
+    current_Timestamp = int(time.time())
+
+    top_Artists = {
+        "top_Info":{
+            "entities_Limit":entities_Limit,
+            "offset":offset,
+            "time_Range":time_Range,
+            "timestamp":current_Timestamp,
+        }
+    }
     for artist in range(entities_Limit):
         top_Artists[artist] = {
             "name":user_Top["items"][artist]["name"],

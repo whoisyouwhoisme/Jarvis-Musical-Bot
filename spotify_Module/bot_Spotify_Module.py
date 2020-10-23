@@ -181,7 +181,7 @@ def contacts_Command(message):
 
 
 
-def create_Super_Shuffle(user_ID, tracks_Count=None):
+def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
     """
     Создать супер-шаффл для пользователя
 
@@ -193,7 +193,6 @@ def create_Super_Shuffle(user_ID, tracks_Count=None):
         in_Work(user_ID)
 
         user_Unique_ID = get_User_UniqueID(user_ID)
-        user_Language = get_User_Language(user_ID)
         spotify_Service.check_User_Liked_Songs(user_Unique_ID, 200)
         playlist_ID = spotify_Service.super_Shuffle(user_Unique_ID, tracks_Count=tracks_Count)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
@@ -201,22 +200,22 @@ def create_Super_Shuffle(user_ID, tracks_Count=None):
         logger.info(f"Creating Super Shuffle For User {user_ID}")
 
     except spotify_Exceptions.no_Tracks:
-        bot_Spotify_Sender.insufficient_Data_For_Shuffle(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.insufficient_Data_For_Shuffle(user_ID, language_Name=language_Name)
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     else:
-        bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=user_Language)
+        bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Super Shuffle Created Successfuly For User {user_ID}")
 
     finally:
@@ -224,7 +223,7 @@ def create_Super_Shuffle(user_ID, tracks_Count=None):
 
 
 
-def user_Top_Tracks(user_ID, time_Range):
+def user_Top_Tracks(user_ID, language_Name, time_Range):
     """
     Создать топ треков для пользователя
 
@@ -234,35 +233,34 @@ def user_Top_Tracks(user_ID, time_Range):
     """
     try:
         top_Data = spotify_Service.get_User_Top_Tracks(get_User_UniqueID(user_ID), entities_Limit=10, time_Range=time_Range)
-        user_Language = get_User_Language(user_ID)
         logger.info(f"Get User Top Tracks For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
-        bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     else:
-        bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=user_Language)
+        bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
 
 
 
-def user_Top_Artists(user_ID, time_Range):
+def user_Top_Artists(user_ID, language_Name, time_Range):
     """
     Создать топ исполнителей для пользователя
 
@@ -272,26 +270,25 @@ def user_Top_Artists(user_ID, time_Range):
     """
     try:
         top_Data = spotify_Service.get_User_Top_Artists(get_User_UniqueID(user_ID), entities_Limit=10, time_Range=time_Range)
-        user_Language = get_User_Language(user_ID)
         logger.info(f"Get User Top Artists For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
-        bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=language_Name)
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     else:
-        bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=user_Language)
+        bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=language_Name)
         logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
     
     finally:
@@ -299,7 +296,7 @@ def user_Top_Artists(user_ID, time_Range):
 
 
 
-def create_Top_Playlist(user_ID, time_Range):
+def create_Top_Playlist(user_ID, language_Name, time_Range):
     """
     Создать плейлист из топ треков для пользователя
 
@@ -310,25 +307,24 @@ def create_Top_Playlist(user_ID, time_Range):
     try:
         in_Work(user_ID)
         user_Unique_ID = get_User_UniqueID(user_ID)
-        user_Language = get_User_Language(user_ID)
         playlist_ID = spotify_Service.create_Top_Tracks_Playlist(user_Unique_ID, time_Range=time_Range)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         logger.info(f"Creating Top Tracks Playlist For User {user_ID}")
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
-        bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=user_Language)
+        bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Playlist Created Successfuly For User {user_ID}")
     
     finally:
@@ -336,7 +332,7 @@ def create_Top_Playlist(user_ID, time_Range):
 
 
 
-def process_MusicQuiz_Round(user_ID, game_Round):
+def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
     """
     Подготовить массив данных для раунда музыкальной викторины
 
@@ -345,8 +341,6 @@ def process_MusicQuiz_Round(user_ID, game_Round):
     game_Round - Номер раунда музыкальной викторины
     """
     try:
-        user_Language = get_User_Language(user_ID)
-
         musicQuiz_Keyboard_Items = []
         musicQuiz_Keyboard_Items.append(musicQuiz_User_Songs[user_ID]["right_Answers"][game_Round])
 
@@ -382,15 +376,15 @@ def process_MusicQuiz_Round(user_ID, game_Round):
         
     except:
         logger.error(f"ERROR OCCURED WHEN PROCESSING MUSIC QUIZ FOR USER {user_ID}")
-        bot_Spotify_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     else:
-        bot_Spotify_Sender.send_MusicQuiz_Round(user_ID, musicQuiz_Round_Data, language_Name=user_Language)
+        bot_Spotify_Sender.send_MusicQuiz_Round(user_ID, musicQuiz_Round_Data, language_Name=language_Name)
 
 
 
-def create_MusicQuiz_Top_Tracks(user_ID, time_Range):
+def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
     """
     Подготовить выборку из топ треков для музыкальной викторины
 
@@ -401,32 +395,31 @@ def create_MusicQuiz_Top_Tracks(user_ID, time_Range):
     try:
         database_Manager.write_User_Position(user_ID, "work_In_Progress")
         user_Unique_ID = get_User_UniqueID(user_ID)
-        user_Language = get_User_Language(user_ID)
         spotify_Service.check_User_Tops(user_Unique_ID, "tracks", time_Range)
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range)
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
-        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.musicQuiz_Error_NoTracks:
-        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
         logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING GAME FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
@@ -440,11 +433,11 @@ def create_MusicQuiz_Top_Tracks(user_ID, time_Range):
             "total_Rounds":10,
         }
         database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, 0)
+        process_MusicQuiz_Round(user_ID, user_Language, 0)
 
 
 
-def create_MusicQuiz_Liked_Songs(user_ID):
+def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
     """
     Подготовить выборку из Liked Songs для музыкальной викторины
 
@@ -453,32 +446,31 @@ def create_MusicQuiz_Liked_Songs(user_ID):
     try:
         database_Manager.write_User_Position(user_ID, "work_In_Progress")
         user_Unique_ID = get_User_UniqueID(user_ID)
-        user_Language = get_User_Language(user_ID)
         spotify_Service.check_User_Liked_Songs(user_Unique_ID, 50)
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Liked_Songs(user_Unique_ID)
         logger.info(f"Creating Liked Songs Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tracks:
-        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.oauth_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.musicQuiz_Error_NoTracks:
-        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
         logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING GAME FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
+        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
@@ -492,7 +484,7 @@ def create_MusicQuiz_Liked_Songs(user_ID):
             "total_Rounds":10,
         }
         database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, 0)
+        process_MusicQuiz_Round(user_ID, user_Language, 0)
 
 
 
@@ -682,7 +674,7 @@ def chat_Messages_Handler(message):
                 create_Super_Shuffle(user_ID, 200)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["offset_Size"]["all_Offset"]:
-                create_Super_Shuffle(user_ID)
+                create_Super_Shuffle(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
                 to_Main_Menu(user_ID)
@@ -714,15 +706,15 @@ def chat_Messages_Handler(message):
         if user_Position_Cache == "user_Top_Tracks_Time":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
                 database_Manager.write_User_Position(user_ID, "user_Top_Tracks_4Weeks")
-                user_Top_Tracks(user_ID, time_Range="short_term")
+                user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="short_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
                 database_Manager.write_User_Position(user_ID, "user_Top_Tracks_6Months")
-                user_Top_Tracks(user_ID, time_Range="medium_term")
+                user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="medium_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
                 database_Manager.write_User_Position(user_ID, "user_Top_Tracks_AllTime")
-                user_Top_Tracks(user_ID, time_Range="long_term")
+                user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
@@ -731,13 +723,13 @@ def chat_Messages_Handler(message):
 
         if user_Position_Cache == "user_Top_Artists_Time":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
-                user_Top_Artists(user_ID, time_Range="short_term")
+                user_Top_Artists(user_ID, language_Name=user_Language, time_Range="short_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
-                user_Top_Artists(user_ID, time_Range="medium_term")
+                user_Top_Artists(user_ID, language_Name=user_Language, time_Range="medium_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
-                user_Top_Artists(user_ID, time_Range="long_term")
+                user_Top_Artists(user_ID, language_Name=user_Language, time_Range="long_term")
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
@@ -746,7 +738,7 @@ def chat_Messages_Handler(message):
 
         if user_Position_Cache == "user_Top_Tracks_4Weeks":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, time_Range="short_term")
+                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="short_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
                 to_Main_Menu(user_ID)
@@ -756,7 +748,7 @@ def chat_Messages_Handler(message):
 
         elif user_Position_Cache == "user_Top_Tracks_6Months":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, time_Range="medium_term")
+                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="medium_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
                 to_Main_Menu(user_ID)
@@ -766,7 +758,7 @@ def chat_Messages_Handler(message):
 
         elif user_Position_Cache == "user_Top_Tracks_AllTime":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["yes_Create_Playlist"]:
-                create_Top_Playlist(user_ID, time_Range="long_term")
+                create_Top_Playlist(user_ID, language_Name=user_Language, time_Range="long_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["no_Thanks"]:
                 to_Main_Menu(user_ID)
@@ -783,7 +775,7 @@ def chat_Messages_Handler(message):
         if user_Position_Cache == "user_MusicQuiz_Type":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["liked_Songs"]:
                 bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
-                create_MusicQuiz_Liked_Songs(user_ID)
+                create_MusicQuiz_Liked_Songs(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["top_Songs"]:
                 database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Time")
@@ -798,15 +790,15 @@ def chat_Messages_Handler(message):
         if user_Position_Cache == "user_MusicQuiz_Time":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
                 bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
-                create_MusicQuiz_Top_Tracks(user_ID, time_Range="short_term")
+                create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="short_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
                 bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
-                create_MusicQuiz_Top_Tracks(user_ID, time_Range="medium_term")
+                create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="medium_term")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
                 bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
-                create_MusicQuiz_Top_Tracks(user_ID, time_Range="long_term")
+                create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
@@ -829,7 +821,7 @@ def chat_Messages_Handler(message):
 
 
             if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #Пока раунд < кол-во раундов, отправлять раунды, иначе отправить конец викторины и вернуть в главное меню
-                process_MusicQuiz_Round(user_ID, musicQuiz_User_Stats[user_ID]["game_Round"])
+                process_MusicQuiz_Round(user_ID, language_Name=user_Language, game_Round=musicQuiz_User_Stats[user_ID]["game_Round"])
             else:
                 bot_Spotify_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
                 to_Main_Menu(user_ID)

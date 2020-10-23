@@ -31,7 +31,7 @@ database_Cursor.execute("""CREATE TABLE users_TopTracks
 
 database_Cursor.execute("""CREATE TABLE users_TopArtists
                         (user_Unique_ID TEXT,
-                        topArtists TEXT,
+                        topArtists_Data TEXT,
                         refresh_Timestamp INTEGER)
                         """)
 
