@@ -163,7 +163,7 @@ def write_User_TopTracks(user_Unique_ID, top_Data):
     top_Data - Сериализованная строка топ песен
     """
     query_Arguments = (str(top_Data), str(user_Unique_ID),)
-    register_Query = "UPDATE spotify_Users SET topTracks_Data = ? WHERE user_Unique_ID = ?"
+    register_Query = "UPDATE user_TopTracks SET topTracks_Data = ? WHERE user_Unique_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
 
 
@@ -177,7 +177,7 @@ def write_User_TopArtists(user_Unique_ID, top_Data):
     top_Data - Сериализованная строка топ исполнителей
     """
     query_Arguments = (str(top_Data), str(user_Unique_ID),)
-    register_Query = "UPDATE spotify_Users SET topArtists_Data = ? WHERE user_Unique_ID = ?"
+    register_Query = "UPDATE user_TopArtists SET topArtists_Data = ? WHERE user_Unique_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
 
 
