@@ -430,6 +430,14 @@ def function_On_Way(chat_id, language_Name):
 
 
 
+def jarvis_Updated(chat_id, language_Name):
+    """
+    Джарвис был обновлен
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["jarvis_Updated"], parse_mode="Markdown")
+
+
+
 def playlist_Ready(chat_id, playlist_Data, language_Name):
     """
     Плейлист готов

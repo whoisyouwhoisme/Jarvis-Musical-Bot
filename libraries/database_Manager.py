@@ -52,7 +52,7 @@ def search_In_Database(keyword_Search, search_Table, search_Row):
 
 
 
-def register_User(user_Telegram_ID, user_Unique_ID, user_Language, reg_Timestamp):
+def register_User(user_Telegram_ID, user_Unique_ID, user_Language, current_Bot_Version, reg_Timestamp):
     """
     Регистрация пользователя в базе данных, таблица bot_Users
 
@@ -65,8 +65,8 @@ def register_User(user_Telegram_ID, user_Unique_ID, user_Language, reg_Timestamp
     reg_Timestamp - Временная метка регистрации пользователя
     """
     if not search_In_Database(user_Unique_ID, "bot_Users", "user_Unique_ID"):
-        query_Arguments = (str(user_Telegram_ID), str(user_Unique_ID), str(user_Language), int(reg_Timestamp),)
-        register_Query = "INSERT INTO bot_Users (telegram_ID, user_Unique_ID, language_Select,reg_Timestamp) VALUES (?, ?, ?, ?)"
+        query_Arguments = (str(user_Telegram_ID), str(user_Unique_ID), str(user_Language), float(current_Bot_Version), int(reg_Timestamp),)
+        register_Query = "INSERT INTO bot_Users (telegram_ID, user_Unique_ID, language_Select, bot_Version, reg_Timestamp) VALUES (?, ?, ?, ?, ?)"
         post_Sql_Query(register_Query, query_Arguments)
 
 
@@ -136,6 +136,20 @@ def write_User_Language(user_Telegram_ID, user_Language):
     """
     query_Arguments = (str(user_Language), int(user_Telegram_ID),)
     register_Query = "UPDATE bot_Users SET language_Select = ? WHERE telegram_ID = ?"
+    post_Sql_Query(register_Query, query_Arguments)
+
+
+
+def write_User_BotVersion(user_Telegram_ID, bot_Version):
+    """
+    Записать версию бота пользователя
+
+    user_Telegram_ID - Telegram ID пользователя
+
+    bot_Version - Версия бота
+    """
+    query_Arguments = (str(bot_Version), int(user_Telegram_ID),)
+    register_Query = "UPDATE bot_Users SET bot_Version = ? WHERE telegram_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
 
 

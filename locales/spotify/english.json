@@ -73,7 +73,9 @@
 
             "playback_Started": "*Playback has started.*",
     
-            "function_On_Way": "This feature will be available soon, stay tuned."
+            "function_On_Way": "This feature will be available soon, stay tuned.",
+
+            "jarvis_Updated": "*The Jarvis has been updated.* \n\nYou have been moved to the main menu."
         },
 
         "yourTops": {

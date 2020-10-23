@@ -8,6 +8,8 @@ from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
 from libraries import database_Manager
 
+bot_Version = 0.1
+
 language_Vocabluary = localization.load_Vocabluary()
 
 musicQuiz_User_Songs = {}
@@ -19,7 +21,7 @@ def get_User_Position(user_ID):
     Получить позицию пользователя из базы данных
     """
     search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-    user_Position = search_Data[0][3]
+    user_Position = search_Data[0][4]
     logger.info(f"Get User Position For User {user_ID}")
     return user_Position
 
@@ -40,6 +42,23 @@ def get_User_Language(user_ID):
     else:
         logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_ID}")
         return "ENG"
+
+
+
+def get_User_BotVersion(user_ID):
+    """
+    Получить версию бота у пользователя
+    """
+    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
+
+    bot_Version = search_Data[0][3]
+
+    if bot_Version:
+        logger.info(f"User {user_ID} Bot Version: {bot_Version}")
+        return bot_Version
+    else:
+        logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_ID}")
+        return 0
 
 
 
@@ -518,7 +537,7 @@ def chat_Messages_Handler(message):
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
         reg_Timestamp = int(time.time())
         generated_Unique_ID = database_Manager.generate_Unique_ID()
-        database_Manager.register_User(user_ID, generated_Unique_ID, "ENG", reg_Timestamp)
+        database_Manager.register_User(user_ID, generated_Unique_ID, "ENG", bot_Version, reg_Timestamp)
 
     if not check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
@@ -557,6 +576,12 @@ def chat_Messages_Handler(message):
             
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, get_User_Language(user_ID))
+
+
+        if get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
+            to_Main_Menu(user_ID)
+            bot_Spotify_Sender.jarvis_Updated(user_ID, language_Name=user_Language)
+            database_Manager.write_User_BotVersion(user_ID, bot_Version)
 
 
         #ГЛАВНОЕ МЕНЮ
