@@ -1,5 +1,6 @@
 import time
 import json
+import math
 import random
 from spotify_Module import localization
 from spotify_Module import bot_Spotify_Sender
@@ -226,6 +227,29 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
 
 
 
+def process_TopTracks_List(user_ID, list_Page):
+    database_User_Tracks = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
+    user_Tracks = database_User_Tracks[0][1] #Достаем из базы данных кэшированный топ пользователя
+
+    top_Data = json.loads(user_Tracks) #Десериализуем строку в словарь
+    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
+    current_Page = {
+        "current_Page":list_Page,
+        "max_Pages":max_Pages,
+        "items":{},
+    }
+
+    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
+    for item in range(start_Index, stop_Index):
+        current_Page["items"][item] = {
+            "artists":top_Data["items"][item]["artists"],
+            "name":top_Data["items"][item]["name"]
+        }
+
+    return current_Page
+
+
+
 def user_Top_Tracks(user_ID, language_Name, time_Range):
     """
     Создать топ треков для пользователя
@@ -255,7 +279,7 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
 
     else:
         database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
-        bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=language_Name)
+        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, 1), language_Name=language_Name)
         logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
 
     finally:
@@ -502,9 +526,10 @@ def callback_Handler(callback_Data):
 
     if check_Spotify_Login(user_ID):
         user_Language = get_User_Language(user_ID) #Записать в словарь язык пользователя
+        message_ID = callback_Data.message.message_id
         callback_Request = callback_Data.data.split("???") #Парсим строку
 
-        if callback_Request[0] == "player":
+        if callback_Request[0] == "player": #Если сообщение из раздела плеера
             if callback_Request[1] == "play":
                 try:
                     spotify_Service.start_Playback(get_User_UniqueID(user_ID), callback_Request[2])
@@ -523,11 +548,16 @@ def callback_Handler(callback_Data):
                 except:
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
         
-        elif callback_Request[0] == "interface":
+        elif callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
             if callback_Request[1] == "playlist":
                 if callback_Request[2] == "create":
                     if callback_Request[3] == "topTracksPlaylist":
                         create_Top_Playlist(user_ID, language_Name=user_Language)
+                
+                elif callback_Request[2] == "page":
+                    page_Number = int(callback_Request[3])
+
+                    bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, page_Number), language_Name=user_Language, message_ID=message_ID)
 
 
 

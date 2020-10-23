@@ -14,7 +14,9 @@
             "top_Songs": "Top Songs",
             "create_Playlist": "Create Playlist",
             "open_On_Spotify": "Open on Spotify",
-            "play_On_Spotify": "Play on Spotify"
+            "play_On_Spotify": "Play on Spotify",
+            "previous_Page": "< Previous page",
+            "next_Page": "Next page >"
         },
 
         "service_Buttons": {
@@ -86,7 +88,7 @@
 
             "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
 
-            "top_Songs_Header": "Here's your top songs <b>(Displayed only 10 songs out of 50)</b>:",
+            "top_Songs_Header": "Here's your top songs <b>(Page {previous_Page} of {next_Page})</b>:",
     
             "top_Artists_Header": "Here's your top artists <b>(Displayed only 10 artists out of 50)</b>:"
         },
