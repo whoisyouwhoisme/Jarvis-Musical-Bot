@@ -39,7 +39,7 @@ def language_Selector(chat_id, language_Name):
 
 def language_Changed(chat_id, language_Name):
     """
-    Успешная авторизация
+    Язык сменен успешно
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["language_Changed"], parse_mode="Markdown")
 

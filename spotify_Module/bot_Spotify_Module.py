@@ -228,6 +228,13 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
 
 
 def process_TopTracks_List(user_ID, list_Page):
+    """
+    Подготовить данные для новой страницы Топ треков
+
+    user_ID - Telegram ID пользователя
+
+    list_Page - Страница списка данных
+    """
     database_User_Tracks = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
     user_Tracks = database_User_Tracks[0][1] #Достаем из базы данных кэшированный топ пользователя
 
@@ -253,6 +260,13 @@ def process_TopTracks_List(user_ID, list_Page):
 
 
 def process_TopArtists_List(user_ID, list_Page):
+    """
+    Подготовить данные для новой страницы Топ исполнителей
+
+    user_ID - Telegram ID пользователя
+
+    list_Page - Страница списка данных
+    """
     database_User_Artists = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
     user_Artists = database_User_Artists[0][1] #Достаем из базы данных кэшированный топ пользователя
 
