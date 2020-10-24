@@ -196,7 +196,7 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
 
     current_Timestamp = int(time.time())
 
-    top_Tracks = {
+    NEW_TopData = {
         "top_Info":{
             "entities_Limit":entities_Limit,
             "offset":offset,
@@ -206,7 +206,7 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
         "items":[],
     }
     for item in range(entities_Limit):
-        top_Tracks["items"].append(
+        NEW_TopData["items"].append(
             {
                 "prefix":" ",
                 "name":user_Top["items"][item]["name"],
@@ -216,7 +216,35 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
             }
         )
 
-    return top_Tracks
+    database_User_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID") #Для сравнения подгружаем старый кэш топа пользователя
+    user_Tracks = database_User_Tracks[0][1]
+
+    if user_Tracks: #Проверяем есть ли старый кэш песен
+        OLD_TopData = json.loads(user_Tracks) #Десериализуем строку в словарь
+
+        if OLD_TopData["top_Info"]["time_Range"] == time_Range: #Если временной период выборки совпадает, то делаем сравнение
+            OLD_URIS = [] #Отслеживание изменений происходит по ID, поэтому делаем список старой выборки
+            for index in range(len(OLD_TopData["items"])):
+                OLD_URIS.append(OLD_TopData["items"][index]["URI"])
+
+            NEW_URIS = [] #Список новой выборки
+            for index in range(len(NEW_TopData["items"])):
+                NEW_URIS.append(NEW_TopData["items"][index]["URI"])
+    
+            for index_New in range(len(NEW_URIS)): #Сравниваем выборку по новой выборке
+                try:
+                    old_Index = OLD_URIS.index(NEW_URIS[index_New])
+                except:
+                    NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
+                else:
+                    if old_Index < index_New:
+                        NEW_TopData["items"][old_Index]["prefix"] = "▲ " #Если песня поднялась выша
+                    elif old_Index > index_New:
+                        NEW_TopData["items"][old_Index]["prefix"] = "▼ " #Если песня опустилась ниже
+                    elif old_Index == index_New:
+                        NEW_TopData["items"][old_Index]["prefix"] = "  " #Если изменений не произошло
+
+    return NEW_TopData
 
 
 
