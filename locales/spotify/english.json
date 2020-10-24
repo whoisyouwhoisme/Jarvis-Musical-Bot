@@ -80,7 +80,7 @@
         },
 
         "yourTops": {
-            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nFor the *Top Songs*, I can suggest you create a playlist from these songs.",
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create Top songs again a little later, you will see which songs you listened less often, or more often, or which new songs appeared in your top.",
 
             "select_Top_Time": "Over what period of time?",
 
