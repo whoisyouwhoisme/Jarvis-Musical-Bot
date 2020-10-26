@@ -195,10 +195,15 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
     """
     try:
         in_Work(user_ID)
-
         user_Unique_ID = get_User_UniqueID(user_ID)
+
+        localization_Data = {
+            "playlist_Name":language_Vocabluary[language_Name]["chat_Messages"]["superShuffle"]["your_SuperShuffle"],
+            "playlist_Description":language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Generated_ByJarvis"],
+        }
+    
         spotify_Service.check_User_Liked_Songs(user_Unique_ID, 200)
-        playlist_ID = spotify_Service.super_Shuffle(user_Unique_ID, tracks_Count=tracks_Count)
+        playlist_ID = spotify_Service.super_Shuffle(user_Unique_ID, localization_Data=localization_Data, tracks_Count=tracks_Count)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         
         logger.info(f"Creating Super Shuffle For User {user_ID}")

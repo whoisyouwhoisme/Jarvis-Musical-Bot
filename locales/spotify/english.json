@@ -3,7 +3,7 @@
 
         "menu_Buttons": {
             "now_Playing": "Now Playing",
-            "super_Shuffle": "Super Shuffle",
+            "super_Shuffle": "Super-Shuffle",
             "your_Tops": "Your Tops",
             "youtube_Clip": "YouTube Clip",
             "musicQuiz": "Music Quiz",
@@ -106,11 +106,13 @@
         },
 
         "superShuffle": {
-            "insufficient_Data_For_Shuffle": "*You don't have enough songs for Super Shuffle.* \n\nAdd more songs and this feature will be available (minimum 100 songs)",
+            "insufficient_Data_For_Shuffle": "*You don't have enough songs for Super-Shuffle.* \n\nAdd more songs and this feature will be available (minimum 100 songs)",
 
             "tracks_Count_Question": "How many songs should I add to the playlist?",
 
-            "superShuffle_Description" : "The *Super Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*"
+            "your_SuperShuffle": "Super-Shuffle %Y-%m-%d %H:%M",
+
+            "superShuffle_Description" : "The *Super-Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*"
         },
 
         "youTube": {
