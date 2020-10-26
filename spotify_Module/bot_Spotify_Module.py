@@ -227,7 +227,7 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
 
 
 
-def process_TopTracks_List(user_ID, list_Page):
+def process_TopTracks_List(user_ID, time_Range, list_Page):
     """
     Подготовить данные для новой страницы Топ треков
 
@@ -236,13 +236,22 @@ def process_TopTracks_List(user_ID, list_Page):
     list_Page - Страница списка данных
     """
     database_User_Tracks = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
-    user_Tracks = database_User_Tracks[0][1] #Достаем из базы данных кэшированный топ пользователя
+
+    if database_User_Tracks: #Если у пользователя есть топ
+        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+            user_Tracks = database_User_Tracks[0][1]
+        elif time_Range == "medium_term":
+            user_Tracks = database_User_Tracks[0][2]
+        elif time_Range == "long_term":
+            user_Tracks = database_User_Tracks[0][3]
 
     top_Data = json.loads(user_Tracks) #Десериализуем строку в словарь
     max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
+        "time_Range":top_Data["top_Info"]["time_Range"],
+        "last_Update":top_Data["top_Info"]["timestamp"],
         "items":{},
     }
 
@@ -259,7 +268,7 @@ def process_TopTracks_List(user_ID, list_Page):
 
 
 
-def process_TopArtists_List(user_ID, list_Page):
+def process_TopArtists_List(user_ID, time_Range, list_Page):
     """
     Подготовить данные для новой страницы Топ исполнителей
 
@@ -268,13 +277,22 @@ def process_TopArtists_List(user_ID, list_Page):
     list_Page - Страница списка данных
     """
     database_User_Artists = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
-    user_Artists = database_User_Artists[0][1] #Достаем из базы данных кэшированный топ пользователя
+
+    if database_User_Artists: #Если у пользователя есть топ
+        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+            user_Artists = database_User_Artists[0][1]
+        elif time_Range == "medium_term":
+            user_Artists = database_User_Artists[0][2]
+        elif time_Range == "long_term":
+            user_Artists = database_User_Artists[0][3]
 
     top_Data = json.loads(user_Artists) #Десериализуем строку в словарь
     max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
+        "time_Range":top_Data["top_Info"]["time_Range"],
+        "last_Update":top_Data["top_Info"]["timestamp"],
         "items":{},
     }
 
@@ -318,8 +336,8 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
 
     else:
-        database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
-        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, 1), language_Name=language_Name)
+        database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
+        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range, 1), language_Name=language_Name)
         logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
 
     finally:
@@ -355,8 +373,8 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     else:
-        database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), top_Data=json.dumps(top_Data), refresh_Timestamp=int(time.time()))
-        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, 1), language_Name=language_Name)
+        database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
+        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range, 1), language_Name=language_Name)
         logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
 
     finally:
@@ -592,15 +610,15 @@ def callback_Handler(callback_Data):
                         create_Top_Playlist(user_ID, language_Name=user_Language)
                 
                 elif callback_Request[2] == "page":
-                    page_Number = int(callback_Request[3])
+                    page_Number = int(callback_Request[4])
 
-                    bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, page_Number), language_Name=user_Language, message_ID=message_ID)
+                    bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
             
             elif callback_Request[1] == "topArtists":
                 if callback_Request[2] == "page":
-                    page_Number = int(callback_Request[3])
+                    page_Number = int(callback_Request[4])
 
-                    bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, page_Number), language_Name=user_Language, message_ID=message_ID)
+                    bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
 
 
 

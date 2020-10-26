@@ -88,9 +88,15 @@
 
             "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
 
-            "top_Songs_Header": "Here's your top songs <b>(Page {previous_Page} of {next_Page})</b>:",
+            "top_Songs_Header": "Here's your top songs <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
     
-            "top_Artists_Header": "Here's your top artists <b>(Page {previous_Page} of {next_Page})</b>:"
+            "top_Artists_Header": "Here's your top artists <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
+
+            "short_term": "4 Weeks",
+            
+            "medium_term": "6 Months",
+
+            "long_term": "All Time"
         },
 
         "superShuffle": {
@@ -156,7 +162,9 @@
 
             "player_Duration": "<b>Duration:</b> ",
 
-            "player_Device": "<b>Device:</b> "
+            "player_Device": "<b>Device:</b> ",
+
+            "last_Update": "<b>Last Update:</b> "
         }
     }
 }

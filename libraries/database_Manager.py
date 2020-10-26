@@ -154,11 +154,13 @@ def write_User_BotVersion(user_Telegram_ID, bot_Version):
 
 
 
-def write_User_TopTracks(user_Unique_ID, top_Data, refresh_Timestamp):
+def write_User_TopTracks(user_Unique_ID, data_Period, top_Data):
     """
     Записать строку с топ песнями пользователя
 
     user_Telegram_ID - Telegram ID пользователя
+
+    data_Period - Период выборки топа (short_term, medium_term, long_term)
 
     top_Data - Сериализованная строка топ песен
     """
@@ -167,17 +169,19 @@ def write_User_TopTracks(user_Unique_ID, top_Data, refresh_Timestamp):
         register_Query = "INSERT INTO users_TopTracks (user_Unique_ID) VALUES (?)"
         post_Sql_Query(register_Query, query_Arguments)
 
-    query_Arguments = (str(top_Data), int(refresh_Timestamp), str(user_Unique_ID),)
-    register_Query = "UPDATE users_TopTracks SET topTracks_Data = ?, refresh_Timestamp = ? WHERE user_Unique_ID = ?"
+    query_Arguments = (str(top_Data), str(user_Unique_ID),)
+    register_Query = f"UPDATE users_TopTracks SET {data_Period} = ? WHERE user_Unique_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
 
 
 
-def write_User_TopArtists(user_Unique_ID, top_Data, refresh_Timestamp):
+def write_User_TopArtists(user_Unique_ID, data_Period, top_Data):
     """
     Записать строку с топ исполнителями пользователя
 
     user_Telegram_ID - Telegram ID пользователя
+
+    data_Period - Период выборки топа (short_term, medium_term, long_term)
 
     top_Data - Сериализованная строка топ исполнителей
     """
@@ -186,8 +190,8 @@ def write_User_TopArtists(user_Unique_ID, top_Data, refresh_Timestamp):
         register_Query = "INSERT INTO users_TopArtists (user_Unique_ID) VALUES (?)"
         post_Sql_Query(register_Query, query_Arguments)
 
-    query_Arguments = (str(top_Data), int(refresh_Timestamp), str(user_Unique_ID),)
-    register_Query = "UPDATE users_TopArtists SET topArtists_Data = ?, refresh_Timestamp = ? WHERE user_Unique_ID = ?"
+    query_Arguments = (str(top_Data), str(user_Unique_ID),)
+    register_Query = f"UPDATE users_TopArtists SET {data_Period} = ? WHERE user_Unique_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
 
 

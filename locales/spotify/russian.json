@@ -27,7 +27,7 @@
         "time_Buttons": {
             "4_Weeks": "4 Недели",
             "6_Months": "6 Месяцев",
-            "all_Time": "Все Время"
+            "all_Time": "Всё Время"
         },
 
         "offset_Size": {
@@ -88,9 +88,15 @@
 
             "insufficient_Data_For_Top": "*Не хватает песен для отображения топа.* \n\nСлушай больше песен, и данные появятся.",
 
-            "top_Songs_Header": "Это твои Топ песни <b>(Страница {previous_Page} из {next_Page})</b>:",
+            "top_Songs_Header": "Это твои Топ песни <b>({time_Range}) (Страница {previous_Page} из {next_Page})</b>:",
     
-            "top_Artists_Header": "Это твои Топ исполнители <b>(Страница {previous_Page} из {next_Page})</b>:"
+            "top_Artists_Header": "Это твои Топ исполнители <b>(Страница {previous_Page} из {next_Page})</b>:",
+
+            "short_term": "4 Недели",
+            
+            "medium_term": "6 Месяцев",
+
+            "long_term": "Всё время"
         },
 
         "superShuffle": {
@@ -156,7 +162,9 @@
 
             "player_Duration": "<b>Длительность:</b> ",
 
-            "player_Device": "<b>Устройство:</b> "
+            "player_Device": "<b>Устройство:</b> ",
+
+            "last_Update": "<b>Последнее обновление:</b> "
         }
     }
 }

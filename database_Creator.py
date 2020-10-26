@@ -25,14 +25,16 @@ database_Cursor.execute("""CREATE TABLE spotify_Users
 
 database_Cursor.execute("""CREATE TABLE users_TopTracks
                         (user_Unique_ID TEXT,
-                        topTracks_Data TEXT,
-                        refresh_Timestamp INTEGER)
+                        short_term TEXT,
+                        medium_term TEXT,
+                        long_term TEXT)
                         """)
 
 database_Cursor.execute("""CREATE TABLE users_TopArtists
                         (user_Unique_ID TEXT,
-                        topArtists_Data TEXT,
-                        refresh_Timestamp INTEGER)
+                        short_term TEXT,
+                        medium_term TEXT,
+                        long_term TEXT)
                         """)
 
 bot_Database.commit()

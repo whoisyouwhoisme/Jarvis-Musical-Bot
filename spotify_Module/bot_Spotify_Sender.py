@@ -1,6 +1,7 @@
 import telebot
 import logging
 import time
+from datetime import datetime
 import json
 import urllib
 from spotify_Module import localization
@@ -176,11 +177,13 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
+    time_Range = top_Data["time_Range"]
+
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topTracks???page???{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topTracks???page???{time_Range}???{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topTracks???page???{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topTracks???page???{time_Range}???{next_Page}")
 
     create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data="interface???topTracks???createPlaylist")
 
@@ -193,8 +196,13 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     elif not top_Data["current_Page"] >= top_Data["max_Pages"]:
         keyboard.add(next_Page_Button)
 
+    time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
+    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
+
     chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+
+    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
 
     for top_Item in top_Data["items"]: #Подготавливаем список песен
         prefix = top_Data["items"][top_Item]["prefix"]
@@ -216,11 +224,13 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
+    time_Range = top_Data["time_Range"]
+
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topArtists???page???{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topArtists???page???{time_Range}???{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topArtists???page???{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topArtists???page???{time_Range}???{next_Page}")
 
     if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
         keyboard.add(previous_Page_Button, next_Page_Button)
@@ -229,8 +239,13 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     elif not top_Data["current_Page"] >= top_Data["max_Pages"]:
         keyboard.add(next_Page_Button)
 
+    time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
+    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
+
     chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+
+    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
 
     for top_Item in top_Data["items"]:
         artist = top_Data["items"][top_Item]["artist"]

@@ -219,7 +219,12 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
     database_User_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID") #Для сравнения подгружаем старый кэш топа пользователя
 
     if database_User_Tracks: #Если у пользователя есть топ
-        user_Tracks = database_User_Tracks[0][1]
+        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+            user_Tracks = database_User_Tracks[0][1]
+        elif time_Range == "medium_term":
+            user_Tracks = database_User_Tracks[0][2]
+        elif time_Range == "long_term":
+            user_Tracks = database_User_Tracks[0][3]
         
         if user_Tracks: #Проверяем есть ли старый кэш песен
             OLD_TopData = json.loads(user_Tracks) #Десериализуем строку в словарь
