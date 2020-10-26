@@ -240,11 +240,11 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
                         NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
                     else:
                         if old_Index < index_New:
-                            NEW_TopData["items"][old_Index]["prefix"] = "▲ " #Если песня поднялась выша
+                            NEW_TopData["items"][index_New]["prefix"] = "▼ " #Если песня опустилась ниже
                         elif old_Index > index_New:
-                            NEW_TopData["items"][old_Index]["prefix"] = "▼ " #Если песня опустилась ниже
+                            NEW_TopData["items"][index_New]["prefix"] = "▲ " #Если песня поднялась выше
                         elif old_Index == index_New:
-                            NEW_TopData["items"][old_Index]["prefix"] = "  " #Если изменений не произошло
+                            NEW_TopData["items"][index_New]["prefix"] = "  " #Если изменений не произошло
 
     return NEW_TopData
 
