@@ -92,9 +92,9 @@
 
             "database_Error": "*Error occurred while loading the Top.* \n\nTry to *(/logout)*, and log in back to Jarvis.",
 
-            "top_Songs_Header": "Here's your top songs <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
+            "top_Songs_Header": "Here's your Top Songs <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
 
-            "top_Artists_Header": "Here's your top artists <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
+            "top_Artists_Header": "Here's your Top Artists <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
 
             "your_TopSongs": "Your Top Songs ({time_Range}) %Y-%m-%d",
 

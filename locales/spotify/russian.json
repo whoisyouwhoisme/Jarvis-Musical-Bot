@@ -92,11 +92,11 @@
 
             "database_Error": "*Возникла ошибка при загрузке Топа.* \n\nПопробуй выйти *(/logout)*, и залогиниться повторно в Jarvis.",
 
-            "top_Songs_Header": "Это твои Топ песни <b>({time_Range}) (Страница {previous_Page} из {next_Page})</b>:",
+            "top_Songs_Header": "Это твои Топ Песни <b>({time_Range}) (Страница {previous_Page} из {next_Page})</b>:",
     
-            "top_Artists_Header": "Это твои Топ исполнители <b>(Страница {previous_Page} из {next_Page})</b>:",
+            "top_Artists_Header": "Это твои Топ Исполнители <b>(Страница {previous_Page} из {next_Page})</b>:",
 
-            "your_TopSongs": "Твои Топ песни ({time_Range}) %Y-%m-%d",
+            "your_TopSongs": "Твои Топ Песни ({time_Range}) %Y-%m-%d",
 
             "short_term": "4 Недели",
             
