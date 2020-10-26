@@ -185,7 +185,7 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
     next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topTracks???page???{time_Range}???{next_Page}")
 
-    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data="interface???topTracks???createPlaylist")
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data=f"interface???topTracks???createPlaylist???{time_Range}")
 
     keyboard.add(create_Playlist_Button) #Кнопка создания плейлиста
 
@@ -215,6 +215,14 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
         spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
     else:
         spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
+
+
+
+def top_Database_Error(chat_id, language_Name):
+    """
+    Ошибка базы данных топов
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["database_Error"], parse_mode="Markdown")
 
 
 

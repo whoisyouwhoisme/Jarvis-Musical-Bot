@@ -70,6 +70,8 @@
 
             "playlist_Ready": "Твой плейлист готов!",
 
+            "playlist_Generated_ByJarvis": "Плейлист был создан с помощью: t.me/JarvisMusicalBot",
+
             "now_Playing": "Сейчас играет:",
 
             "playback_Started": "*Воспроизведение началось.*",
@@ -88,9 +90,13 @@
 
             "insufficient_Data_For_Top": "*Не хватает песен для отображения топа.* \n\nСлушай больше песен, и данные появятся.",
 
+            "database_Error": "*Возникла ошибка при загрузке Топа.* \n\nПопробуй выйти *(/logout)*, и залогиниться повторно в Jarvis.",
+
             "top_Songs_Header": "Это твои Топ песни <b>({time_Range}) (Страница {previous_Page} из {next_Page})</b>:",
     
             "top_Artists_Header": "Это твои Топ исполнители <b>(Страница {previous_Page} из {next_Page})</b>:",
+
+            "your_TopSongs": "Твои Топ песни ({time_Range}) %Y-%m-%d",
 
             "short_term": "4 Недели",
             

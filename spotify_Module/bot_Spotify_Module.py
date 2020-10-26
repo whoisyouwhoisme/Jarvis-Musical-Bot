@@ -337,8 +337,16 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
 
     else:
         database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
-        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range, 1), language_Name=language_Name)
-        logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
+
+        try:
+            bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range, 1), language_Name=language_Name)
+        
+        except:
+            bot_Spotify_Sender.top_Database_Error(user_ID, language_Name=language_Name)
+            logger.error(f"DATABASE ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
+        
+        else:
+            logger.info(f"Top Tracks Prepared Successfuly For User {user_ID}")
 
     finally:
         to_Main_Menu(user_ID)
@@ -374,15 +382,23 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
 
     else:
         database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
-        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range, 1), language_Name=language_Name)
-        logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
+
+        try:
+            bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range, 1), language_Name=language_Name)
+        
+        except:
+            bot_Spotify_Sender.top_Database_Error(user_ID, language_Name=language_Name)
+            logger.error(f"DATABASE ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
+        
+        else:
+            logger.info(f"Top Artists Prepared Successfuly For User {user_ID}")
 
     finally:
         to_Main_Menu(user_ID)
 
 
 
-def create_Top_Playlist(user_ID, language_Name):
+def create_Top_Playlist(user_ID, time_Range, language_Name):
     """
     Создать плейлист из топ треков для пользователя
 
@@ -393,7 +409,14 @@ def create_Top_Playlist(user_ID, language_Name):
     try:
         in_Work(user_ID)
         user_Unique_ID = get_User_UniqueID(user_ID)
-        playlist_ID = spotify_Service.create_Top_Tracks_Playlist(user_Unique_ID)
+
+        localization_Data = {
+            "playlist_Name":language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["your_TopSongs"],
+            "playlist_TimeRange":language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range],
+            "playlist_Description":language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Generated_ByJarvis"],
+        }
+
+        playlist_ID = spotify_Service.create_Top_Tracks_Playlist(user_Unique_ID, localization_Data=localization_Data, time_Range=time_Range)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         logger.info(f"Creating Top Tracks Playlist For User {user_ID}")
 
@@ -607,7 +630,7 @@ def callback_Handler(callback_Data):
         elif callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
             if callback_Request[1] == "topTracks":
                 if callback_Request[2] == "createPlaylist":
-                        create_Top_Playlist(user_ID, language_Name=user_Language)
+                        create_Top_Playlist(user_ID, time_Range=callback_Request[3], language_Name=user_Language)
                 
                 elif callback_Request[2] == "page":
                     page_Number = int(callback_Request[4])
