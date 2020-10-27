@@ -99,8 +99,7 @@ def controls_Main_Menu(chat_id, language_Name):
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["now_Playing"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"])
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
 
@@ -325,15 +324,6 @@ def now_Playing_Error(chat_id, language_Name):
 
 
 
-def search_Clip(chat_id, language_Name):
-    """
-    Клип в процессе поиска
-    """
-    markup = telebot.types.ReplyKeyboardRemove(selective=False)
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["youTube"]["searching_Clip"], reply_markup=markup, parse_mode="Markdown")
-
-
-
 def musicQuiz_Preparing(chat_id, language_Name):
     """
     Игровая сессия подготавливается
@@ -533,26 +523,16 @@ def now_Playing(chat_id, playing_Data, language_Name):
     now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Artist"] + ", ".join(playing_Data["artists"]) + "\n"
     now_Playing_Data["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Album"] + playing_Data["album_Name"] + "\n"
     now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n"
-    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000)) + "\n"
-    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["song_Duration"]
+    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000)) + "\n\n"
+
+    if playing_Data["youtube_URL"]: #Если клип песни есть, создаем строчку
+        now_Playing_Data["youtube_Clip"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["youtube_Clip"] + playing_Data["youtube_URL"]
+    else:
+        now_Playing_Data["youtube_Clip"] = ""
+
+    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["song_Duration"] + now_Playing_Data["youtube_Clip"]
 
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
     playback_Cover = urllib.request.urlopen(playing_Data["song_Cover_URL"]).read()
 
     spotify_Bot.send_photo(chat_id, playback_Cover, caption=playback_Text, parse_mode="HTML")
-
-
-
-def clip_Message(chat_id, playing_Data, language_Name):
-    """
-    Вывод клипа
-    """
-    now_Playing_Data = {}
-    now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Artist"] + ", ".join(playing_Data["artists"]) + "\n"
-    now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n\n"
-    now_Playing_Data["youtube_Clip_Link"] = playing_Data["youtube_URL"]
-    now_Playing_Data["playback_Summary"] = now_Playing_Data["artists"] + now_Playing_Data["song_Name"] + now_Playing_Data["youtube_Clip_Link"]
-
-    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
-
-    spotify_Bot.send_message(chat_id, text=playback_Text, parse_mode="HTML")

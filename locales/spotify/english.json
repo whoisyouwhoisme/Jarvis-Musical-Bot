@@ -115,10 +115,6 @@
             "superShuffle_Description" : "The *Super-Shuffle* takes all the songs from your *Liked Songs* section and just shuffles them so many times and then creates a new playlist where it puts those songs. \n\n*The minimum number of songs in the Liked Songs section should be 100.*"
         },
 
-        "youTube": {
-            "searching_Clip": "*Your clip is being searched*, please wait."
-        },
-
         "musicQuiz": {
             "quiz_Section": "Select a quiz section",
 
@@ -171,6 +167,8 @@
             "player_Duration": "<b>Duration:</b> ",
 
             "player_Device": "<b>Device:</b> ",
+
+            "youtube_Clip": "<b>YouTube Clip:</b> ",
 
             "last_Update": "<b>Last Update:</b> "
         }

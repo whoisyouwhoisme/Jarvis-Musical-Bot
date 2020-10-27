@@ -55,6 +55,16 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["song_URI"] = user_Playback["item"]["uri"]
         playback_Data["external_URL"] = user_Playback["item"]["external_urls"]["spotify"]
         playback_Data["song_Cover_URL"] = user_Playback["item"]["album"]["images"][1]["url"]
+
+        search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
+        search_Result = youtube_Lib.search_Youtube(search_Keywords) #Поиск Ютуб клипа для песни
+
+        if search_Result["items"]: #Если песня найдена
+            first_Result_ID = search_Result["items"][0]["id"]["videoId"]
+            playback_Data["youtube_URL"] = "https://www.youtube.com/watch?v=" + first_Result_ID
+        else:
+            playback_Data["youtube_URL"] = ""
+
     except:
         raise spotify_Exceptions.no_Data
     
@@ -96,37 +106,6 @@ def start_Playback(user_Unique_ID, playback_Context):
 
     else:
         return True
-
-
-
-def get_Clip_For_Current_Playing(user_Unique_ID):
-    """
-    Найти в YouTube клип для текущего воспроизведения, в случае успеха возвращает словарь
-
-    В случае ошибки возвращает исключение no_Data (не хватает мета-данных)
-
-    user_Unique_ID - Внутренний уникальный ID пользователя
-    """
-    check_Token_Lifetime(user_Unique_ID)
-    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Playback = spotify_Lib.get_Current_Playback(user_Auth_Token)
-
-    try:
-        playback_Data = {"artists":[]}
-        playback_Data["song_Name"] = user_Playback["item"]["name"]
-
-        for artist in range(len(user_Playback["item"]["artists"])):
-            playback_Data["artists"] += [user_Playback["item"]["artists"][artist]["name"]]
-
-        search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
-        search_Result = youtube_Lib.search_Youtube(search_Keywords)
-        first_Result_ID = search_Result["items"][0]["id"]["videoId"]
-        playback_Data["youtube_URL"] = "https://www.youtube.com/watch?v=" + first_Result_ID
-    except:
-        raise spotify_Exceptions.no_Data
-    
-    else:
-        return playback_Data
 
 
 

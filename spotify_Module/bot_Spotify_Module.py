@@ -11,7 +11,7 @@ from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
 from libraries import database_Manager
 
-bot_Version = 0.1
+bot_Version = 0.2
 
 language_Vocabluary = localization.load_Vocabluary()
 
@@ -738,37 +738,6 @@ def chat_Messages_Handler(message):
                 else:
                     bot_Spotify_Sender.now_Playing(user_ID, user_Data, language_Name=user_Language)
                     logger.info(f"Sending Now Playing For User {user_ID}")
-
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"]: #Пункт ютуб клипа
-                try:
-                    database_Manager.write_User_Position(user_ID, "work_In_Progress")
-                    bot_Spotify_Sender.search_Clip(user_ID, language_Name=user_Language)
-                    user_Data = spotify_Service.get_Clip_For_Current_Playing(get_User_UniqueID(user_ID))
-
-                except spotify_Exceptions.no_Playback:
-                    bot_Spotify_Sender.nowplaying_Nothing(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.no_Data:
-                    bot_Spotify_Sender.now_Playing_Error(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.oauth_Http_Error:
-                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
-                    logger.error(f"HTTP ERROR OCCURED WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                except spotify_Exceptions.oauth_Connection_Error:
-                    bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"CONNECTION ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                except:
-                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"UNKNOWN ERROR OCCURED WHEN WHEN SENDING YOUTUBE CLIP FOR USER {user_ID}")
-
-                else:
-                    bot_Spotify_Sender.clip_Message(user_ID, user_Data, language_Name=user_Language)
-                    logger.info(f"Sending YouTube Clip For User {user_ID}")
-
-                finally:
-                    to_Main_Menu(user_ID)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
