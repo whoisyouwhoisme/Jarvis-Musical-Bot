@@ -47,9 +47,11 @@ Authorization practically does not collect any private data, except user nicknam
 
 ## Screenshots
 ###### Authorization
-![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
+![Authorization](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
+###### Interface
+![Interface](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/interface.jpg?raw=true "Authorization")
 ###### Language changing
-![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
+![Language Changing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
 ###### Now Playing
 ![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/now%20playing.png?raw=true "Now Playing")
 ###### Super Shuffle
@@ -60,7 +62,5 @@ Authorization practically does not collect any private data, except user nicknam
 ![Top Tracks List](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20tracks%20display.png?raw=true "Top Tracks List")
 ###### Top Tracks Playlist
 ![Top Tracks Playlist](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20tracks%20playlist.png?raw=true "Top Tracks Playlist")
-###### YouTube Clips
-![YouTube Clips](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/youtube%20clip.png?raw=true "YouTube Clips")
 ###### Music Quiz
 ![Music Quiz](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/music%20quiz.png?raw=true "Music Quiz")
