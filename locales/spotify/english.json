@@ -82,7 +82,7 @@
         },
 
         "yourTops": {
-            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create Top songs again a little later, you will see which songs you listened less often, or more often, or which new songs appeared in your top.",
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create Top songs list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your Top.",
 
             "select_Top_Time": "Over what period of time?",
 
