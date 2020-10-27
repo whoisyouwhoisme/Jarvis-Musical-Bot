@@ -1,9 +1,8 @@
 import telebot
 import logging
 import time
-from datetime import datetime
 import json
-import urllib
+from datetime import datetime
 from spotify_Module import localization
 
 with open("bot_Keys.json") as bot_Keys_File:
@@ -502,6 +501,8 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     keyboard.add(play_Playlist)
     keyboard.add(open_Playlist)
 
+    playlist_Cover = playlist_Data["playlist_Cover"]
+
     ready_Data = {}
     ready_Data["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Name"] + playlist_Data["name"] + "\n"
     ready_Data["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Description"] + playlist_Data["description"] + "\n"
@@ -509,7 +510,6 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     ready_Data["playlist_Summary"] = ready_Data["name"] + ready_Data["description"] + ready_Data["total_Tracks"]
 
     ready_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Ready"] + "\n\n" + ready_Data["playlist_Summary"]
-    playlist_Cover = urllib.request.urlopen(playlist_Data["image_URL"]).read()
 
     spotify_Bot.send_photo(chat_id, playlist_Cover, caption=ready_Text, reply_markup=keyboard, parse_mode="HTML")
 
@@ -525,6 +525,8 @@ def now_Playing(chat_id, playing_Data, language_Name):
     now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n"
     now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000)) + "\n\n"
 
+    playback_Cover = playing_Data["song_Cover"]
+
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем строчку
         now_Playing_Data["youtube_Clip"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["youtube_Clip"] + playing_Data["youtube_URL"]
     else:
@@ -533,6 +535,5 @@ def now_Playing(chat_id, playing_Data, language_Name):
     now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["song_Duration"] + now_Playing_Data["youtube_Clip"]
 
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
-    playback_Cover = urllib.request.urlopen(playing_Data["song_Cover_URL"]).read()
 
     spotify_Bot.send_photo(chat_id, playback_Cover, caption=playback_Text, parse_mode="HTML")

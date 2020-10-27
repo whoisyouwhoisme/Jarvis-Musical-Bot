@@ -225,6 +225,8 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     else:
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["image_URL"]).read() #Скачивание обложки
+
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Super Shuffle Created Successfuly For User {user_ID}")
 
@@ -439,6 +441,8 @@ def create_Top_Playlist(user_ID, time_Range, language_Name):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["image_URL"]).read() #Скачивание обложки
+
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Playlist Created Successfuly For User {user_ID}")
     
@@ -736,6 +740,8 @@ def chat_Messages_Handler(message):
                     logger.error(f"UNKNOWN ERROR OCCURED WHEN WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
                 else:
+                    user_Data["song_Cover"] = urllib.request.urlopen(user_Data["song_Cover_URL"]).read() #Скачивание обложки
+
                     bot_Spotify_Sender.now_Playing(user_ID, user_Data, language_Name=user_Language)
                     logger.info(f"Sending Now Playing For User {user_ID}")
 

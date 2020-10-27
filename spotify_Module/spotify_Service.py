@@ -2,7 +2,6 @@ import math
 import time
 import json
 import random
-import urllib
 from libraries import database_Manager
 from libraries import spotify_Lib
 from libraries import spotify_Oauth
