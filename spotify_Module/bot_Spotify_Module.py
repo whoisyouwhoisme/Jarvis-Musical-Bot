@@ -2,6 +2,7 @@ import time
 import json
 import math
 import random
+import urllib
 from spotify_Module import localization
 from spotify_Module import bot_Spotify_Sender
 from spotify_Module import spotify_Service
@@ -472,9 +473,11 @@ def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
 
         random.shuffle(musicQuiz_Keyboard_Items) #Перемешивание клавиатуры
 
+        audio_File = urllib.request.urlopen(musicQuiz_User_Songs[user_ID]["right_Answers"][game_Round]["audio_URL"]).read()
+
         musicQuiz_Round_Data = {
             "current_Round":game_Round,
-            "audio_URL":musicQuiz_User_Songs[user_ID]["right_Answers"][game_Round]["audio_URL"],
+            "audio_File":audio_File,
         }
 
         keyboard_Keys = []

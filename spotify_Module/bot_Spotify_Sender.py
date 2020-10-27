@@ -117,7 +117,7 @@ def send_MusicQuiz_Round(chat_id, musicQuiz_Round_Data, language_Name):
 
     musicQuiz_Round = musicQuiz_Round_Data["current_Round"] + 1
     audio_Title = f"Round #{musicQuiz_Round}"
-    audio_File = urllib.request.urlopen(musicQuiz_Round_Data["audio_URL"]).read()
+    audio_File = musicQuiz_Round_Data["audio_File"]
 
     spotify_Bot.send_audio(chat_id, audio=audio_File, title=audio_Title, caption=language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Question"], reply_markup=keyboard)
 
