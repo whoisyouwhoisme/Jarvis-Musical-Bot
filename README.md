@@ -49,7 +49,7 @@ Authorization practically does not collect any private data, except user nicknam
 ###### Authorization
 ![Authorization](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
 ###### Interface
-![Interface](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/interface.jpg?raw=true "Authorization")
+![Interface](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/interface.png?raw=true "Authorization")
 ###### Language changing
 ![Language Changing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
 ###### Now Playing
