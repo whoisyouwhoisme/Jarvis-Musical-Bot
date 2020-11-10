@@ -9,6 +9,12 @@ flask_App = flask.Flask(__name__)
 
 
 
+@flask_App.route("/")
+def index():
+    return flask.render_template("index.html")
+
+
+
 @flask_App.route("/spotify")
 def spotify_Auth():
     try:
@@ -26,9 +32,9 @@ def spotify_Auth():
 
 
 
-print("Auth-Server launched!")
+print("Web-Server launched!")
 
 
 
-http_server = WSGIServer(("0.0.0.0", 8000), flask_App)
+http_server = WSGIServer(("0.0.0.0", 80), flask_App)
 http_server.serve_forever()
