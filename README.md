@@ -71,9 +71,8 @@ The result of a successful WebHook connection will be the response:
 
 
 
-**5.** And just start the bot (2 files, bot, and authorization server):
+**5.** And just start the bot:
 
-    $ python bot_Mothership.py
     $ python web_Server.py
 
 
