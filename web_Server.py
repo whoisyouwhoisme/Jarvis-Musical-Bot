@@ -1,9 +1,12 @@
 import flask
+import json
 from gevent.pywsgi import WSGIServer
 from libraries import database_Manager
 from libraries import spotify_Oauth
+from bot_Mothership import proceed_Updates
 
-
+with open("bot_Keys.json") as json_File:
+    bot_Keys_File = json.load(json_File)
 
 flask_App = flask.Flask(__name__)
 
@@ -12,6 +15,29 @@ flask_App = flask.Flask(__name__)
 @flask_App.route("/")
 def index():
     return flask.render_template("index.html")
+
+
+
+@flask_App.route("/telegram_Api", methods=["GET", "POST"])
+def receive_Updates():
+    try:
+        secret = flask.request.args["secret"] #Используем секрет для защиты
+
+    except:
+        return flask.Response(status=403)
+
+    else:
+        if secret == bot_Keys_File["telegram"]["telegram_Key"]:
+            if flask.request.headers.get("content-type") == "application/json":
+                json_string = flask.request.get_data().decode("utf-8")
+                proceed_Updates(json_string)
+                return flask.Response(status=200)
+            
+            else:
+                return flask.Response(status=405)
+        
+        else:
+            return flask.Response(status=403)
 
 
 
@@ -32,9 +58,6 @@ def spotify_Auth():
 
 
 
-print("Web-Server launched!")
-
-
-
-http_server = WSGIServer(("0.0.0.0", 80), flask_App)
-http_server.serve_forever()
+if __name__ == "__main__":
+    print("Web-Server launched!")
+    flask_App.run(host="0.0.0.0")
