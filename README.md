@@ -43,7 +43,7 @@ Authorization practically does not collect any private data, except user nicknam
 **4.** And just start the bot (2 files, bot, and authorization server):
 
     $ python bot_Mothership.py
-    $ python auth_Server.py
+    $ python web_Server.py
 
 ## Screenshots
 ###### Authorization
