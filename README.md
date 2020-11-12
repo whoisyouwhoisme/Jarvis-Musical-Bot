@@ -24,15 +24,15 @@ In this case, you need to rewrite some code in the **bot_Mothership.py** file, y
 You will have to figure out the WebHook configuration yourself, because solution will depend on whether you are using a self-signed certificate, a domain, and how you launch the bot.
 
 In my case, I use the ***nginx+gunicorn+Flask*** bundle to handle web requests.
-Nginx provides a secure SSL connection using certificates that are signed by Let's Encrypt, to use **Let's Encrypt**, you must buy a domain name.
-The **wsgi.py** file is the entry point for *Gunicorn*.
+Nginx provides a secure SSL connection using certificates that are signed by **Let's Encrypt**, to use **Let's Encrypt**, you must buy a domain name.
+The **wsgi.py** file is the entry point for **Gunicorn**.
 
 After you have configured a secure SSL connection, you must tell the Telegram servers where to send updates requests.
 The request is created using a CURL request (In this example, the option for the Let's Encrypt certificate, which **nginx** uses):
 
 `curl -F "url=https://YOUR-DOMAIN-NAME/telegram_Api?secret=TELEGRAM-API-TOKEN" "https://api.telegram.org/botTELEGRAM-API-TOKEN/setwebhook"`
 
-Replace YOUR-DOMAIN-NAME, and TELEGRAM-API-TOKEN, and make request.
+Replace **YOUR-DOMAIN-NAME**, and **TELEGRAM-API-TOKEN**, and make request.
 
 The result of a successful WebHook connection will be the response:
 
