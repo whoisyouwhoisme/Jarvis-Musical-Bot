@@ -28,7 +28,7 @@ Nginx provides a secure SSL connection using certificates that are signed by **L
 The **wsgi.py** file is the entry point for **Gunicorn**.
 
 After you have configured a secure SSL connection, you must tell the Telegram servers where to send updates requests.
-The request is created using a CURL request (In this example, the option for the Let's Encrypt certificate, which **nginx** uses):
+The request is created using a **CURL** request (In this example, the option for the **Let's Encrypt** certificate, which **nginx** uses):
 
 `curl -F "url=https://YOUR-DOMAIN-NAME/telegram_Api?secret=TELEGRAM-API-TOKEN" "https://api.telegram.org/botTELEGRAM-API-TOKEN/setwebhook"`
 
@@ -38,11 +38,15 @@ The result of a successful WebHook connection will be the response:
 
 `{"description": "Webhook was set","ok": true,"result": true}`
 
+
+
 **2.** Install modules for the bot (Requires Python 3+):
 
     $ pip install pyTelegramBotAPI
     $ pip install Flask
     $ pip install google-api-python-client
+
+
 
 **3.** After installing the modules, configure **bot_Keys.json:**
 ```json
@@ -60,12 +64,19 @@ The result of a successful WebHook connection will be the response:
     }
 }
 ```
+
+
+
 **4.** After that, run the **database_Creator.py** file which will create the sqlite3 database.
+
+
 
 **5.** And just start the bot (2 files, bot, and authorization server):
 
     $ python bot_Mothership.py
     $ python web_Server.py
+
+
 
 ## Screenshots
 ###### Authorization
