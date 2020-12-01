@@ -14,15 +14,41 @@ Authorization practically does not collect any private data, except user nicknam
 - Multi-Language. Support English and Russian languages.
 
 ## To install the bot:
-**1.** Install modules for the bot (Requires Python 3+):
+**1.** Setting up WebHook:
+
+Because the bot uses WebHook to receive updates, you will need an SSL certificate and a web server (a web server that processes HTTPS and redirects data to the Bot web server)
+
+You can rewrite a code to convert the bot to the polling method (when the bot will constantly poll the Telegram servers for updates).
+In this case, you need to rewrite some code in the **bot_Mothership.py** file, you can also remove the useless code for WebHook in the **web_Server.py** file, and remove the **wsgi.py** entry point
+
+You will have to figure out the WebHook configuration yourself, because solution will depend on whether you are using a self-signed certificate, a domain, and how you launch the bot.
+
+In my case, I use the ***nginx+gunicorn+Flask*** bundle to handle web requests.
+Nginx provides a secure SSL connection using certificates that are signed by **Let's Encrypt**, to use **Let's Encrypt**, you must buy a domain name.
+The **wsgi.py** file is the entry point for **Gunicorn**.
+
+After you have configured a secure SSL connection, you must tell the Telegram servers where to send updates requests.
+The request is created using a **CURL** request (In this example, the option for the **Let's Encrypt** certificate, which **nginx** uses):
+
+`curl -F "url=https://YOUR-DOMAIN-NAME/telegram_Api?secret=TELEGRAM-API-TOKEN" "https://api.telegram.org/botTELEGRAM-API-TOKEN/setwebhook"`
+
+Replace **YOUR-DOMAIN-NAME**, and **TELEGRAM-API-TOKEN**, and make request.
+
+The result of a successful WebHook connection will be the response:
+
+`{"description": "Webhook was set","ok": true,"result": true}`
+
+
+
+**2.** Install modules for the bot (Requires Python 3+):
 
     $ pip install pyTelegramBotAPI
     $ pip install Flask
-    $ pip install gevent
-    $ pip install WSGIserver
     $ pip install google-api-python-client
 
-**2.** After installing the modules, configure **bot_Keys.json:**
+
+
+**3.** After installing the modules, configure **bot_Keys.json:**
 ```json
 {
     "spotify": {
@@ -38,12 +64,18 @@ Authorization practically does not collect any private data, except user nicknam
     }
 }
 ```
-**3.** After that, run the **database_Creator.py** file which will create the sqlite3 database.
 
-**4.** And just start the bot (2 files, bot, and authorization server):
 
-    $ python bot_Mothership.py
+
+**4.** After that, run the **database_Creator.py** file which will create the sqlite3 database.
+
+
+
+**5.** And just start the bot:
+
     $ python web_Server.py
+
+
 
 ## Screenshots
 ###### Authorization
