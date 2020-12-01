@@ -82,6 +82,12 @@ class playback_Error(spotify_Exception):
     """
     pass
 
+class private_Session_Enabled(spotify_Exception):
+    """
+    Активирована приватная сессия
+    """
+    pass
+
 
 
 #YOUTUBE ERRORS

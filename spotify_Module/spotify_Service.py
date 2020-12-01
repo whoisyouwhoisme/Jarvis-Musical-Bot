@@ -42,8 +42,12 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["device_Info"] = {
             "device_ID":user_Playback["device"]["id"],
             "device_Name":user_Playback["device"]["name"],
-            "device_Type":user_Playback["device"]["type"]
+            "device_Type":user_Playback["device"]["type"],
+            "private_Session":user_Playback["device"]["is_private_session"]
         }
+
+        if playback_Data["device_Info"]["private_Session"]:
+            raise spotify_Exceptions.private_Session_Enabled
 
         for artist in range(len(user_Playback["item"]["artists"])):
             playback_Data["artists"] += [user_Playback["item"]["artists"][artist]["name"]]
@@ -53,6 +57,7 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["song_Duration"] = user_Playback["item"]["duration_ms"]
         playback_Data["song_URI"] = user_Playback["item"]["uri"]
         playback_Data["external_URL"] = user_Playback["item"]["external_urls"]["spotify"]
+        playback_Data["preview_URL"] = user_Playback["item"]["preview_url"]
         playback_Data["song_Cover_URL"] = user_Playback["item"]["album"]["images"][1]["url"]
 
         search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
@@ -63,6 +68,9 @@ def get_Current_Playing(user_Unique_ID):
             playback_Data["youtube_URL"] = "https://www.youtube.com/watch?v=" + first_Result_ID
         else:
             playback_Data["youtube_URL"] = ""
+    
+    except spotify_Exceptions.private_Session_Enabled:
+        raise spotify_Exceptions.private_Session_Enabled
 
     except:
         raise spotify_Exceptions.no_Data

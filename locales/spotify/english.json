@@ -60,6 +60,12 @@
         "notifications": {
             "nowplaying_Nothing": "At the moment, nothing is playing.",
 
+            "private_Session": "<b>Data not available.</b> \n\nPrivate Session enabled.",
+
+            "preview_Not_Available": "Preview not available for this song.",
+
+            "youtube_Clip_Not_Available": "YouTube Clip not available for this song.",
+
             "playlist_Preparing": "*Your playlist is being prepared, please wait.* \n\nIt might take a couple of minutes.",
 
             "language_Changed": "Language changed successfully.",
@@ -169,6 +175,8 @@
             "player_Device": "<b>Device:</b> ",
 
             "youtube_Clip": "<b>YouTube Clip:</b> ",
+
+            "preview_Url": "<b>Preview URL:</b> ",
 
             "last_Update": "<b>Last Update:</b> "
         }

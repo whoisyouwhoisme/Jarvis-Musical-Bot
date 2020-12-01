@@ -60,6 +60,12 @@
         "notifications": {
             "nowplaying_Nothing": "В данный момент ничего не играет.",
 
+            "private_Session": "<b>Данные недоступны.</b> \n\nАктивирована Приватная Сессия.",
+
+            "preview_Not_Available": "Превью недоступно для этой песни.",
+
+            "youtube_Clip_Not_Available": "Клип недоступен для этой песни.",
+
             "playlist_Preparing": "*Твой плейлист подготавливается, пожалуйста, потерпи.* \n\nЭто может занять пару минут.",
 
             "language_Changed": "Язык успешно изменён.",
@@ -169,6 +175,8 @@
             "player_Device": "<b>Устройство:</b> ",
 
             "youtube_Clip": "<b>YouTube Клип:</b> ",
+
+            "preview_Url": "<b>URL Превью:</b> ",
 
             "last_Update": "<b>Последнее обновление:</b> "
         }

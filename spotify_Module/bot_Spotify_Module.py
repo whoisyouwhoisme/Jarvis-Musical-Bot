@@ -726,6 +726,9 @@ def chat_Messages_Handler(message):
 
                 except spotify_Exceptions.no_Data:
                     bot_Spotify_Sender.now_Playing_Error(user_ID, language_Name=user_Language)
+                
+                except spotify_Exceptions.private_Session_Enabled:
+                    bot_Spotify_Sender.private_Session_Enabled(user_ID, language_Name=user_Language)
 
                 except spotify_Exceptions.oauth_Http_Error:
                     bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
@@ -741,6 +744,9 @@ def chat_Messages_Handler(message):
 
                 else:
                     user_Data["song_Cover"] = urllib.request.urlopen(user_Data["song_Cover_URL"]).read() #Скачивание обложки
+
+                    if user_Data["preview_URL"]:
+                        user_Data["preview_File"] = urllib.request.urlopen(user_Data["preview_URL"]).read() #Скачивание превью
 
                     bot_Spotify_Sender.now_Playing(user_ID, user_Data, language_Name=user_Language)
                     logger.info(f"Sending Now Playing For User {user_ID}")
