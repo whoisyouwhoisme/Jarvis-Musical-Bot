@@ -530,6 +530,8 @@ def now_Playing(chat_id, playing_Data, language_Name):
     now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n"
     now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
 
+    now_Playing_Data["spotify_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["spotify_URL"] + playing_Data["external_URL"]
+
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем строчку
         now_Playing_Data["youtube_Clip"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["youtube_Clip"] + playing_Data["youtube_URL"]
     else:
@@ -540,7 +542,7 @@ def now_Playing(chat_id, playing_Data, language_Name):
     else:
         now_Playing_Data["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
 
-    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["song_Duration"] + now_Playing_Data["youtube_Clip"] + now_Playing_Data["preview_URL"]
+    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["song_Duration"] + now_Playing_Data["spotify_URL"] + now_Playing_Data["youtube_Clip"] + now_Playing_Data["preview_URL"]
 
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
 
