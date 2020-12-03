@@ -7,7 +7,7 @@ Authorization practically does not collect any private data, except user nicknam
 
 
 ## Its features:
-- Now playing. Displaying track cover, title, artists, duration, and searches for a clip for the song in YouTube.
+- Now playing. Feature to share songs with your friends. There is an automatic search for a clip on YouTube, providing a 30 second preview (if available), displaying the name of the song, artist, and album.
 - Super Shuffle. Spotify-alghoritms-less. Just shuffles songs from Liked Songs section many times.
 - Your Tops. Displays the tops of songs / artists for a certain period of time. Shows changes in the top, which tracks listened more often, less often, or what new tracks appeared in the tops. You can create a playlist from tops of top songs.
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
