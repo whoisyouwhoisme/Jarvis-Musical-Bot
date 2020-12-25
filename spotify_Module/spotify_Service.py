@@ -67,7 +67,7 @@ def get_Current_Playing(user_Unique_ID):
 
         if search_Result["items"]: #Если песня найдена
             first_Result_ID = search_Result["items"][0]["id"]["videoId"]
-            playback_Data["youtube_URL"] = "https://www.youtube.com/watch?v=" + first_Result_ID
+            playback_Data["youtube_URL"] = "https://youtu.be/" + first_Result_ID
         else:
             playback_Data["youtube_URL"] = ""
     

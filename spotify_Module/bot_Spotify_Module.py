@@ -19,14 +19,21 @@ musicQuiz_User_Songs = {}
 musicQuiz_User_Stats = {}
 
 
+
 def get_User_Position(user_ID):
     """
     Получить позицию пользователя из базы данных
     """
     search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-    user_Position = search_Data[0][4]
-    logger.info(f"Get User Position For User {user_ID}")
-    return user_Position
+    
+    if search_Data:
+        user_Position = search_Data[0][4]
+        logger.info(f"Get User Position For User {user_ID}")
+        return user_Position
+    
+    else:
+        logger.info(f"CANNOT Get User Position For User {user_ID}, sending value 'undefined_Position'")
+        return "undefined_Position"
 
 
 
@@ -36,12 +43,11 @@ def get_User_Language(user_ID):
     """
     search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
 
-    user_Language = search_Data[0][2]
-
-    if user_Language:
+    if search_Data:
+        user_Language = search_Data[0][2]
         logger.info(f"Get User Language For User {user_ID}")
         return user_Language
-    
+
     else:
         logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_ID}")
         return "ENG"
@@ -54,11 +60,11 @@ def get_User_BotVersion(user_ID):
     """
     search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
 
-    bot_Version = search_Data[0][3]
-
-    if bot_Version:
+    if search_Data:
+        bot_Version = search_Data[0][3]
         logger.info(f"User {user_ID} Bot Version: {bot_Version}")
         return bot_Version
+
     else:
         logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_ID}")
         return 0
@@ -69,13 +75,14 @@ def get_User_UniqueID(user_ID):
     """
     Получить уникальный ID пользователя из базы данных
     """
-    try:
-        search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
+    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
+
+    if search_Data:
         user_UniqueID = search_Data[0][1]
         logger.info(f"Get User Unique ID For User {user_ID}")
         return user_UniqueID
-
-    except:
+    
+    else:
         logger.error(f"CANNOT Get User Unique ID For User {user_ID}")
         return None
 

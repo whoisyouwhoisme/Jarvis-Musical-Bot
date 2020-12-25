@@ -154,7 +154,7 @@
     
             "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     
-            "developer_Contacts": "Are you having problems? Questions? You found a bug? \n\nThere are 2 ways to contact the developer. *Discord* and *VKontakte*."
+            "developer_Contacts": "Having problems? Have questions? Want to report a bug?"
         },
 
         "metadata": {
