@@ -57,6 +57,7 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["album_Name"] = user_Playback["item"]["album"]["name"]
         playback_Data["song_Name"] = user_Playback["item"]["name"]
         playback_Data["song_Duration"] = user_Playback["item"]["duration_ms"]
+        playback_Data["release_Date"] = user_Playback["item"]["album"]["release_date"]
         playback_Data["song_URI"] = user_Playback["item"]["uri"]
         playback_Data["external_URL"] = user_Playback["item"]["external_urls"]["spotify"]
         playback_Data["preview_URL"] = user_Playback["item"]["preview_url"]
