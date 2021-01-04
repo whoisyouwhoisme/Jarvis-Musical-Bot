@@ -545,7 +545,7 @@ def callback_Handler(callback_Data):
     logger.info(f"New Callback Data: {callback_Data.data} From: {user_ID}")
 
     if db_Manager.check_Spotify_Login(user_ID):
-        user_Language = db_Manager.get_User_Language(user_ID) #Записать в словарь язык пользователя
+        user_Language = db_Manager.get_User_Language(user_ID) #Записать в переменную язык пользователя
         callback_Request = callback_Data.data.split("???") #Парсим строку
 
         if callback_Request[0] == "player": #Если сообщение из раздела плеера
@@ -639,20 +639,30 @@ def chat_Messages_Handler(message):
     if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
         reg_Timestamp = int(time.time())
+
+        language_Code = message.from_user.language_code
+
+        if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
+            user_Language = "RUS"
+        else:
+            user_Language = "ENG"
+
         generated_Unique_ID = db_Manager.generate_Unique_ID()
-        db_Manager.register_User(user_ID, generated_Unique_ID, "ENG", bot_Version, reg_Timestamp)
+        db_Manager.register_User(user_ID, generated_Unique_ID, user_Language, bot_Version, reg_Timestamp)
+
+
+
+    #Оптимизация для БД
+    user_Position_Cache = db_Manager.get_User_Position(user_ID) #Записать в переменную позицию пользователя
+    user_Language = db_Manager.get_User_Language(user_ID) #Записать в переменную язык пользователя
+
+
 
     if not db_Manager.check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Auth_Link = spotify_Oauth.generate_Auth_Link(user_Unique_ID)
-        bot_Spotify_Sender.spotify_Login_Offer(user_ID, spotify_Auth_Link, language_Name="ENG")
-
-
-
-    #Оптимизация для БД
-    user_Position_Cache = db_Manager.get_User_Position(user_ID) #Записать в словарь позицию пользователя
-    user_Language = db_Manager.get_User_Language(user_ID) #Записать в словарь язык пользователя
+        bot_Spotify_Sender.spotify_Login_Offer(user_ID, spotify_Auth_Link, language_Name=user_Language)
 
 
 

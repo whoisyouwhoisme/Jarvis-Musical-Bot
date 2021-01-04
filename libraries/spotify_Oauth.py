@@ -66,7 +66,7 @@ def request_Access_Tokens(user_Auth_Code):
         raise spotify_Exceptions.oauth_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
 
     except:
         raise spotify_Exceptions.oauth_Unknown_Error
@@ -140,7 +140,7 @@ def get_User_Profile(auth_Token):
         raise spotify_Exceptions.oauth_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
 
     except:
         raise spotify_Exceptions.oauth_Unknown_Error
@@ -175,10 +175,14 @@ def auth_User(user_Auth_Code, user_Unique_ID):
     """
     payload_Data = request_Access_Tokens(user_Auth_Code)
     user_Profile = get_User_Profile(payload_Data["access_token"])
+
     user_Telegram_ID = database_Manager.search_In_Database(user_Unique_ID, "bot_Users", "user_Unique_ID")[0][0]
+    user_Language = database_Manager.get_User_Language(user_Telegram_ID)
+
     auth_Timestamp = int(time.time())
 
     database_Manager.register_Spotify(user_Unique_ID, user_Profile["id"], user_Profile["display_name"], user_Auth_Code, payload_Data["access_token"], payload_Data["refresh_token"], auth_Timestamp, auth_Timestamp)
     database_Manager.write_User_Position(user_Telegram_ID, "main_Menu")
-    bot_Spotify_Sender.auth_Complete(user_Telegram_ID, user_Profile["display_name"], language_Name="ENG")
-    bot_Spotify_Sender.controls_Main_Menu(user_Telegram_ID, language_Name="ENG")
+    
+    bot_Spotify_Sender.auth_Complete(user_Telegram_ID, user_Profile["display_name"], language_Name=user_Language)
+    bot_Spotify_Sender.controls_Main_Menu(user_Telegram_ID, language_Name=user_Language)
