@@ -1,8 +1,8 @@
 """
 Ребята не стоит вскрывать этот код. 
-Вы молодые, хакеры, вам все легко. Это не то. Это не Stuxnet и даже не шпионские программы ЦРУ. Сюда лучше не лезть. 
+Вы молодые, шутливые, вам все легко. Это не то. Это не Stuxnet и даже не шпионские программы ЦРУ. Сюда лучше не лезть. 
 Серьезно, любой из вас будет жалеть. 
-Лучше закройте компилятор и забудьте что там писалось. 
+Лучше закройте код и забудьте что там писалось. 
 Я вполне понимаю что данным сообщением вызову дополнительный интерес, но хочу сразу предостеречь пытливых - стоп. Остальные просто не найдут.
 """
 
@@ -17,7 +17,7 @@ from spotify_Module import spotify_Service
 from spotify_Module import spotify_Exceptions
 from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
-from libraries import database_Manager
+from libraries import database_Manager as db_Manager
 
 bot_Version = 0.2
 
@@ -28,99 +28,13 @@ musicQuiz_User_Stats = {}
 
 
 
-def get_User_Position(user_ID):
-    """
-    Получить позицию пользователя из базы данных
-    """
-    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-    
-    if search_Data:
-        user_Position = search_Data[0][4]
-        logger.info(f"Get User Position For User {user_ID}")
-        return user_Position
-    
-    else:
-        logger.info(f"CANNOT Get User Position For User {user_ID}, sending value 'undefined_Position'")
-        return "undefined_Position"
-
-
-
-def get_User_Language(user_ID):
-    """
-    Получить язык пользователя из базы данных
-    """
-    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-
-    if search_Data:
-        user_Language = search_Data[0][2]
-        logger.info(f"Get User Language For User {user_ID}")
-        return user_Language
-
-    else:
-        logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_ID}")
-        return "ENG"
-
-
-
-def get_User_BotVersion(user_ID):
-    """
-    Получить версию бота у пользователя
-    """
-    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-
-    if search_Data:
-        bot_Version = search_Data[0][3]
-        logger.info(f"User {user_ID} Bot Version: {bot_Version}")
-        return bot_Version
-
-    else:
-        logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_ID}")
-        return 0
-
-
-
-def get_User_UniqueID(user_ID):
-    """
-    Получить уникальный ID пользователя из базы данных
-    """
-    search_Data = database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-
-    if search_Data:
-        user_UniqueID = search_Data[0][1]
-        logger.info(f"Get User Unique ID For User {user_ID}")
-        return user_UniqueID
-    
-    else:
-        logger.error(f"CANNOT Get User Unique ID For User {user_ID}")
-        return None
-
-
-
-def check_Bot_Reg(user_ID):
-    """
-    Проверить регистрацию в боте
-    """
-    logger.info(f"Check Bot Reg For User {user_ID}")
-    return database_Manager.search_In_Database(user_ID, "bot_Users", "telegram_ID")
-
-
-
-def check_Spotify_Login(user_ID):
-    """
-    Проверить авторизован ли пользователь в Spotify
-    """
-    logger.info(f"Check Spotify Login For User {user_ID}")
-    return database_Manager.search_In_Database(get_User_UniqueID(user_ID), "spotify_Users", "user_Unique_ID")
-
-
-
 def to_Main_Menu(user_ID):
     """
     Вернуть пользователя в главное меню
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
-    database_Manager.write_User_Position(user_ID, "main_Menu")
-    user_Language = get_User_Language(user_ID)
+    db_Manager.write_User_Position(user_ID, "main_Menu")
+    user_Language = db_Manager.get_User_Language(user_ID)
     bot_Spotify_Sender.controls_Main_Menu(user_ID, language_Name=user_Language)
 
 
@@ -130,8 +44,8 @@ def in_Work(user_ID):
     Поставить пользователю позицию in Work
     """
     logger.info(f"Sending In Work State For User {user_ID}")
-    database_Manager.write_User_Position(user_ID, "work_In_Progress")
-    user_Language = get_User_Language(user_ID)
+    db_Manager.write_User_Position(user_ID, "work_In_Progress")
+    user_Language = db_Manager.get_User_Language(user_ID)
     bot_Spotify_Sender.playlist_Preparing(user_ID, language_Name=user_Language)
 
 
@@ -143,15 +57,15 @@ def logout_Command(message):
     Удаление пользователя из всех таблиц в базе данных
     """
     user_ID = message.from_user.id
-    if check_Bot_Reg(user_ID):
-        user_Unique_ID = get_User_UniqueID(user_ID)
-        user_Language = get_User_Language(user_ID)
+    if db_Manager.check_Bot_Reg(user_ID):
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
+        user_Language = db_Manager.get_User_Language(user_ID)
         logger.info(f"Preparing Logout For User {user_ID}")
         
-        database_Manager.delete_User(user_Unique_ID, "bot_Users")
-        database_Manager.delete_User(user_Unique_ID, "spotify_Users")
-        database_Manager.delete_User(user_Unique_ID, "users_TopTracks")
-        database_Manager.delete_User(user_Unique_ID, "users_TopArtists")
+        db_Manager.delete_User(user_Unique_ID, "bot_Users")
+        db_Manager.delete_User(user_Unique_ID, "spotify_Users")
+        db_Manager.delete_User(user_Unique_ID, "users_TopTracks")
+        db_Manager.delete_User(user_Unique_ID, "users_TopArtists")
 
         logger.info(f"Logout Successful For User {user_ID}")
         bot_Spotify_Sender.user_Leaving(message.from_user.id, language_Name=user_Language)
@@ -163,11 +77,11 @@ def language_Command(message):
     Обработка команды смены языка
     """
     user_ID = message.from_user.id
-    if check_Spotify_Login(user_ID):
+    if db_Manager.check_Spotify_Login(user_ID):
         user_ID = message.from_user.id
         logger.info(f"Sending Language Selector Keyboard For User {user_ID}")
-        bot_Spotify_Sender.language_Selector(user_ID, get_User_Language(user_ID))
-        database_Manager.write_User_Position(user_ID, "language_Select")
+        bot_Spotify_Sender.language_Selector(user_ID, db_Manager.get_User_Language(user_ID))
+        db_Manager.write_User_Position(user_ID, "language_Select")
 
 
 
@@ -179,7 +93,7 @@ def menu_Command(message):
     """
     user_ID = message.from_user.id
 
-    if check_Spotify_Login(user_ID):
+    if db_Manager.check_Spotify_Login(user_ID):
         to_Main_Menu(user_ID)
 
 
@@ -193,7 +107,7 @@ def contacts_Command(message):
     user_ID = message.from_user.id
 
     logger.info(f"Sending Contacts For User {user_ID}")
-    user_Language = get_User_Language(user_ID)
+    user_Language = db_Manager.get_User_Language(user_ID)
     bot_Spotify_Sender.send_Developer_Contacts(user_ID, language_Name=user_Language)
 
 
@@ -211,7 +125,7 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
     """
     try:
         in_Work(user_ID)
-        user_Unique_ID = get_User_UniqueID(user_ID)
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
         localization_Data = {
             "playlist_Name":language_Vocabluary[language_Name]["chat_Messages"]["superShuffle"]["your_SuperShuffle"],
@@ -258,7 +172,7 @@ def process_TopTracks_List(user_ID, time_Range, list_Page):
 
     list_Page - Страница списка данных
     """
-    database_User_Tracks = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
+    database_User_Tracks = db_Manager.search_In_Database(db_Manager.get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
 
     if database_User_Tracks: #Если у пользователя есть топ
         if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
@@ -299,7 +213,7 @@ def process_TopArtists_List(user_ID, time_Range, list_Page):
 
     list_Page - Страница списка данных
     """
-    database_User_Artists = database_Manager.search_In_Database(get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
+    database_User_Artists = db_Manager.search_In_Database(db_Manager.get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
 
     if database_User_Artists: #Если у пользователя есть топ
         if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
@@ -340,7 +254,7 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        top_Data = spotify_Service.get_User_Top_Tracks(get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
+        top_Data = spotify_Service.get_User_Top_Tracks(db_Manager.get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
         logger.info(f"Get User Top Tracks For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -359,7 +273,7 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
 
     else:
-        database_Manager.write_User_TopTracks(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
+        db_Manager.write_User_TopTracks(db_Manager.get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
 
         try:
             bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range, 1), language_Name=language_Name)
@@ -385,7 +299,7 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        top_Data = spotify_Service.get_User_Top_Artists(get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
+        top_Data = spotify_Service.get_User_Top_Artists(db_Manager.get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
         logger.info(f"Get User Top Artists For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -404,7 +318,7 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
     else:
-        database_Manager.write_User_TopArtists(get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
+        db_Manager.write_User_TopArtists(db_Manager.get_User_UniqueID(user_ID), data_Period=time_Range, top_Data=json.dumps(top_Data))
 
         try:
             bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range, 1), language_Name=language_Name)
@@ -431,7 +345,7 @@ def create_Top_Playlist(user_ID, time_Range, language_Name):
     """
     try:
         in_Work(user_ID)
-        user_Unique_ID = get_User_UniqueID(user_ID)
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
         localization_Data = {
             "playlist_Name":language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["your_TopSongs"],
@@ -529,8 +443,8 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        database_Manager.write_User_Position(user_ID, "work_In_Progress")
-        musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(get_User_UniqueID(user_ID), time_Range)
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
+        musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(db_Manager.get_User_UniqueID(user_ID), time_Range)
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
@@ -566,7 +480,7 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
             "correct_Answers":0,
             "total_Rounds":10,
         }
-        database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
+        db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
         process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
 
 
@@ -578,8 +492,8 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
     user_ID - Telegram ID пользователя
     """
     try:
-        database_Manager.write_User_Position(user_ID, "work_In_Progress")
-        user_Unique_ID = get_User_UniqueID(user_ID)
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Service.check_User_Liked_Songs(user_Unique_ID, 50)
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Liked_Songs(user_Unique_ID)
         logger.info(f"Creating Liked Songs Music Quiz For User {user_ID}")
@@ -617,7 +531,7 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
             "correct_Answers":0,
             "total_Rounds":10,
         }
-        database_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
+        db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
         process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
 
 
@@ -630,8 +544,8 @@ def callback_Handler(callback_Data):
     user_ID = callback_Data.from_user.id
     logger.info(f"New Callback Data: {callback_Data.data} From: {user_ID}")
 
-    if check_Spotify_Login(user_ID):
-        user_Language = get_User_Language(user_ID) #Записать в словарь язык пользователя
+    if db_Manager.check_Spotify_Login(user_ID):
+        user_Language = db_Manager.get_User_Language(user_ID) #Записать в словарь язык пользователя
         callback_Request = callback_Data.data.split("???") #Парсим строку
 
         if callback_Request[0] == "player": #Если сообщение из раздела плеера
@@ -639,11 +553,11 @@ def callback_Handler(callback_Data):
                 try:
                     if callback_Request[2] == "playlist":
                         playlist_ID = "spotify:playlist:" + callback_Request[3]
-                        spotify_Service.start_Playback(get_User_UniqueID(user_ID), playback_Context=playlist_ID)
+                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
                     
                     elif callback_Request[2] == "track":
                         track_ID = "spotify:track:" + callback_Request[3]
-                        spotify_Service.start_Playback(get_User_UniqueID(user_ID), playback_Uris=[track_ID])
+                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Uris=[track_ID])
 
                 except spotify_Exceptions.no_ActiveDevices:
                     bot_Spotify_Sender.no_ActiveDevices(user_ID, user_Language)
@@ -689,9 +603,9 @@ def inline_Handler(data):
     inline_ID = data.id
     inline_Request = data.query.lower()
 
-    if check_Spotify_Login(user_ID):
+    if db_Manager.check_Spotify_Login(user_ID):
         if inline_Request == "share music":
-            user_Language = get_User_Language(user_ID)
+            user_Language = db_Manager.get_User_Language(user_ID)
 
             try:
                 user_Data = spotify_Service.get_Current_Playing(get_User_UniqueID(user_ID))
@@ -722,27 +636,27 @@ def chat_Messages_Handler(message):
     user_ID = message.from_user.id
     logger.info(f"New Message: {message.text} From: {message.from_user.id}")
 
-    if not check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
+    if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
         reg_Timestamp = int(time.time())
-        generated_Unique_ID = database_Manager.generate_Unique_ID()
-        database_Manager.register_User(user_ID, generated_Unique_ID, "ENG", bot_Version, reg_Timestamp)
+        generated_Unique_ID = db_Manager.generate_Unique_ID()
+        db_Manager.register_User(user_ID, generated_Unique_ID, "ENG", bot_Version, reg_Timestamp)
 
-    if not check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
+    if not db_Manager.check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
-        user_Unique_ID = get_User_UniqueID(user_ID)
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Auth_Link = spotify_Oauth.generate_Auth_Link(user_Unique_ID)
         bot_Spotify_Sender.spotify_Login_Offer(user_ID, spotify_Auth_Link, language_Name="ENG")
 
 
 
     #Оптимизация для БД
-    user_Position_Cache = get_User_Position(user_ID) #Записать в словарь позицию пользователя
-    user_Language = get_User_Language(user_ID) #Записать в словарь язык пользователя
+    user_Position_Cache = db_Manager.get_User_Position(user_ID) #Записать в словарь позицию пользователя
+    user_Language = db_Manager.get_User_Language(user_ID) #Записать в словарь язык пользователя
 
 
 
-    if check_Spotify_Login(user_ID):
+    if db_Manager.check_Spotify_Login(user_ID):
         logger.info(f"User {user_ID} Have Spotify Login")
 
 
@@ -754,23 +668,23 @@ def chat_Messages_Handler(message):
         #Меню смены языка
         if user_Position_Cache == "language_Select":
             if message.text == "English":
-                database_Manager.write_User_Language(user_ID, "ENG")
+                db_Manager.write_User_Language(user_ID, "ENG")
                 bot_Spotify_Sender.language_Changed(user_ID, "ENG")
                 to_Main_Menu(user_ID)
 
             elif message.text == "Russian":
-                database_Manager.write_User_Language(user_ID, "RUS")
+                db_Manager.write_User_Language(user_ID, "RUS")
                 bot_Spotify_Sender.language_Changed(user_ID, "RUS")
                 to_Main_Menu(user_ID)
             
             else:
-                bot_Spotify_Sender.astray_Notification(user_ID, get_User_Language(user_ID))
+                bot_Spotify_Sender.astray_Notification(user_ID, db_Manager.get_User_Language(user_ID))
 
 
-        if get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
+        if db_Manager.get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
             to_Main_Menu(user_ID)
             bot_Spotify_Sender.jarvis_Updated(user_ID, language_Name=user_Language, jarvis_Version=bot_Version)
-            database_Manager.write_User_BotVersion(user_ID, bot_Version)
+            db_Manager.write_User_BotVersion(user_ID, bot_Version)
 
 
         #ГЛАВНОЕ МЕНЮ
@@ -780,7 +694,7 @@ def chat_Messages_Handler(message):
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["now_Playing"]: #Пункт Now Playing
                 logger.info(f"User {user_ID} Entered To Now Playing")
                 try:
-                    user_Data = spotify_Service.get_Current_Playing(get_User_UniqueID(user_ID))
+                    user_Data = spotify_Service.get_Current_Playing(db_Manager.get_User_UniqueID(user_ID))
 
                 except spotify_Exceptions.no_Playback:
                     bot_Spotify_Sender.nowplaying_Nothing(user_ID, language_Name=user_Language)
@@ -810,21 +724,21 @@ def chat_Messages_Handler(message):
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
-                database_Manager.write_User_Position(user_ID, "user_Super_Shuffle")
+                db_Manager.write_User_Position(user_ID, "user_Super_Shuffle")
                 bot_Spotify_Sender.superShuffle_Description(user_ID, language_Name=user_Language)
                 bot_Spotify_Sender.shuffle_Tracks_Count(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Super Shuffle Selector For User {user_ID}")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"]: #Пункт топов
                 logger.info(f"User {user_ID} Entered To Your Tops")
-                database_Manager.write_User_Position(user_ID, "user_Your_Tops")
+                db_Manager.write_User_Position(user_ID, "user_Your_Tops")
                 bot_Spotify_Sender.yourTops_Description(user_ID, language_Name=user_Language)
                 bot_Spotify_Sender.tops_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Your Tops Selector For User {user_ID}")
             
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]: #Пункт музыкальной викторины
                 logger.info(f"User {user_ID} Entered To Music Quiz")
-                database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
+                db_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
                 bot_Spotify_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
                 bot_Spotify_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
@@ -859,11 +773,11 @@ def chat_Messages_Handler(message):
         if user_Position_Cache == "user_Your_Tops":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["songs"]:
                 bot_Spotify_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
-                database_Manager.write_User_Position(user_ID, "user_Top_Tracks_Time")
+                db_Manager.write_User_Position(user_ID, "user_Top_Tracks_Time")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["artists"]:
                 bot_Spotify_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
-                database_Manager.write_User_Position(user_ID, "user_Top_Artists_Time")
+                db_Manager.write_User_Position(user_ID, "user_Top_Artists_Time")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
                 to_Main_Menu(user_ID)
@@ -913,7 +827,7 @@ def chat_Messages_Handler(message):
                 create_MusicQuiz_Liked_Songs(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["top_Songs"]:
-                database_Manager.write_User_Position(user_ID, "user_MusicQuiz_Time")
+                db_Manager.write_User_Position(user_ID, "user_MusicQuiz_Time")
                 bot_Spotify_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:

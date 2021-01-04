@@ -1,6 +1,7 @@
 import sqlite3
 import random
 import string
+from spotify_Module.spotify_Logger import logger
 
 spotify_Database = sqlite3.connect("bot_Database.db")
 database_Cursor = spotify_Database.cursor()
@@ -209,3 +210,89 @@ def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
     query_Arguments = (str(refreshed_Token), int(refresh_Timestamp), str(user_Unique_ID),)
     register_Query = "UPDATE spotify_Users SET spotify_Auth_Token = ?, refresh_Timestamp = ? WHERE user_Unique_ID = ?"
     post_Sql_Query(register_Query, query_Arguments)
+
+
+
+def get_User_Position(user_Telegram_ID):
+    """
+    Получить позицию пользователя из базы данных
+    """
+    search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
+    
+    if search_Data:
+        user_Position = search_Data[0][4]
+        logger.info(f"Get User Position For User {user_Telegram_ID}")
+        return user_Position
+    
+    else:
+        logger.info(f"CANNOT Get User Position For User {user_Telegram_ID}, sending value 'undefined_Position'")
+        return "undefined_Position"
+
+
+
+def get_User_Language(user_Telegram_ID):
+    """
+    Получить язык пользователя из базы данных
+    """
+    search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
+
+    if search_Data:
+        user_Language = search_Data[0][2]
+        logger.info(f"Get User Language For User {user_Telegram_ID}")
+        return user_Language
+
+    else:
+        logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_Telegram_ID}")
+        return "ENG"
+
+
+
+def get_User_BotVersion(user_Telegram_ID):
+    """
+    Получить версию бота у пользователя
+    """
+    search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
+
+    if search_Data:
+        bot_Version = search_Data[0][3]
+        logger.info(f"User {user_Telegram_ID} Bot Version: {bot_Version}")
+        return bot_Version
+
+    else:
+        logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_Telegram_ID}")
+        return 0
+
+
+
+def get_User_UniqueID(user_Telegram_ID):
+    """
+    Получить уникальный ID пользователя из базы данных
+    """
+    search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
+
+    if search_Data:
+        user_UniqueID = search_Data[0][1]
+        logger.info(f"Get User Unique ID For User {user_Telegram_ID}")
+        return user_UniqueID
+    
+    else:
+        logger.error(f"CANNOT Get User Unique ID For User {user_Telegram_ID}")
+        return None
+
+
+
+def check_Bot_Reg(user_Telegram_ID):
+    """
+    Проверить регистрацию в боте
+    """
+    logger.info(f"Check Bot Reg For User {user_Telegram_ID}")
+    return search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
+
+
+
+def check_Spotify_Login(user_Telegram_ID):
+    """
+    Проверить авторизован ли пользователь в Spotify
+    """
+    logger.info(f"Check Spotify Login For User {user_Telegram_ID}")
+    return search_In_Database(get_User_UniqueID(user_Telegram_ID), "spotify_Users", "user_Unique_ID")
