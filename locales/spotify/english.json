@@ -88,7 +88,7 @@
         },
 
         "yourTops": {
-            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create Top songs list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your Top.",
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create *Top Songs* list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your *Top*.",
 
             "select_Top_Time": "Over what period of time?",
 
@@ -152,7 +152,7 @@
 
             "user_Leaving": "I'm sorry that you are leaving. 😭 \nIf you have any problems, you can contact us via the /contacts command. \n\n*To completely disable the Jarvis, go to the Spotify website.*",
     
-            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
+            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n_@JarvisMusicalBot share music_ - Share Now Playing Song \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     
             "developer_Contacts": "Having problems? Have questions? Want to report a bug?"
         },

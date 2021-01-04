@@ -13,6 +13,10 @@ spotify_Bot = telebot.TeleBot(bot_Keys_File["telegram"]["telegram_Key"])
 def get_Callback_Data(callback_Data):
     bot_Spotify_Module.callback_Handler(callback_Data)
 
+@spotify_Bot.inline_handler(func=lambda query: len(query.query) > 0) #Слушатель Inline режима
+def get_Inline_Data(query):
+    bot_Spotify_Module.inline_Handler(query)
+
 @spotify_Bot.message_handler(commands=["logout"]) #Слушатель команды Logout
 def logout_Command_Handler(message):
     bot_Spotify_Module.logout_Command(message)

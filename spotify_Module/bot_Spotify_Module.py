@@ -619,20 +619,23 @@ logger.info("Spotify Module Ready")
 
 
 def callback_Handler(callback_Data):
-    user_ID = callback_Data.message.chat.id
-    logger.info(f"New Callback Data: {callback_Data.data} From: {callback_Data.message.chat.id}")
+    user_ID = callback_Data.from_user.id
+    logger.info(f"New Callback Data: {callback_Data.data} From: {user_ID}")
 
     if check_Spotify_Login(user_ID):
         user_Language = get_User_Language(user_ID) #Записать в словарь язык пользователя
-        message_ID = callback_Data.message.message_id
         callback_Request = callback_Data.data.split("???") #Парсим строку
 
         if callback_Request[0] == "player": #Если сообщение из раздела плеера
             if callback_Request[1] == "play":
                 try:
-                    spotify_Service.start_Playback(get_User_UniqueID(user_ID), callback_Request[2])
+                    if callback_Request[2] == "playlist":
+                        playlist_ID = "spotify:playlist:" + callback_Request[3]
+                        spotify_Service.start_Playback(get_User_UniqueID(user_ID), playback_Context=playlist_ID)
                     
-                    bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
+                    elif callback_Request[2] == "track":
+                        track_ID = "spotify:track:" + callback_Request[3]
+                        spotify_Service.start_Playback(get_User_UniqueID(user_ID), playback_Uris=[track_ID])
 
                 except spotify_Exceptions.no_ActiveDevices:
                     bot_Spotify_Sender.no_ActiveDevices(user_ID, user_Language)
@@ -645,22 +648,62 @@ def callback_Handler(callback_Data):
 
                 except:
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
-        
-        elif callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
-            if callback_Request[1] == "topTracks":
-                if callback_Request[2] == "createPlaylist":
-                        create_Top_Playlist(user_ID, time_Range=callback_Request[3], language_Name=user_Language)
                 
-                elif callback_Request[2] == "page":
-                    page_Number = int(callback_Request[4])
+                else:
+                    bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
+        
+        if callback_Data.message: #По каким-то причинам у сообщений отправленных из Inline нету тела сообщения
+            message_ID = callback_Data.message.message_id
 
-                    bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+            if callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
+                if callback_Request[1] == "topTracks":
+                    if callback_Request[2] == "createPlaylist":
+                            create_Top_Playlist(user_ID, time_Range=callback_Request[3], language_Name=user_Language)
+                    
+                    elif callback_Request[2] == "page":
+                        page_Number = int(callback_Request[4])
+
+                        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+                
+                elif callback_Request[1] == "topArtists":
+                    if callback_Request[2] == "page":
+                        page_Number = int(callback_Request[4])
+
+                        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+
+
+
+def inline_Handler(data):
+    user_ID = data.from_user.id
+    inline_ID = data.id
+    inline_Request = data.query.lower()
+
+    if check_Spotify_Login(user_ID):
+        if inline_Request == "share music":
+            user_Language = get_User_Language(user_ID)
+
+            try:
+                user_Data = spotify_Service.get_Current_Playing(get_User_UniqueID(user_ID))
+
+            except spotify_Exceptions.no_Data:
+                bot_Spotify_Sender.inline_NowPlaying_Error(inline_ID)
+
+            except spotify_Exceptions.no_Playback:
+                bot_Spotify_Sender.inline_NowPlaying_Nothing(inline_ID)
+
+            except spotify_Exceptions.oauth_Http_Error:
+                bot_Spotify_Sender.inline_Auth_Error(inline_ID)
+                logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+
+            except:
+                bot_Spotify_Sender.inline_Unknown_Error(inline_ID)
+                logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
             
-            elif callback_Request[1] == "topArtists":
-                if callback_Request[2] == "page":
-                    page_Number = int(callback_Request[4])
-
-                    bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+            else:
+                bot_Spotify_Sender.share_Inline_NowPlaying(inline_ID, user_Data, user_Language)
+    
+    else:
+        bot_Spotify_Sender.inline_Spotify_Not_Authorized(inline_ID)
 
 
 
@@ -743,11 +786,7 @@ def chat_Messages_Handler(message):
 
                 except spotify_Exceptions.oauth_Connection_Error:
                     bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"CONNECTION ERROR OCCURED WHEN WHEN SENDING NOW PLAYING FOR USER {user_ID}")
-
-                except:
-                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"UNKNOWN ERROR OCCURED WHEN WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+                    logger.error(f"CONNECTION ERROR OCCURED WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
                 else:
                     user_Data["song_Cover"] = urllib.request.urlopen(user_Data["song_Cover_URL"]).read() #Скачивание обложки

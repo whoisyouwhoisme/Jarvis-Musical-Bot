@@ -238,7 +238,7 @@ def get_User_Devices(auth_Token):
 
 
 
-def start_Playback(auth_Token, device_ID, playback_Context):
+def start_Playback(auth_Token, device_ID, playback_Context=None, playback_Uris=None):
     """
     Запустить новое проигрывание.
 
@@ -248,12 +248,21 @@ def start_Playback(auth_Token, device_ID, playback_Context):
 
     device_ID - ID устройства пользователя
 
-    playback_Context - Что требуется проигрывать (например spotify:playlist:0soXLPoBV9LGgpwCZOvVi5)
+    playback_Context - Контекст для проигрывания (плейлист, исполнитель)
+    
+    ИЛИ
+
+    playback_Uris - Список из URI треков Спотифай
     """
     request_Headers = return_Request_Headers(auth_Token)
-    request_Data = json.dumps({
-        "context_uri":playback_Context,
-    })
+    if playback_Context:
+        request_Data = json.dumps({
+            "context_uri":playback_Context,
+        })
+    elif playback_Uris:
+        request_Data = json.dumps({
+            "uris":playback_Uris,
+        })        
 
     response = put_Request("https://api.spotify.com/v1/me/player/play", headers=request_Headers, data=request_Data)
 

@@ -59,18 +59,24 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["song_Duration"] = user_Playback["item"]["duration_ms"]
         playback_Data["release_Date"] = user_Playback["item"]["album"]["release_date"]
         playback_Data["song_URI"] = user_Playback["item"]["uri"]
+        playback_Data["song_ID"] = user_Playback["item"]["id"]
         playback_Data["external_URL"] = user_Playback["item"]["external_urls"]["spotify"]
         playback_Data["preview_URL"] = user_Playback["item"]["preview_url"]
         playback_Data["song_Cover_URL"] = user_Playback["item"]["album"]["images"][1]["url"]
 
         search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
-        search_Result = youtube_Lib.search_Youtube(search_Keywords) #Поиск Ютуб клипа для песни
-
-        if search_Result["items"]: #Если песня найдена
-            first_Result_ID = search_Result["items"][0]["id"]["videoId"]
-            playback_Data["youtube_URL"] = "https://youtu.be/" + first_Result_ID
-        else:
+        try: #Костыль для обхода привышения квоты на поиск. КОГДА НИБУДЬ сделаю авторизацию через Гугл аккаунт... КОГДА НИБУДЬ))
+            search_Result = youtube_Lib.search_Youtube(search_Keywords) #Поиск Ютуб клипа для песни
+        
+        except:
             playback_Data["youtube_URL"] = ""
+        
+        else:
+            if search_Result["items"]: #Если песня найдена
+                first_Result_ID = search_Result["items"][0]["id"]["videoId"]
+                playback_Data["youtube_URL"] = "https://youtu.be/" + first_Result_ID
+            else:
+                playback_Data["youtube_URL"] = ""
     
     except spotify_Exceptions.private_Session_Enabled:
         raise spotify_Exceptions.private_Session_Enabled
@@ -83,7 +89,7 @@ def get_Current_Playing(user_Unique_ID):
 
 
 
-def start_Playback(user_Unique_ID, playback_Context):
+def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
     """
     Начинает воспроизведение контента, в случае успеха возвращает True
 
@@ -94,6 +100,10 @@ def start_Playback(user_Unique_ID, playback_Context):
     user_Unique_ID - Внутренний уникальный ID пользователя
 
     playback_Context - Контекст для проигрывания (плейлист, исполнитель)
+    
+    ИЛИ
+
+    playback_Uris - Список из URI треков Спотифай
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -105,7 +115,10 @@ def start_Playback(user_Unique_ID, playback_Context):
         raise spotify_Exceptions.no_ActiveDevices
 
     try:
-        spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Context)
+        if playback_Context:
+            spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Context=playback_Context)
+        elif playback_Uris:
+            spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Uris=playback_Uris)
 
     except spotify_Exceptions.oauth_Http_Error as error:
         if error.http_Code == 404:
@@ -121,7 +134,7 @@ def start_Playback(user_Unique_ID, playback_Context):
 
 def get_Playlist_Data(user_Unique_ID, playlist_ID):
     """
-    Найти в YouTube клип для текущего воспроизведения, возвращает словарь
+    Возвращает информацию о плейлисте по ID плейлиста
 
     user_Unique_ID - Внутренний уникальный ID пользователя
 
@@ -135,7 +148,8 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
     playlist_Data["name"] = playlist_Info["name"]
     playlist_Data["description"] = playlist_Info["description"]
     playlist_Data["external_URL"] = playlist_Info["external_urls"]["spotify"]
-    playlist_Data["playlist_ID"] = "spotify:playlist:" + playlist_Info["id"]
+    playlist_Data["playlist_ID"] = playlist_Info["id"]
+
     playlist_Data["total_Tracks"] = playlist_Info["tracks"]["total"]
     playlist_Data["image_URL"] = playlist_Info["images"][1]["url"]
 

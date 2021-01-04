@@ -108,7 +108,7 @@ def request_Refreshed_Token(user_Refresh_Token):
         raise spotify_Exceptions.oauth_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error
+        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
 
     except:
         raise spotify_Exceptions.oauth_Unknown_Error
