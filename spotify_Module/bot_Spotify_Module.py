@@ -1,3 +1,11 @@
+"""
+Ребята не стоит вскрывать этот код. 
+Вы молодые, хакеры, вам все легко. Это не то. Это не Stuxnet и даже не шпионские программы ЦРУ. Сюда лучше не лезть. 
+Серьезно, любой из вас будет жалеть. 
+Лучше закройте компилятор и забудьте что там писалось. 
+Я вполне понимаю что данным сообщением вызову дополнительный интерес, но хочу сразу предостеречь пытливых - стоп. Остальные просто не найдут.
+"""
+
 import time
 import json
 import math
@@ -645,6 +653,9 @@ def callback_Handler(callback_Data):
 
                 except spotify_Exceptions.playback_Error:
                     bot_Spotify_Sender.playback_Error(user_ID, language_Name=user_Language)
+                
+                except spotify_Exceptions.oauth_Http_Error:
+                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
 
                 except:
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
