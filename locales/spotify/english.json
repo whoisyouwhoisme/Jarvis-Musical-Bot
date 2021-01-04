@@ -150,7 +150,9 @@
 
             "choose_Language": "Choose language \n\n*You can always change language via /language command*",
 
-            "user_Leaving": "I'm sorry that you are leaving. 😭 \nIf you have any problems, you can contact us via the /contacts command. \n\n*To completely disable the Jarvis, go to the Spotify website.*",
+            "user_Leaving": "I'm sorry that you are leaving. 😭 \nIf you have any problems, you can contact us via the /contacts command.",
+
+            "disable_Bot": "*To completely disable the Jarvis, go to the Spotify website.*",
     
             "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n_@JarvisMusicalBot share music_ - Share Now Playing Song \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     

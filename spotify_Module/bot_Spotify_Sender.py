@@ -48,10 +48,16 @@ def user_Leaving(chat_id, language_Name):
     """
     Уведомление пользователю об успешном выходе из бота
     """
-    disable_Keyboard = telebot.types.InlineKeyboardMarkup()
+    #Первое сообщение с кнопкой /start
+    start_Keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
+    start_Keyboard.row("/start")
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["user_Leaving"], parse_mode="Markdown", reply_markup=start_Keyboard)
+
+    #Второе сообщение с кнопкой отключения бота
+    keyboard = telebot.types.InlineKeyboardMarkup()
     disable_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["service_Buttons"]["disable_Jarvis"], url="https://www.spotify.com/account/apps/")
-    disable_Keyboard.add(disable_Button)
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["user_Leaving"], parse_mode="Markdown", reply_markup=disable_Keyboard)
+    keyboard.add(disable_Button)
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["disable_Bot"], parse_mode="Markdown", reply_markup=keyboard)
 
 
 
@@ -568,7 +574,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     keyboard.add(open_Playlist)
 
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем кнопку
-        youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["youtube_Clip"], url=playing_Data["youtube_URL"])
+        youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
     now_Playing_Data = {}
