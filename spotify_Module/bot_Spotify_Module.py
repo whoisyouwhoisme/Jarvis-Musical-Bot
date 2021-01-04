@@ -608,7 +608,7 @@ def inline_Handler(data):
             user_Language = db_Manager.get_User_Language(user_ID)
 
             try:
-                user_Data = spotify_Service.get_Current_Playing(get_User_UniqueID(user_ID))
+                user_Data = spotify_Service.get_Current_Playing(db_Manager.get_User_UniqueID(user_ID))
 
             except spotify_Exceptions.no_Data:
                 bot_Spotify_Sender.inline_NowPlaying_Error(inline_ID)
