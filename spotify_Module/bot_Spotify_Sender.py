@@ -320,6 +320,15 @@ def playback_Started(chat_id, language_Name):
 
 
 
+def song_Added_To_Queue(chat_id, language_Name):
+    """
+    Песня была добавлена в список воспроизведения
+    """
+    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["added_To_Queue"]
+    spotify_Bot.send_message(chat_id, playback_Text, parse_mode="Markdown")
+
+
+
 def now_Playing_Error(chat_id, language_Name):
     """
     Недостаточно метаданных для отображения

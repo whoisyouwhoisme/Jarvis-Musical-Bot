@@ -238,15 +238,13 @@ def get_User_Devices(auth_Token):
 
 
 
-def start_Playback(auth_Token, device_ID, playback_Context=None, playback_Uris=None):
+def start_Playback(auth_Token, playback_Context=None, playback_Uris=None):
     """
     Запустить новое проигрывание.
 
     В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
 
     auth_Token - Ключ авторизации
-
-    device_ID - ID устройства пользователя
 
     playback_Context - Контекст для проигрывания (плейлист, исполнитель)
     
@@ -265,5 +263,23 @@ def start_Playback(auth_Token, device_ID, playback_Context=None, playback_Uris=N
         })        
 
     response = put_Request("https://api.spotify.com/v1/me/player/play", headers=request_Headers, data=request_Data)
+
+    return response
+
+
+
+def add_Track_To_Queue(auth_Token, track_Uri):
+    """
+    Добавить трек в очередь проигрывания пользователя
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    track_Uri - URI песни
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = post_Request(f"https://api.spotify.com/v1/me/player/queue?uri={track_Uri}", headers=request_Headers)
 
     return response

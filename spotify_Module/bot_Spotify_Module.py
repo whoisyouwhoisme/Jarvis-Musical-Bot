@@ -554,10 +554,10 @@ def callback_Handler(callback_Data):
                     if callback_Request[2] == "playlist":
                         playlist_ID = "spotify:playlist:" + callback_Request[3]
                         spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
-                    
+
                     elif callback_Request[2] == "track":
                         track_ID = "spotify:track:" + callback_Request[3]
-                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Uris=[track_ID])
+                        spotify_Service.add_Track_To_Queue(db_Manager.get_User_UniqueID(user_ID), track_Uri=track_ID)
 
                 except spotify_Exceptions.no_ActiveDevices:
                     bot_Spotify_Sender.no_ActiveDevices(user_ID, user_Language)
@@ -575,7 +575,11 @@ def callback_Handler(callback_Data):
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
                 
                 else:
-                    bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
+                    if callback_Request[2] == "playlist":
+                        bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
+                    
+                    elif callback_Request[2] == "track":
+                        bot_Spotify_Sender.song_Added_To_Queue(user_ID, language_Name=user_Language)
         
         if callback_Data.message: #По каким-то причинам у сообщений отправленных из Inline нету тела сообщения
             message_ID = callback_Data.message.message_id
@@ -587,14 +591,14 @@ def callback_Handler(callback_Data):
                     
                     elif callback_Request[2] == "page":
                         page_Number = int(callback_Request[4])
-
-                        bot_Spotify_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+                        top_Data = process_TopTracks_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number)
+                        bot_Spotify_Sender.tracks_Top(user_ID, top_Data, language_Name=user_Language, message_ID=message_ID)
                 
                 elif callback_Request[1] == "topArtists":
                     if callback_Request[2] == "page":
                         page_Number = int(callback_Request[4])
-
-                        bot_Spotify_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number), language_Name=user_Language, message_ID=message_ID)
+                        top_Data = process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number)
+                        bot_Spotify_Sender.artists_Top(user_ID, top_Data, language_Name=user_Language, message_ID=message_ID)
 
 
 
@@ -604,9 +608,9 @@ def inline_Handler(data):
     inline_Request = data.query.lower()
 
     if db_Manager.check_Spotify_Login(user_ID):
-        if inline_Request == "share song":
-            user_Language = db_Manager.get_User_Language(user_ID)
+        user_Language = db_Manager.get_User_Language(user_ID)
 
+        if inline_Request == "share song":
             try:
                 user_Data = spotify_Service.get_Current_Playing(db_Manager.get_User_UniqueID(user_ID))
 

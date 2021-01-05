@@ -109,16 +109,48 @@ def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
 
-    if user_Devices["devices"]: #Проверка наличия активного устройства
-        latest_User_Device = user_Devices["devices"][0]["id"]
-    else:
+    if not user_Devices["devices"]: #Проверка наличия активного устройства
         raise spotify_Exceptions.no_ActiveDevices
 
     try:
         if playback_Context:
-            spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Context=playback_Context)
+            spotify_Lib.start_Playback(user_Auth_Token, playback_Context=playback_Context)
         elif playback_Uris:
-            spotify_Lib.start_Playback(user_Auth_Token, latest_User_Device, playback_Uris=playback_Uris)
+            spotify_Lib.start_Playback(user_Auth_Token, playback_Uris=playback_Uris)
+
+    except spotify_Exceptions.oauth_Http_Error as error:
+        if error.http_Code == 404:
+            raise spotify_Exceptions.no_ActiveDevices
+        
+        elif error.http_Code == 403:
+            raise spotify_Exceptions.premium_Required
+
+    else:
+        return True
+
+
+
+def add_Track_To_Queue(user_Unique_ID, track_Uri):
+    """
+    Добавить трек в очередь проигрывания пользователя
+
+    В случае ошибки возвращает исключения:
+    no_ActiveDevices - Нет активных устройств
+    premium_Required - Требуется премиум-подписка
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    track_Uri - URI песни
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
+
+    if not user_Devices["devices"]: #Проверка наличия активного устройства
+        raise spotify_Exceptions.no_ActiveDevices
+    
+    try:
+        spotify_Lib.add_Track_To_Queue(user_Auth_Token, track_Uri=track_Uri)
 
     except spotify_Exceptions.oauth_Http_Error as error:
         if error.http_Code == 404:

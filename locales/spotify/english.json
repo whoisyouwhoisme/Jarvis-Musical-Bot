@@ -83,6 +83,8 @@
             "listening_Now": "I'm listening now:",
 
             "playback_Started": "*Playback has started.*",
+
+            "added_To_Queue": "*The song has been added to the play queue.*",
     
             "function_On_Way": "This feature will be available soon, stay tuned.",
 
