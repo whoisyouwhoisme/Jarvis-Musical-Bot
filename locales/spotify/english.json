@@ -80,6 +80,8 @@
 
             "now_Playing": "Now playing:",
 
+            "listening_Now": "I'm listening now:",
+
             "playback_Started": "*Playback has started.*",
     
             "function_On_Way": "This feature will be available soon, stay tuned.",
@@ -154,7 +156,7 @@
 
             "disable_Bot": "*To completely disable the Jarvis, go to the Spotify website.*",
     
-            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n_@JarvisMusicalBot share music_ - Share Now Playing Song \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
+            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n_@JarvisMusicalBot share song_ - Share Now Playing Song \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     
             "developer_Contacts": "Having problems? Have questions? Want to report a bug?"
         },

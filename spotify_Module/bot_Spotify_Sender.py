@@ -591,7 +591,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
 
     now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["release_date"] + now_Playing_Data["song_Duration"] + now_Playing_Data["preview_URL"]
 
-    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
+    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["listening_Now"] + "\n\n" + now_Playing_Data["playback_Summary"]
 
     if playing_Data["preview_URL"]: #Если существует превью, отправляем аудио, если нет - отправляем обложку
         results = telebot.types.InlineQueryResultAudio(1, playing_Data["preview_URL"], title="Song Preview", caption=playback_Text, parse_mode="HTML", reply_markup=keyboard)

@@ -604,7 +604,7 @@ def inline_Handler(data):
     inline_Request = data.query.lower()
 
     if db_Manager.check_Spotify_Login(user_ID):
-        if inline_Request == "share music":
+        if inline_Request == "share song":
             user_Language = db_Manager.get_User_Language(user_ID)
 
             try:
