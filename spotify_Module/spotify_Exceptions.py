@@ -1,14 +1,14 @@
-#OAUTH ERRORS
-class oauth_Exception(Exception):
+#HTTP ERRORS
+class http_Exception(Exception):
     pass
 
-class oauth_Connection_Error(oauth_Exception):
+class http_Connection_Error(http_Exception):
     """
     Ошибка соединения с сервером
     """
     pass
 
-class oauth_Http_Error(oauth_Exception):
+class http_Error(http_Exception):
     """
     Ошибка HTTP
     """
@@ -16,7 +16,7 @@ class oauth_Http_Error(oauth_Exception):
         self.http_Code = http_Code
         self.http_Reason = http_Reason
 
-class oauth_Unknown_Error(oauth_Exception):
+class http_Unknown_Error(http_Exception):
     """
     Неизвестная ошибка
     """
@@ -64,12 +64,6 @@ class musicQuiz_Error_NoTracks(spotify_Exception):
     """
     pass
 
-class musicQuiz_Error_RoundProcess(spotify_Exception):
-    """
-    Ошибка MusicQuiz - ошибка во время обработки нового раунда
-    """
-    pass
-
 class premium_Required(spotify_Exception):
     """
     Требуется Premium подписка
@@ -91,47 +85,5 @@ class playback_Error(spotify_Exception):
 class private_Session_Enabled(spotify_Exception):
     """
     Активирована приватная сессия
-    """
-    pass
-
-
-
-#YOUTUBE ERRORS
-class youtube_Exception(Exception):
-    pass
-
-class youtube_Quota_Limit(youtube_Exception):
-    """
-    Закончилась квота на доступы в YouTube
-    """
-    pass
-
-class youtube_No_Results(youtube_Exception):
-    """
-    Нет результатов поиска
-    """
-    pass
-
-class youtube_Invalid_Request(youtube_Exception):
-    """
-    Неправильный запрос
-    """
-    pass
-
-class youtube_Unknown_Error(Exception):
-    """
-    Неизвестная ошибка
-    """
-    pass
-
-
-
-#HTTP ERRORS
-class http_Exception(Exception):
-    pass
-
-class http_Connection_Error(http_Exception):
-    """
-    Ошибка HTTP
     """
     pass

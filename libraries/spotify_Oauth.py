@@ -63,13 +63,13 @@ def request_Access_Tokens(user_Auth_Code):
         response.raise_for_status()
         
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
-        raise spotify_Exceptions.oauth_Connection_Error
+        raise spotify_Exceptions.http_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
+        raise spotify_Exceptions.http_Error(response.status_code, response.reason)
 
     except:
-        raise spotify_Exceptions.oauth_Unknown_Error
+        raise spotify_Exceptions.http_Unknown_Error
 
     else:
         return response.json()
@@ -105,13 +105,13 @@ def request_Refreshed_Token(user_Refresh_Token):
         response.raise_for_status()
         
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
-        raise spotify_Exceptions.oauth_Connection_Error
+        raise spotify_Exceptions.http_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
+        raise spotify_Exceptions.http_Error(response.status_code, response.reason)
 
     except:
-        raise spotify_Exceptions.oauth_Unknown_Error
+        raise spotify_Exceptions.http_Unknown_Error
 
     else:
         return response.json()
@@ -137,13 +137,13 @@ def get_User_Profile(auth_Token):
         response.raise_for_status()
 
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
-        raise spotify_Exceptions.oauth_Connection_Error
+        raise spotify_Exceptions.http_Connection_Error
 
     except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.oauth_Http_Error(response.status_code, response.reason)
+        raise spotify_Exceptions.http_Error(response.status_code, response.reason)
 
     except:
-        raise spotify_Exceptions.oauth_Unknown_Error
+        raise spotify_Exceptions.http_Unknown_Error
 
     else:
         return response.json()

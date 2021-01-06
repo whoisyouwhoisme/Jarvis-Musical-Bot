@@ -174,9 +174,9 @@
     
             "musicQuiz_End": "*The quiz is over!* \n\nYour Result Is *{correct_Answers} / {total_Rounds}*",
     
-            "musicQuiz_Error_NoSongs": "Due to the peculiarities of *Spotify*, could not create a game session.\n\n *Please try again*.",
+            "musicQuiz_Error_NoSongs": "*Unable to create a game session.* \n\nPlease try again. If the error persists, contact the developer.",
     
-            "musicQuiz_Error_RoundProcess": "*Sorry*, Music Quiz has encountered an internal error.\n\n *Try to start a new game*.",
+            "musicQuiz_Error_RoundProcess": "*Music Quiz Internal Error.* \n\nTry to start a new game. If the error persists, contact the developer.",
 
             "musicQuiz_Question": "Listen the song, and select an answer 🤔",
 

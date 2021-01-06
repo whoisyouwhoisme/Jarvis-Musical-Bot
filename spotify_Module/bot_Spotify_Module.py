@@ -141,11 +141,11 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
     except spotify_Exceptions.no_Tracks:
         bot_Spotify_Sender.insufficient_Data_For_Shuffle(user_ID, language_Name=language_Name)
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
@@ -260,11 +260,11 @@ def user_Top_Tracks(user_ID, language_Name, time_Range):
     except spotify_Exceptions.no_Tops_Data:
         bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=language_Name)
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
 
@@ -305,11 +305,11 @@ def user_Top_Artists(user_ID, language_Name, time_Range):
     except spotify_Exceptions.no_Tops_Data:
         bot_Spotify_Sender.insufficient_Data_For_Top(user_ID, language_Name=language_Name)
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
 
@@ -357,11 +357,11 @@ def create_Top_Playlist(user_ID, time_Range, language_Name):
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         logger.info(f"Creating Top Tracks Playlist For User {user_ID}")
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
@@ -451,12 +451,12 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
         bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
@@ -502,12 +502,12 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
         bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
-    except spotify_Exceptions.oauth_Http_Error:
+    except spotify_Exceptions.http_Error:
         bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
-    except spotify_Exceptions.oauth_Connection_Error:
+    except spotify_Exceptions.http_Connection_Error:
         bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
@@ -576,7 +576,7 @@ def callback_Handler(callback_Data):
                 except spotify_Exceptions.playback_Error:
                     bot_Spotify_Sender.playback_Error(user_ID, language_Name=user_Language)
                 
-                except spotify_Exceptions.oauth_Http_Error:
+                except spotify_Exceptions.http_Error:
                     bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
 
                 except:
@@ -632,7 +632,7 @@ def inline_Handler(data):
             except spotify_Exceptions.private_Session_Enabled:
                 bot_Spotify_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
 
-            except spotify_Exceptions.oauth_Http_Error:
+            except spotify_Exceptions.http_Error:
                 bot_Spotify_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
                 logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
@@ -667,7 +667,7 @@ def inline_Handler(data):
             except spotify_Exceptions.private_Session_Enabled:
                 bot_Spotify_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
 
-            except spotify_Exceptions.oauth_Http_Error:
+            except spotify_Exceptions.http_Error:
                 bot_Spotify_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
                 logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
@@ -895,24 +895,30 @@ def chat_Messages_Handler(message):
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
         
         if user_Position_Cache == "user_MusicQuiz_inGame":
-            if message.text == musicQuiz_User_Stats[user_ID]["round_Answer"]: #Если сообщение пользователя = правильный ответ
-                if (int(time.time()) - musicQuiz_User_Stats[user_ID]["round_Prepared_Timestamp"]) <= 10: #Если с момента создания раунда прошло не более 10 секунд включительно
-                    bot_Spotify_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Засчитать ответ
-                    musicQuiz_User_Stats[user_ID]["correct_Answers"] += 1
+            try:
+                if message.text == musicQuiz_User_Stats[user_ID]["round_Answer"]: #Если сообщение пользователя = правильный ответ
+                    if (int(time.time()) - musicQuiz_User_Stats[user_ID]["round_Prepared_Timestamp"]) <= 10: #Если с момента создания раунда прошло не более 10 секунд включительно
+                        bot_Spotify_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Засчитать ответ
+                        musicQuiz_User_Stats[user_ID]["correct_Answers"] += 1
+                    else:
+                        bot_Spotify_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Иначе поражение
+
                 else:
-                    bot_Spotify_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Иначе поражение
-
-            else:
-                bot_Spotify_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Поражение если ответ неправильный
+                    bot_Spotify_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Поражение если ответ неправильный
 
 
 
-            musicQuiz_User_Stats[user_ID]["game_Round"] += 1
+                musicQuiz_User_Stats[user_ID]["game_Round"] += 1
 
 
 
-            if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #Пока раунд < кол-во раундов, отправлять раунды, иначе отправить конец викторины и вернуть в главное меню
-                process_MusicQuiz_Round(user_ID, language_Name=user_Language, game_Round=musicQuiz_User_Stats[user_ID]["game_Round"])
-            else:
-                bot_Spotify_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
+                if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #Пока раунд < кол-во раундов, отправлять раунды, иначе отправить конец викторины и вернуть в главное меню
+                    process_MusicQuiz_Round(user_ID, language_Name=user_Language, game_Round=musicQuiz_User_Stats[user_ID]["game_Round"])
+                else:
+                    bot_Spotify_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
+                    to_Main_Menu(user_ID)
+            
+            except Exception as error:
+                logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING ROUND FOR USER {user_ID} ERROR: {error}")
+                bot_Spotify_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=user_Language)
                 to_Main_Menu(user_ID)

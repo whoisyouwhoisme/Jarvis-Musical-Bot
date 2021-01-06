@@ -139,7 +139,7 @@ def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
         elif playback_Uris:
             spotify_Lib.start_Playback(user_Auth_Token, playback_Uris=playback_Uris)
 
-    except spotify_Exceptions.oauth_Http_Error as error:
+    except spotify_Exceptions.http_Error as error:
         if error.http_Code == 404:
             raise spotify_Exceptions.no_ActiveDevices
         
@@ -173,7 +173,7 @@ def add_Track_To_Queue(user_Unique_ID, track_Uri):
     try:
         spotify_Lib.add_Track_To_Queue(user_Auth_Token, track_Uri=track_Uri)
 
-    except spotify_Exceptions.oauth_Http_Error as error:
+    except spotify_Exceptions.http_Error as error:
         if error.http_Code == 404:
             raise spotify_Exceptions.no_ActiveDevices
         
