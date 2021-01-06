@@ -82,10 +82,12 @@ The result of a successful WebHook connection will be the response:
 ![Authorization](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
 ###### Interface
 ![Interface](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/interface.png?raw=true "Authorization")
+###### Sharing Songs
+![Sharing songs](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20song%20sharing.png?raw=true "Sharing songs")
+###### Sharing Context (Album, Artist, Playlist)
+![Sharing context](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20context%20sharing.png?raw=true "Sharing context")
 ###### Language changing
 ![Language Changing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
-###### Now Playing
-![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/now%20playing.png?raw=true "Now Playing")
 ###### Super Shuffle
 ![Super Shuffle](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/super%20shuffle.png?raw=true "Super Shuffle")
 ###### Top Artists List
