@@ -316,7 +316,7 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
         },
         "items":[],
     }
-    for item in range(entities_Limit):
+    for item in range(user_Top["total"]):
         NEW_TopData["items"].append(
             {
                 "prefix":" ",
@@ -396,7 +396,7 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
         },
         "items":[],
     }
-    for artist in range(entities_Limit):
+    for artist in range(user_Top["total"]):
         top_Artists["items"].append(
             {
                 "artist":user_Top["items"][artist]["name"],
