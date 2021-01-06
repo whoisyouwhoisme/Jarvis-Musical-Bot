@@ -183,12 +183,12 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     time_Range = top_Data["time_Range"]
 
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topTracks???page???{time_Range}???{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topTracks???page???{time_Range}???{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{next_Page}")
 
-    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data=f"interface???topTracks???createPlaylist???{time_Range}")
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data=f"interface#topTracks#createPlaylist#{time_Range}")
 
     keyboard.add(create_Playlist_Button) #Кнопка создания плейлиста
 
@@ -238,10 +238,10 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     time_Range = top_Data["time_Range"]
 
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface???topArtists???page???{time_Range}???{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface???topArtists???page???{time_Range}???{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{next_Page}")
 
     if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
         keyboard.add(previous_Page_Button, next_Page_Button)
@@ -517,15 +517,15 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     playlist_ID = playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
-    play_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player???play???playlist???{playlist_ID}")
-    open_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
-    keyboard.add(play_Playlist)
-    keyboard.add(open_Playlist)
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
+    keyboard.add(play_On_Spotify)
+    keyboard.add(open_On_Spotify)
 
     ready_Data = {}
-    ready_Data["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Name"] + playlist_Data["name"] + "\n"
-    ready_Data["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Description"] + playlist_Data["description"] + "\n"
-    ready_Data["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["playlist_Total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
+    ready_Data["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + playlist_Data["name"] + "\n"
+    ready_Data["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["description"] + playlist_Data["description"] + "\n"
+    ready_Data["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
     ready_Data["playlist_Summary"] = ready_Data["name"] + ready_Data["description"] + ready_Data["total_Tracks"]
 
     ready_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Ready"] + "\n\n" + ready_Data["playlist_Summary"]
@@ -539,11 +539,11 @@ def now_Playing(chat_id, playing_Data, language_Name):
     Вывод сейчас играет
     """
     now_Playing_Data = {}
-    now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Artist"] + ", ".join(playing_Data["artists"]) + "\n"
-    now_Playing_Data["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Album"] + playing_Data["album_Name"] + "\n"
-    now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n"
+    now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(playing_Data["artists"]) + "\n"
+    now_Playing_Data["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
+    now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + playing_Data["song_Name"] + "\n"
     now_Playing_Data["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
-    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
+    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
 
     now_Playing_Data["spotify_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["spotify_URL"] + playing_Data["external_URL"]
 
@@ -577,89 +577,288 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     song_ID = playing_Data["song_ID"]
-    play_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player???play???track???{song_ID}")
-    open_Playlist = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playing_Data["external_URL"])
-    keyboard.add(play_Playlist)
-    keyboard.add(open_Playlist)
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playing_Data["external_URL"])
+    keyboard.add(play_On_Spotify)
+    keyboard.add(open_On_Spotify)
 
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем кнопку
         youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
-    now_Playing_Data = {}
-    now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Artist"] + ", ".join(playing_Data["artists"]) + "\n"
-    now_Playing_Data["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Album"] + playing_Data["album_Name"] + "\n"
-    now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Song"] + playing_Data["song_Name"] + "\n"
-    now_Playing_Data["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
-    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["player_Duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
+    nowPlaying_Info = {}
+    nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(playing_Data["artists"]) + "\n"
+    nowPlaying_Info["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
+    nowPlaying_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + playing_Data["song_Name"] + "\n"
+    nowPlaying_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
+    nowPlaying_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
     
     if playing_Data["preview_URL"]: #Если превью нет, уведомляем об этом
-        now_Playing_Data["preview_URL"] = ""
+        nowPlaying_Info["preview_URL"] = ""
     else:
-        now_Playing_Data["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
+        nowPlaying_Info["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
 
-    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["release_date"] + now_Playing_Data["song_Duration"] + now_Playing_Data["preview_URL"]
+    if len(playing_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+        nowPlaying_Info["full_Image"] = playing_Data["images"][1]
+        nowPlaying_Info["preview_Image"] = playing_Data["images"][2]
+    else:
+        nowPlaying_Info["full_Image"] = playing_Data["images"][0]
+        nowPlaying_Info["preview_Image"] = playing_Data["images"][0]
 
-    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["listening_Now"] + "\n\n" + now_Playing_Data["playback_Summary"]
+    nowPlaying_Info["playback_Summary"] = nowPlaying_Info["song_Name"] + nowPlaying_Info["artists"] + nowPlaying_Info["album_Name"] + nowPlaying_Info["release_date"] + nowPlaying_Info["song_Duration"] + nowPlaying_Info["preview_URL"]
+
+    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["song_Listening_Now"] + "\n\n" + nowPlaying_Info["playback_Summary"]
 
     if playing_Data["preview_URL"]: #Если существует превью, отправляем аудио, если нет - отправляем обложку
-        results = telebot.types.InlineQueryResultAudio(1, playing_Data["preview_URL"], title="Song Preview", caption=playback_Text, parse_mode="HTML", reply_markup=keyboard)
+        results = telebot.types.InlineQueryResultAudio(1,
+        playing_Data["preview_URL"],
+        title="Song Preview",
+        caption=playback_Text,
+        parse_mode="HTML",
+        reply_markup=keyboard)
         spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
     else:
-        results = telebot.types.InlineQueryResultPhoto(1, playing_Data["song_Cover_URL"], playing_Data["song_Cover_URL"], caption=playback_Text, parse_mode="HTML", reply_markup=keyboard)
+        results = telebot.types.InlineQueryResultPhoto(1,
+        photo_url=nowPlaying_Info["full_Image"]["url"],
+        thumb_url=nowPlaying_Info["preview_Image"]["url"],
+        photo_width=nowPlaying_Info["full_Image"]["width"],
+        photo_height=nowPlaying_Info["full_Image"]["height"],
+        caption=playback_Text,
+        parse_mode="HTML",
+        reply_markup=keyboard)
         spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
-def inline_NowPlaying_Error(inline_ID):
+def share_Inline_Album(inline_ID, album_Data, language_Name):
+    """
+    ИНЛАЙН ОТВЕТ
+
+    Вывод альбома
+    """
+    keyboard = telebot.types.InlineKeyboardMarkup()
+
+    album_ID = album_Data["id"]
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#album#{album_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=album_Data["external_URL"])
+    keyboard.add(play_On_Spotify)
+    keyboard.add(open_On_Spotify)
+
+    album_Info = {}
+    album_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + album_Data["name"] + "\n"
+    album_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(album_Data["artists"]) + "\n"
+    album_Info["label"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["label"] + album_Data["label"] + "\n"
+    album_Info["release_Date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + album_Data["release_Date"] + "\n"
+    album_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(album_Data["total_Tracks"]) + "\n"
+
+    if len(album_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+        album_Info["full_Image"] = album_Data["images"][1]
+        album_Info["preview_Image"] = album_Data["images"][2]
+    else:
+        album_Info["full_Image"] = album_Data["images"][0]
+        album_Info["preview_Image"] = album_Data["images"][0]
+    
+    album_Info["info_Summary"] = album_Info["name"] + album_Info["artists"] + album_Info["label"] + album_Info["release_Date"] + album_Info["total_Tracks"]
+
+    album_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["album_Listening_Now"] + "\n\n" + album_Info["info_Summary"]
+
+    results = telebot.types.InlineQueryResultPhoto(1, 
+    photo_url=album_Info["full_Image"]["url"],
+    thumb_url=album_Info["preview_Image"]["url"],
+    photo_width=album_Info["full_Image"]["width"],
+    photo_height=album_Info["full_Image"]["height"],
+    caption=album_Info_Summary,
+    parse_mode="HTML",
+    reply_markup=keyboard)
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
+def share_Inline_Artist(inline_ID, artist_Data, language_Name):
+    """
+    ИНЛАЙН ОТВЕТ
+
+    Вывод исполнителя
+    """
+    keyboard = telebot.types.InlineKeyboardMarkup()
+
+    artist_ID = artist_Data["id"]
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#artist#{artist_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=artist_Data["external_URL"])
+    keyboard.add(play_On_Spotify)
+    keyboard.add(open_On_Spotify)
+
+    artist_Info = {}
+    artist_Info["artist"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artist_Data["name"] + "\n"
+    artist_Info["genres"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["genres"] + ", ".join(artist_Data["genres"]) + "\n"
+    artist_Info["followers"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["followers"] + str(artist_Data["followers"]) + "\n"
+    artist_Info["info_Summary"] = artist_Info["artist"] + artist_Info["genres"] + artist_Info["followers"]
+
+    if len(artist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+        artist_Info["full_Image"] = artist_Data["images"][1]
+        artist_Info["preview_Image"] = artist_Data["images"][2]
+    else:
+        artist_Info["full_Image"] = artist_Data["images"][0]
+        artist_Info["preview_Image"] = artist_Data["images"][0]
+
+    artist_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["artist_Listening_Now"] + "\n\n" + artist_Info["info_Summary"]
+
+    results = telebot.types.InlineQueryResultPhoto(1, 
+    photo_url=artist_Info["full_Image"]["url"],
+    thumb_url=artist_Info["preview_Image"]["url"],
+    photo_width=artist_Info["full_Image"]["width"],
+    photo_height=artist_Info["full_Image"]["height"],
+    caption=artist_Info_Summary,
+    parse_mode="HTML",
+    reply_markup=keyboard)
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
+def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
+    """
+    ИНЛАЙН ОТВЕТ
+
+    Вывод плейлиста
+    """
+    keyboard = telebot.types.InlineKeyboardMarkup()
+
+    playlist_ID = playlist_Data["playlist_ID"]
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
+    keyboard.add(play_On_Spotify)
+    keyboard.add(open_On_Spotify)
+
+    playlist_Info = {}
+    playlist_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + playlist_Data["name"] + "\n"
+    playlist_Info["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["description"] + playlist_Data["description"] + "\n"
+    playlist_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
+    playlist_Info["playlist_Summary"] = playlist_Info["name"] + playlist_Info["description"] + playlist_Info["total_Tracks"]
+
+    if len(playlist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+        playlist_Info["full_Image"] = playlist_Data["images"][1]
+        playlist_Info["preview_Image"] = playlist_Data["images"][2]
+    else:
+        playlist_Info["full_Image"] = playlist_Data["images"][0]
+        playlist_Info["preview_Image"] = playlist_Data["images"][0]
+
+    playlist_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["playlist_Listening_Now"] + "\n\n" + playlist_Info["playlist_Summary"]
+
+    results = telebot.types.InlineQueryResultPhoto(1, 
+    photo_url=playlist_Info["full_Image"]["url"],
+    thumb_url=playlist_Info["preview_Image"]["url"],
+    photo_width=playlist_Info["full_Image"]["width"],
+    photo_height=playlist_Info["full_Image"]["height"],
+    caption=playlist_Info_Summary,
+    parse_mode="HTML",
+    reply_markup=keyboard)
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
+def inline_NowPlaying_Error(inline_ID, language_Name):
     """
     ИНЛАЙН ОТВЕТ
 
     Ошибка "Песня не содержит всех метаданных"
     """
-    results = telebot.types.InlineQueryResultArticle(1, title="Error", input_message_content=telebot.types.InputTextMessageContent("This song does not contain all the metadata."), description="This song does not contain all the metadata.")
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_NoData"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_NoData"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_NoData"]["description"])
+
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
-def inline_NowPlaying_Nothing(inline_ID):
+def inline_NowPlaying_Nothing(inline_ID, language_Name):
     """
     ИНЛАЙН ОТВЕТ
 
     Ошибка "Сейчас ничего не играет"
     """
-    results = telebot.types.InlineQueryResultArticle(1, title="Error", input_message_content=telebot.types.InputTextMessageContent("At the moment, nothing is playing."), description="At the moment, nothing is playing.")
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_Nothing"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_Nothing"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_Nothing"]["description"])
+
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
-def inline_Unknown_Error(inline_ID):
+def inline_Unknown_Error(inline_ID, language_Name):
     """
     ИНЛАЙН ОТВЕТ
 
     Ошибка "Неизвестная ошибка"
     """
-    results = telebot.types.InlineQueryResultArticle(1, title="Error", input_message_content=telebot.types.InputTextMessageContent("Unknown Error."), description="Unknown Error.")
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["unknown_Error"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["unknown_Error"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["unknown_Error"]["description"])
+
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
-def inline_Spotify_Not_Authorized(inline_ID):
+def inline_Spotify_Not_Authorized(inline_ID, language_Name):
     """
     ИНЛАЙН ОТВЕТ
 
     Ошибка "Аккаунт Spotify не авторизован"
     """
-    results = telebot.types.InlineQueryResultArticle(1, title="Your Spotify account is not authorized.", input_message_content=telebot.types.InputTextMessageContent("But it's never too late to fix this 🙃"), description="But it's never too late to fix this 🙃")
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["spotify_Not_Authorized"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["spotify_Not_Authorized"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["spotify_Not_Authorized"]["description"])
+
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
-def inline_Auth_Error(inline_ID):
+def inline_Auth_Error(inline_ID, language_Name):
     """
     ИНЛАЙН ОТВЕТ
 
     Ошибка "Ошибка авторизации Spotify аккаунта"
     """
-    results = telebot.types.InlineQueryResultArticle(1, title="Authorization error", input_message_content=telebot.types.InputTextMessageContent("You might have blocked the bot in your Spotify account."), description="You might have blocked the bot in your Spotify account.")
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["oauth_Error"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["oauth_Error"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["oauth_Error"]["description"])
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
+def inline_No_Context(inline_ID, language_Name):
+    """
+    ИНЛАЙН ОТВЕТ
+
+    Ошибка "Невозможно получить контекст"
+    """
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["no_Playback_Context"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["no_Playback_Context"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["no_Playback_Context"]["description"])
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
+def inline_Private_Session(inline_ID, language_Name):
+    """
+    ИНЛАЙН ОТВЕТ
+
+    Ошибка "Активна приватная сессия"
+    """
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["private_Session_Enabled"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["private_Session_Enabled"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["private_Session_Enabled"]["description"])
+
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)

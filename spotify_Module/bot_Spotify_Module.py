@@ -154,7 +154,7 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     else:
-        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["image_URL"]).read() #Скачивание обложки
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read() #Скачивание обложки
 
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Super Shuffle Created Successfuly For User {user_ID}")
@@ -370,7 +370,7 @@ def create_Top_Playlist(user_ID, time_Range, language_Name):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
-        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["image_URL"]).read() #Скачивание обложки
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read() #Скачивание обложки
 
         bot_Spotify_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Playlist Created Successfuly For User {user_ID}")
@@ -546,12 +546,20 @@ def callback_Handler(callback_Data):
 
     if db_Manager.check_Spotify_Login(user_ID):
         user_Language = db_Manager.get_User_Language(user_ID) #Записать в переменную язык пользователя
-        callback_Request = callback_Data.data.split("???") #Парсим строку
+        callback_Request = callback_Data.data.split("#") #Парсим строку
 
         if callback_Request[0] == "player": #Если сообщение из раздела плеера
             if callback_Request[1] == "play":
                 try:
-                    if callback_Request[2] == "playlist":
+                    if callback_Request[2] == "album":
+                        playlist_ID = "spotify:album:" + callback_Request[3]
+                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
+
+                    elif callback_Request[2] == "artist":
+                        playlist_ID = "spotify:artist:" + callback_Request[3]
+                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
+
+                    elif callback_Request[2] == "playlist":
                         playlist_ID = "spotify:playlist:" + callback_Request[3]
                         spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
 
@@ -575,7 +583,7 @@ def callback_Handler(callback_Data):
                     bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
                 
                 else:
-                    if callback_Request[2] == "playlist":
+                    if callback_Request[2] == "album" or callback_Request[2] == "artist" or callback_Request[2] == "playlist":
                         bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
                     
                     elif callback_Request[2] == "track":
@@ -609,30 +617,77 @@ def inline_Handler(data):
 
     if db_Manager.check_Spotify_Login(user_ID):
         user_Language = db_Manager.get_User_Language(user_ID)
+        user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
         if inline_Request == "share song":
             try:
-                user_Data = spotify_Service.get_Current_Playing(db_Manager.get_User_UniqueID(user_ID))
+                user_Data = spotify_Service.get_Current_Playing(user_Unique_ID)
 
             except spotify_Exceptions.no_Data:
-                bot_Spotify_Sender.inline_NowPlaying_Error(inline_ID)
+                bot_Spotify_Sender.inline_NowPlaying_Error(inline_ID, language_Name=user_Language)
 
             except spotify_Exceptions.no_Playback:
-                bot_Spotify_Sender.inline_NowPlaying_Nothing(inline_ID)
+                bot_Spotify_Sender.inline_NowPlaying_Nothing(inline_ID, language_Name=user_Language)
+
+            except spotify_Exceptions.private_Session_Enabled:
+                bot_Spotify_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
 
             except spotify_Exceptions.oauth_Http_Error:
-                bot_Spotify_Sender.inline_Auth_Error(inline_ID)
+                bot_Spotify_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
                 logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
             except:
-                bot_Spotify_Sender.inline_Unknown_Error(inline_ID)
+                bot_Spotify_Sender.inline_Unknown_Error(inline_ID, language_Name=user_Language)
                 logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
             
             else:
-                bot_Spotify_Sender.share_Inline_NowPlaying(inline_ID, user_Data, user_Language)
+                bot_Spotify_Sender.share_Inline_NowPlaying(inline_ID, user_Data, language_Name=user_Language)
+        
+        if inline_Request == "share context":
+            try:
+                current_Context = spotify_Service.get_Current_Context(user_Unique_ID)
+                context = current_Context["context_URI"].split(":")
+                context_ID = context[-1] #Обычно ID контекста находится в самом конце
+
+                if current_Context["context_Type"] == "album":
+                    context_Data = spotify_Service.get_Album_Data(user_Unique_ID, context_ID)
+
+                elif current_Context["context_Type"] == "artist":
+                    context_Data = spotify_Service.get_Artist_Data(user_Unique_ID, context_ID)
+
+                elif current_Context["context_Type"] == "playlist":
+                    context_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, context_ID)
+            
+            except spotify_Exceptions.no_Playback:
+                bot_Spotify_Sender.inline_NowPlaying_Nothing(inline_ID, language_Name=user_Language)
+            
+            except spotify_Exceptions.no_Playing_Context:
+                bot_Spotify_Sender.inline_No_Context(inline_ID, language_Name=user_Language)
+
+            except spotify_Exceptions.private_Session_Enabled:
+                bot_Spotify_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
+
+            except spotify_Exceptions.oauth_Http_Error:
+                bot_Spotify_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
+                logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+
+            except:
+                bot_Spotify_Sender.inline_Unknown_Error(inline_ID, language_Name=user_Language)
+                logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+            
+            else:
+                if current_Context["context_Type"] == "album":
+                    bot_Spotify_Sender.share_Inline_Album(inline_ID, context_Data, language_Name=user_Language)
+
+                elif current_Context["context_Type"] == "artist":
+                    bot_Spotify_Sender.share_Inline_Artist(inline_ID, context_Data, language_Name=user_Language)
+
+                elif current_Context["context_Type"] == "playlist":
+                    bot_Spotify_Sender.share_Inline_Playlist(inline_ID, context_Data, language_Name=user_Language)
+
     
     else:
-        bot_Spotify_Sender.inline_Spotify_Not_Authorized(inline_ID)
+        bot_Spotify_Sender.inline_Spotify_Not_Authorized(inline_ID, language_Name=user_Language)
 
 
 
@@ -728,7 +783,7 @@ def chat_Messages_Handler(message):
                     logger.error(f"CONNECTION ERROR OCCURED WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
                 else:
-                    user_Data["song_Cover"] = urllib.request.urlopen(user_Data["song_Cover_URL"]).read() #Скачивание обложки
+                    user_Data["song_Cover"] = urllib.request.urlopen(user_Data["images"][1]["url"]).read() #Скачивание обложки
 
                     if user_Data["preview_URL"]:
                         user_Data["preview_File"] = urllib.request.urlopen(user_Data["preview_URL"]).read() #Скачивание превью

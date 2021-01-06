@@ -29,6 +29,7 @@ def get_Current_Playing(user_Unique_ID):
     Получить текущее проигрывание пользователя, в случае успеха возвращает словарь
 
     В случае ошибки возвращает исключения:
+    no_Playback - ничего не играет
     no_Data - не хватает мета-данных
     private_Session_Enabled - активирована приватная сессия
 
@@ -38,18 +39,11 @@ def get_Current_Playing(user_Unique_ID):
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Playback = spotify_Lib.get_Current_Playback(user_Auth_Token)
 
+    if user_Playback["device"]["is_private_session"]:
+        raise spotify_Exceptions.private_Session_Enabled
+
     try:
         playback_Data = {"artists":[]}
-
-        playback_Data["device_Info"] = {
-            "device_ID":user_Playback["device"]["id"],
-            "device_Name":user_Playback["device"]["name"],
-            "device_Type":user_Playback["device"]["type"],
-            "private_Session":user_Playback["device"]["is_private_session"]
-        }
-
-        if playback_Data["device_Info"]["private_Session"]:
-            raise spotify_Exceptions.private_Session_Enabled
 
         for artist in range(len(user_Playback["item"]["artists"])):
             playback_Data["artists"] += [user_Playback["item"]["artists"][artist]["name"]]
@@ -58,11 +52,10 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["song_Name"] = user_Playback["item"]["name"]
         playback_Data["song_Duration"] = user_Playback["item"]["duration_ms"]
         playback_Data["release_Date"] = user_Playback["item"]["album"]["release_date"]
-        playback_Data["song_URI"] = user_Playback["item"]["uri"]
         playback_Data["song_ID"] = user_Playback["item"]["id"]
         playback_Data["external_URL"] = user_Playback["item"]["external_urls"]["spotify"]
         playback_Data["preview_URL"] = user_Playback["item"]["preview_url"]
-        playback_Data["song_Cover_URL"] = user_Playback["item"]["album"]["images"][1]["url"]
+        playback_Data["images"] = user_Playback["item"]["album"]["images"]
 
         search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
         try: #Костыль для обхода привышения квоты на поиск. КОГДА НИБУДЬ сделаю авторизацию через Гугл аккаунт... КОГДА НИБУДЬ))
@@ -77,15 +70,43 @@ def get_Current_Playing(user_Unique_ID):
                 playback_Data["youtube_URL"] = "https://youtu.be/" + first_Result_ID
             else:
                 playback_Data["youtube_URL"] = ""
-    
-    except spotify_Exceptions.private_Session_Enabled:
-        raise spotify_Exceptions.private_Session_Enabled
 
     except:
         raise spotify_Exceptions.no_Data
     
     else:
         return playback_Data
+
+
+
+def get_Current_Context(user_Unique_ID):
+    """
+    Получить текущий контекст пользователя
+
+    В случае ошибки возвращает исключения:
+    no_Playback - ничего не играет
+    no_Playing_Context - нет активного контекста
+    private_Session_Enabled - активирована приватная сессия
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    user_Playback = spotify_Lib.get_Current_Playback(user_Auth_Token)
+
+    if user_Playback["device"]["is_private_session"]:
+        raise spotify_Exceptions.private_Session_Enabled
+
+    playback_Data = {}
+
+    if user_Playback["context"]:
+        playback_Data["context_URI"] = user_Playback["context"]["uri"]
+        playback_Data["context_Type"] = user_Playback["context"]["type"] #Context type может быть исполнитель, альбом, или плейлист
+
+        return playback_Data
+    else:
+        raise spotify_Exceptions.no_Playing_Context
+
 
 
 
@@ -166,7 +187,7 @@ def add_Track_To_Queue(user_Unique_ID, track_Uri):
 
 def get_Playlist_Data(user_Unique_ID, playlist_ID):
     """
-    Возвращает информацию о плейлисте по ID плейлиста
+    Возвращает информацию о плейлисте по ID
 
     user_Unique_ID - Внутренний уникальный ID пользователя
 
@@ -181,11 +202,66 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
     playlist_Data["description"] = playlist_Info["description"]
     playlist_Data["external_URL"] = playlist_Info["external_urls"]["spotify"]
     playlist_Data["playlist_ID"] = playlist_Info["id"]
-
     playlist_Data["total_Tracks"] = playlist_Info["tracks"]["total"]
-    playlist_Data["image_URL"] = playlist_Info["images"][1]["url"]
+    playlist_Data["images"] = playlist_Info["images"]
 
     return playlist_Data
+
+
+
+def get_Album_Data(user_Unique_ID, album_ID):
+    """
+    Возвращает информацию о альбоме по ID
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    album_ID - Уникальный ID плейлиста в Spotify
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    album_Info = spotify_Lib.get_Album_Info(user_Auth_Token, album_ID)
+
+    album_Data = {"artists":[]}
+
+    for artist in range(len(album_Info["artists"])):
+        album_Data["artists"] += [album_Info["artists"][artist]["name"]]
+
+    album_Data["external_URL"] = album_Info["external_urls"]["spotify"]
+    album_Data["id"] = album_Info["id"]
+    album_Data["images"] = album_Info["images"]
+    album_Data["label"] = album_Info["label"]
+    album_Data["name"] = album_Info["name"]
+    album_Data["release_Date"] = album_Info["release_date"]
+    album_Data["total_Tracks"] = album_Info["total_tracks"]
+
+    return album_Data
+
+
+
+def get_Artist_Data(user_Unique_ID, artist_ID):
+    """
+    Возвращает информацию о исполнителе по ID
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    artist_ID - Уникальный ID исполнителя в Spotify
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    artist_Info = spotify_Lib.get_Artist_Info(user_Auth_Token, artist_ID)
+
+    artist_Data = {"genres":[]}
+
+    for genre in range(len(artist_Info["genres"])):
+        artist_Data["genres"] += [artist_Info["genres"][genre]]
+
+    artist_Data["external_URL"] = artist_Info["external_urls"]["spotify"]
+    artist_Data["followers"] = artist_Info["followers"]["total"]
+    artist_Data["id"] = artist_Info["id"]
+    artist_Data["images"] = artist_Info["images"]
+    artist_Data["name"] = artist_Info["name"]
+
+    return artist_Data
 
 
 

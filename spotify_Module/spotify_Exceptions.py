@@ -52,6 +52,12 @@ class no_Data(spotify_Exception):
     """
     pass
 
+class no_Playing_Context(spotify_Exception):
+    """
+    Нет контекста воспроизведения (например приватная сессия)
+    """
+    pass
+
 class musicQuiz_Error_NoTracks(spotify_Exception):
     """
     Ошибка MusicQuiz - не хватает песен для игры

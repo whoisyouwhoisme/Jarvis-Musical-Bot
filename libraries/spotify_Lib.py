@@ -222,6 +222,43 @@ def get_Playlist_Info(auth_Token, playlist_ID):
 
 
 
+def get_Album_Info(auth_Token, album_ID):
+    """
+    Получить информацию о альбоме, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    album_ID - Уникальный ID альбома в Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/albums/{album_ID}", headers=request_Headers)
+
+    return response.json()
+
+
+
+def get_Artist_Info(auth_Token, artist_ID):
+    """
+    Получить информацию о исполнителе, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    artist_ID - Уникальный ID исполнителя в Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/artists/{artist_ID}", headers=request_Headers)
+
+    return response.json()
+
+
+
+
 def get_User_Devices(auth_Token):
     """ 
     Получить информацию о доступных устройствах пользователя, в случае успеха возвращает ответ в формате json
