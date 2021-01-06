@@ -13,6 +13,17 @@ language_Vocabluary = localization.load_Vocabluary()
 
 
 
+def controls_Main_Menu(chat_id, language_Name):
+    """
+    Клавиатура основного меню
+    """
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"])
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
+
+
+
 def spotify_Login_Offer(chat_id, spotify_Auth_Link, language_Name):
     """
     Просьба о входе в аккаунт Spotify
@@ -94,17 +105,6 @@ def yourTops_Description(chat_id, language_Name):
     Описание функции ваши-топы
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["yourTops_Description"], parse_mode="Markdown")
-
-
-
-def controls_Main_Menu(chat_id, language_Name):
-    """
-    Клавиатура основного меню
-    """
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["now_Playing"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"])
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
 
 
@@ -329,22 +329,6 @@ def song_Added_To_Queue(chat_id, language_Name):
 
 
 
-def now_Playing_Error(chat_id, language_Name):
-    """
-    Недостаточно метаданных для отображения
-    """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["now_Playing_Error"], parse_mode="Markdown")
-
-
-
-def private_Session_Enabled(chat_id, language_Name):
-    """
-    Приватная сессия активирована
-    """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["private_Session"], parse_mode="HTML")
-
-
-
 def musicQuiz_Preparing(chat_id, language_Name):
     """
     Игровая сессия подготавливается
@@ -441,14 +425,6 @@ def insufficient_Data_For_Shuffle(chat_id, language_Name):
 
 
 
-def nowplaying_Nothing(chat_id, language_Name):
-    """
-    В данный момент ничего не играет
-    """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["nowplaying_Nothing"], parse_mode="Markdown")
-
-
-
 def cannot_Authorize(chat_id, language_Name):
     """
     Ошибка авторизации пользователя
@@ -494,14 +470,6 @@ def playlist_Preparing(chat_id, language_Name, hide_Keyboard=True):
 
 
 
-def function_On_Way(chat_id, language_Name):
-    """
-    Функция скоро появится
-    """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["function_On_Way"], parse_mode="Markdown")
-
-
-
 def jarvis_Updated(chat_id, language_Name, jarvis_Version):
     """
     Джарвис был обновлен
@@ -534,37 +502,11 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
 
 
 
-def now_Playing(chat_id, playing_Data, language_Name):
+def inline_Mode_Help(chat_id, language_Name):
     """
-    Вывод сейчас играет
+    Помощь по Inline режиму
     """
-    now_Playing_Data = {}
-    now_Playing_Data["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(playing_Data["artists"]) + "\n"
-    now_Playing_Data["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
-    now_Playing_Data["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + playing_Data["song_Name"] + "\n"
-    now_Playing_Data["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
-    now_Playing_Data["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
-
-    now_Playing_Data["spotify_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["spotify_URL"] + playing_Data["external_URL"]
-
-    if playing_Data["youtube_URL"]: #Если клип песни есть, создаем строчку
-        now_Playing_Data["youtube_Clip"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["youtube_Clip"] + playing_Data["youtube_URL"]
-    else:
-        now_Playing_Data["youtube_Clip"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["youtube_Clip_Not_Available"]
-    
-    if playing_Data["preview_URL"]: #Если превью нет, уведомляем об этом
-        now_Playing_Data["preview_URL"] = ""
-    else:
-        now_Playing_Data["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
-
-    now_Playing_Data["playback_Summary"] = now_Playing_Data["song_Name"] + now_Playing_Data["artists"] + now_Playing_Data["album_Name"] + now_Playing_Data["release_date"] + now_Playing_Data["song_Duration"] + now_Playing_Data["spotify_URL"] + now_Playing_Data["youtube_Clip"] + now_Playing_Data["preview_URL"]
-
-    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["now_Playing"] + "\n\n" + now_Playing_Data["playback_Summary"]
-
-    if playing_Data["preview_URL"]: #Если существует превью, отправляем аудио, если нет - отправляем обложку
-        spotify_Bot.send_audio(chat_id, playing_Data["preview_File"], caption=playback_Text, title="Song Preview", parse_mode="HTML")
-    else:
-        spotify_Bot.send_photo(chat_id, playing_Data["song_Cover"], caption=playback_Text, parse_mode="HTML")
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["messages"]["inline_Help"], parse_mode="Markdown")
 
 
 

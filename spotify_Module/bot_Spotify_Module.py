@@ -19,7 +19,7 @@ from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
 from libraries import database_Manager as db_Manager
 
-bot_Version = 0.2
+bot_Version = 0.3
 
 language_Vocabluary = localization.load_Vocabluary()
 
@@ -760,36 +760,9 @@ def chat_Messages_Handler(message):
 
 
         if user_Position_Cache == "main_Menu":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["now_Playing"]: #Пункт Now Playing
-                logger.info(f"User {user_ID} Entered To Now Playing")
-                try:
-                    user_Data = spotify_Service.get_Current_Playing(db_Manager.get_User_UniqueID(user_ID))
-
-                except spotify_Exceptions.no_Playback:
-                    bot_Spotify_Sender.nowplaying_Nothing(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.no_Data:
-                    bot_Spotify_Sender.now_Playing_Error(user_ID, language_Name=user_Language)
-                
-                except spotify_Exceptions.private_Session_Enabled:
-                    bot_Spotify_Sender.private_Session_Enabled(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.oauth_Http_Error:
-                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
-                    logger.error(f"HTTP ERROR OCCURED WHEN SENDING NOW PLAYING FOR USER {user_ID}")
-
-                except spotify_Exceptions.oauth_Connection_Error:
-                    bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=user_Language)
-                    logger.error(f"CONNECTION ERROR OCCURED WHEN SENDING NOW PLAYING FOR USER {user_ID}")
-
-                else:
-                    user_Data["song_Cover"] = urllib.request.urlopen(user_Data["images"][1]["url"]).read() #Скачивание обложки
-
-                    if user_Data["preview_URL"]:
-                        user_Data["preview_File"] = urllib.request.urlopen(user_Data["preview_URL"]).read() #Скачивание превью
-
-                    bot_Spotify_Sender.now_Playing(user_ID, user_Data, language_Name=user_Language)
-                    logger.info(f"Sending Now Playing For User {user_ID}")
+            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"]: #Пункт Inline Help
+                logger.info(f"Sending Inline Help for user {user_ID}")
+                bot_Spotify_Sender.inline_Mode_Help(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
