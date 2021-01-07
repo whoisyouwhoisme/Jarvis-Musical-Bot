@@ -7,7 +7,8 @@ Authorization practically does not collect any private data, except user nicknam
 
 
 ## Its features:
-- Now playing. Feature to share songs with your friends. There is an automatic search for a clip on YouTube, providing a 30 second preview (if available), displaying the name of the song, artist, and album.
+- Share the current song. You can share any song currently playing on your Spotify client. If your friend is logged into Jarvis, when your friend clicks on the "Play on Spotify" button in his Spotify client, your shared content will play.
+- Share the current playback context. Jarvis automatically detects what is playing (album, artist, playlist) and allows you to share it with your friends. Also, when you click on the "Play on Spotify" button, the playback context will be played.
 - Super Shuffle. Spotify-alghoritms-less. Just shuffles songs from Liked Songs section many times.
 - Your Tops. Displays the tops of songs / artists for a certain period of time. Shows changes in the top, which tracks listened more often, less often, or what new tracks appeared in the tops. You can create a playlist from tops of top songs.
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
@@ -82,10 +83,12 @@ The result of a successful WebHook connection will be the response:
 ![Authorization](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/auth.png?raw=true "Authorization")
 ###### Interface
 ![Interface](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/interface.png?raw=true "Authorization")
+###### Sharing Songs
+![Sharing songs](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20song%20sharing.png?raw=true "Sharing songs")
+###### Sharing Context (Album, Artist, Playlist)
+![Sharing context](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20context%20sharing.png?raw=true "Sharing context")
 ###### Language changing
 ![Language Changing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/language%20select.png?raw=true "Language changing")
-###### Now Playing
-![Now Playing](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/now%20playing.png?raw=true "Now Playing")
 ###### Super Shuffle
 ![Super Shuffle](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/super%20shuffle.png?raw=true "Super Shuffle")
 ###### Top Artists List
