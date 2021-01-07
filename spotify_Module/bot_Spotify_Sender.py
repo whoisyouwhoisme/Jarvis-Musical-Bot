@@ -676,7 +676,12 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
 
     playlist_Info = {}
     playlist_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + playlist_Data["name"] + "\n"
-    playlist_Info["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["description"] + playlist_Data["description"] + "\n"
+
+    if playlist_Data["description"]:
+        playlist_Info["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["description"] + playlist_Data["description"] + "\n"
+    else:
+        playlist_Info["description"] = ""
+    
     playlist_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
     playlist_Info["playlist_Summary"] = playlist_Info["name"] + playlist_Info["description"] + playlist_Info["total_Tracks"]
 
