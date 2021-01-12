@@ -839,6 +839,9 @@ def chat_Messages_Handler(message):
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
                 user_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
+                to_Main_Menu(user_ID)                
+
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
@@ -853,6 +856,9 @@ def chat_Messages_Handler(message):
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
                 user_Top_Artists(user_ID, language_Name=user_Language, time_Range="long_term")
+
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
+                to_Main_Menu(user_ID)                
 
             else:
                 bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
