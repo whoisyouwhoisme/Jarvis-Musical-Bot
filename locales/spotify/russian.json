@@ -13,7 +13,7 @@
             "liked_Songs": "Любимые песни",
             "top_Songs": "Топ песни",
             "create_Playlist": "Создать Плейлист",
-            "open_On_Spotify": "Открыть в Spotify",
+            "open_On_Spotify": "Открыть на сайте Spotify",
             "play_On_Spotify": "Играть в Spotify",
             "previous_Page": "< Предыдущая страница",
             "next_Page": "Следующая страница >"
@@ -69,6 +69,14 @@
                 "description": "Для доступа к данным, Приватная Сессия должна быть отключена"
             }
         }
+    },
+
+    "inline_Metadata": {
+        "album": "Альбом",
+
+        "artist": "Исполнитель",
+
+        "playlist": "Плейлист"
     },
 
     "chat_Messages": {

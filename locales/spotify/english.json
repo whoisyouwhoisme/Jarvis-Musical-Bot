@@ -13,7 +13,7 @@
             "liked_Songs": "Liked Songs",
             "top_Songs": "Top Songs",
             "create_Playlist": "Create Playlist",
-            "open_On_Spotify": "Open on Spotify",
+            "open_On_Spotify": "Open on Spotify site",
             "play_On_Spotify": "Play on Spotify",
             "previous_Page": "< Previous page",
             "next_Page": "Next page >"
@@ -70,6 +70,14 @@
             }
         }
     },
+
+    "inline_Metadata": {
+        "album": "Album",
+
+        "artist": "Artist",
+
+        "playlist": "Playlist"
+    },    
 
     "chat_Messages": {
 

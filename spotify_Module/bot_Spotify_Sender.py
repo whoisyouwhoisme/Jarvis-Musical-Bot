@@ -534,7 +534,9 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
         keyboard.add(youtube_Button)
 
     nowPlaying_Info = {}
-    nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(playing_Data["artists"]) + "\n"
+
+    artists_Enum = ", ".join(playing_Data["artists"])
+    nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
     nowPlaying_Info["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
     nowPlaying_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + playing_Data["song_Name"] + "\n"
     nowPlaying_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
@@ -545,36 +547,39 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     else:
         nowPlaying_Info["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
 
-    if len(playing_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
-        nowPlaying_Info["full_Image"] = playing_Data["images"][1]
-        nowPlaying_Info["preview_Image"] = playing_Data["images"][2]
+    if len(playing_Data["images"]) > 0: #Если существует обложка альбома
+        if len(playing_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+            nowPlaying_Info["full_Image"] = playing_Data["images"][1]
+            nowPlaying_Info["preview_Image"] = playing_Data["images"][2]
+            nowPlaying_Info["article_Cover"] = playing_Data["images"][2]["url"]
+        else:
+            nowPlaying_Info["full_Image"] = playing_Data["images"][0]
+            nowPlaying_Info["preview_Image"] = playing_Data["images"][0]
+            nowPlaying_Info["article_Cover"] = playing_Data["images"][0]["url"]
     else:
-        nowPlaying_Info["full_Image"] = playing_Data["images"][0]
-        nowPlaying_Info["preview_Image"] = playing_Data["images"][0]
+        nowPlaying_Info["full_Image"] = None
+        nowPlaying_Info["preview_Image"] = None
+        nowPlaying_Info["article_Cover"] = None
 
     nowPlaying_Info["playback_Summary"] = nowPlaying_Info["song_Name"] + nowPlaying_Info["artists"] + nowPlaying_Info["album_Name"] + nowPlaying_Info["release_date"] + nowPlaying_Info["song_Duration"] + nowPlaying_Info["preview_URL"]
-
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["song_Listening_Now"] + "\n\n" + nowPlaying_Info["playback_Summary"]
 
-    if playing_Data["preview_URL"]: #Если существует превью, отправляем аудио, если нет - отправляем обложку
+    if playing_Data["preview_URL"]:
         results = telebot.types.InlineQueryResultAudio(1,
         playing_Data["preview_URL"],
         title="Song Preview",
         caption=playback_Text,
         parse_mode="HTML",
         reply_markup=keyboard)
-        spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
-
     else:
-        results = telebot.types.InlineQueryResultPhoto(1,
-        photo_url=nowPlaying_Info["full_Image"]["url"],
-        thumb_url=nowPlaying_Info["preview_Image"]["url"],
-        photo_width=nowPlaying_Info["full_Image"]["width"],
-        photo_height=nowPlaying_Info["full_Image"]["height"],
-        caption=playback_Text,
-        parse_mode="HTML",
-        reply_markup=keyboard)
-        spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+        results = telebot.types.InlineQueryResultArticle(1,
+        title=playing_Data["song_Name"],
+        input_message_content=telebot.types.InputTextMessageContent(playback_Text, parse_mode="HTML"),
+        reply_markup=keyboard,
+        description=artists_Enum,
+        thumb_url=nowPlaying_Info["article_Cover"])
+    
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
 
 
@@ -593,31 +598,41 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
     keyboard.add(open_On_Spotify)
 
     album_Info = {}
-    album_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + album_Data["name"] + "\n"
-    album_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(album_Data["artists"]) + "\n"
+    artists_Enum = ", ".join(album_Data["artists"])
+    album_Link = album_Data["external_URL"]
+    album_Name = album_Data["name"]
+    html_Link = f'<a href="{album_Link}">{album_Name}</a>'
+    
+    album_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + html_Link + "\n"
+    album_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
     album_Info["label"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["label"] + album_Data["label"] + "\n"
     album_Info["release_Date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + album_Data["release_Date"] + "\n"
     album_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(album_Data["total_Tracks"]) + "\n"
 
-    if len(album_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
-        album_Info["full_Image"] = album_Data["images"][1]
-        album_Info["preview_Image"] = album_Data["images"][2]
+    if len(album_Data["images"]) > 0: #Если существует обложка альбома
+        if len(album_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+            album_Info["full_Image"] = album_Data["images"][1]
+            album_Info["preview_Image"] = album_Data["images"][2]
+            album_Info["article_Cover"] = album_Data["images"][2]["url"]
+        else:
+            album_Info["full_Image"] = album_Data["images"][0]
+            album_Info["preview_Image"] = album_Data["images"][0]
+            album_Info["article_Cover"] = album_Data["images"][0]["url"]
     else:
-        album_Info["full_Image"] = album_Data["images"][0]
-        album_Info["preview_Image"] = album_Data["images"][0]
+        album_Info["full_Image"] = None
+        album_Info["preview_Image"] = None
+        album_Info["article_Cover"] = None
     
     album_Info["info_Summary"] = album_Info["name"] + album_Info["artists"] + album_Info["label"] + album_Info["release_Date"] + album_Info["total_Tracks"]
 
     album_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["album_Listening_Now"] + "\n\n" + album_Info["info_Summary"]
 
-    results = telebot.types.InlineQueryResultPhoto(1, 
-    photo_url=album_Info["full_Image"]["url"],
-    thumb_url=album_Info["preview_Image"]["url"],
-    photo_width=album_Info["full_Image"]["width"],
-    photo_height=album_Info["full_Image"]["height"],
-    caption=album_Info_Summary,
-    parse_mode="HTML",
-    reply_markup=keyboard)
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Metadata"]["album"],
+    input_message_content=telebot.types.InputTextMessageContent(album_Info_Summary, parse_mode="HTML"),
+    reply_markup=keyboard,
+    description=album_Data["name"],
+    thumb_url=album_Info["article_Cover"])
 
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
@@ -638,28 +653,37 @@ def share_Inline_Artist(inline_ID, artist_Data, language_Name):
     keyboard.add(open_On_Spotify)
 
     artist_Info = {}
-    artist_Info["artist"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artist_Data["name"] + "\n"
+    artist_Link = artist_Data["external_URL"]
+    artist_Name = artist_Data["name"]
+    html_Link = f'<a href="{artist_Link}">{artist_Name}</a>'
+
+    artist_Info["artist"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + html_Link + "\n"
     artist_Info["genres"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["genres"] + ", ".join(artist_Data["genres"]) + "\n"
     artist_Info["followers"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["followers"] + str(artist_Data["followers"]) + "\n"
     artist_Info["info_Summary"] = artist_Info["artist"] + artist_Info["genres"] + artist_Info["followers"]
 
-    if len(artist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
-        artist_Info["full_Image"] = artist_Data["images"][1]
-        artist_Info["preview_Image"] = artist_Data["images"][2]
+    if len(artist_Data["images"]) > 0: #Если существует обложка альбома
+        if len(artist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+            artist_Info["full_Image"] = artist_Data["images"][1]
+            artist_Info["preview_Image"] = artist_Data["images"][2]
+            artist_Info["article_Cover"] = artist_Data["images"][2]["url"]
+        else:
+            artist_Info["full_Image"] = artist_Data["images"][0]
+            artist_Info["preview_Image"] = artist_Data["images"][0]
+            artist_Info["article_Cover"] = artist_Data["images"][0]["url"]
     else:
-        artist_Info["full_Image"] = artist_Data["images"][0]
-        artist_Info["preview_Image"] = artist_Data["images"][0]
+        artist_Info["full_Image"] = None
+        artist_Info["preview_Image"] = None
+        artist_Info["article_Cover"] = None
 
     artist_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["artist_Listening_Now"] + "\n\n" + artist_Info["info_Summary"]
 
-    results = telebot.types.InlineQueryResultPhoto(1, 
-    photo_url=artist_Info["full_Image"]["url"],
-    thumb_url=artist_Info["preview_Image"]["url"],
-    photo_width=artist_Info["full_Image"]["width"],
-    photo_height=artist_Info["full_Image"]["height"],
-    caption=artist_Info_Summary,
-    parse_mode="HTML",
-    reply_markup=keyboard)
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Metadata"]["artist"],
+    description=artist_Data["name"],
+    input_message_content=telebot.types.InputTextMessageContent(artist_Info_Summary, parse_mode="HTML"),
+    reply_markup=keyboard,
+    thumb_url=artist_Info["article_Cover"])
 
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
@@ -680,7 +704,10 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
     keyboard.add(open_On_Spotify)
 
     playlist_Info = {}
-    playlist_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + playlist_Data["name"] + "\n"
+    playlist_Link = playlist_Data["external_URL"]
+    playlist_Name = playlist_Data["name"]
+    html_Link = f'<a href="{playlist_Link}">{playlist_Name}</a>'
+    playlist_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + html_Link + "\n"
 
     if playlist_Data["description"]:
         playlist_Info["description"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["description"] + playlist_Data["description"] + "\n"
@@ -690,23 +717,28 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
     playlist_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
     playlist_Info["playlist_Summary"] = playlist_Info["name"] + playlist_Info["description"] + playlist_Info["total_Tracks"]
 
-    if len(playlist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
-        playlist_Info["full_Image"] = playlist_Data["images"][1]
-        playlist_Info["preview_Image"] = playlist_Data["images"][2]
+    if len(playlist_Data["images"]) > 0: #Если существует обложка альбома
+        if len(playlist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+            playlist_Info["full_Image"] = playlist_Data["images"][1]
+            playlist_Info["preview_Image"] = playlist_Data["images"][2]
+            playlist_Info["article_Cover"] = playlist_Data["images"][2]["url"]
+        else:
+            playlist_Info["full_Image"] = playlist_Data["images"][0]
+            playlist_Info["preview_Image"] = playlist_Data["images"][0]
+            playlist_Info["article_Cover"] = playlist_Data["images"][0]["url"]
     else:
-        playlist_Info["full_Image"] = playlist_Data["images"][0]
-        playlist_Info["preview_Image"] = playlist_Data["images"][0]
+        playlist_Info["full_Image"] = None
+        playlist_Info["preview_Image"] = None
+        playlist_Info["article_Cover"] = None
 
     playlist_Info_Summary = language_Vocabluary[language_Name]["chat_Messages"]["sharing_Headers"]["playlist_Listening_Now"] + "\n\n" + playlist_Info["playlist_Summary"]
 
-    results = telebot.types.InlineQueryResultPhoto(1, 
-    photo_url=playlist_Info["full_Image"]["url"],
-    thumb_url=playlist_Info["preview_Image"]["url"],
-    photo_width=playlist_Info["full_Image"]["width"],
-    photo_height=playlist_Info["full_Image"]["height"],
-    caption=playlist_Info_Summary,
-    parse_mode="HTML",
-    reply_markup=keyboard)
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Metadata"]["playlist"],
+    description=playlist_Data["name"],
+    input_message_content=telebot.types.InputTextMessageContent(playlist_Info_Summary, parse_mode="HTML"),
+    reply_markup=keyboard,
+    thumb_url=playlist_Info["article_Cover"])
 
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
 
