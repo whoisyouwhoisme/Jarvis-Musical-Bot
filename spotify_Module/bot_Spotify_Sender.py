@@ -263,9 +263,10 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
 
     for top_Item in top_Data["items"]:
+        prefix = top_Data["items"][top_Item]["prefix"]
         artist = top_Data["items"][top_Item]["artist"]
         followers = top_Data["items"][top_Item]["followers"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers \n\n"
+        chat_Top_Data[top_Item] = f"<b>{prefix}{top_Item + 1}.</b> {artist} - {followers} Followers \n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
     if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое

@@ -387,7 +387,7 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
 
     current_Timestamp = int(time.time())
 
-    top_Artists = {
+    NEW_TopData = {
         "top_Info":{
             "entities_Limit":entities_Limit,
             "offset":offset,
@@ -397,15 +397,51 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
         "items":[],
     }
     for artist in range(user_Top["total"]):
-        top_Artists["items"].append(
+        NEW_TopData["items"].append(
             {
+                "prefix":" ",
                 "artist":user_Top["items"][artist]["name"],
                 "followers":user_Top["items"][artist]["followers"]["total"],
                 "URI":user_Top["items"][artist]["uri"],
             }
         )
+    
+    database_User_Artists = database_Manager.search_In_Database(user_Unique_ID, "users_TopArtists", "user_Unique_ID") #Для сравнения подгружаем старый кэш топа пользователя
 
-    return top_Artists
+    if database_User_Artists: #Если у пользователя есть топ
+        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+            user_Artists = database_User_Artists[0][1]
+        elif time_Range == "medium_term":
+            user_Artists = database_User_Artists[0][2]
+        elif time_Range == "long_term":
+            user_Artists = database_User_Artists[0][3]
+        
+        if user_Artists: #Проверяем есть ли старый кэш песен
+            OLD_TopData = json.loads(user_Artists) #Десериализуем строку в словарь
+
+            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #Если временной период выборки совпадает, то делаем сравнение
+                OLD_URIS = [] #Отслеживание изменений происходит по ID, поэтому делаем список старой выборки
+                for index in range(len(OLD_TopData["items"])):
+                    OLD_URIS.append(OLD_TopData["items"][index]["URI"])
+
+                NEW_URIS = [] #Список новой выборки
+                for index in range(len(NEW_TopData["items"])):
+                    NEW_URIS.append(NEW_TopData["items"][index]["URI"])
+        
+                for index_New in range(len(NEW_URIS)): #Сравниваем выборку по новой выборке
+                    try:
+                        old_Index = OLD_URIS.index(NEW_URIS[index_New])
+                    except:
+                        NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
+                    else:
+                        if old_Index < index_New:
+                            NEW_TopData["items"][index_New]["prefix"] = "▼ " #Если песня опустилась ниже
+                        elif old_Index > index_New:
+                            NEW_TopData["items"][index_New]["prefix"] = "▲ " #Если песня поднялась выше
+                        elif old_Index == index_New:
+                            NEW_TopData["items"][index_New]["prefix"] = "  " #Если изменений не произошло
+
+    return NEW_TopData
 
 
 
@@ -576,7 +612,7 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
         for track in range(len(user_Tracks["items"])): #Достать uri песни из всех данных
             liked_Tracks.append(user_Tracks["items"][track]["track"]["uri"])
 
-    for user_Tracks in range(500): #Перемешать все песни 500 раз
+    for user_Tracks in range(100): #Перемешать все песни 100 раз
         random.shuffle(liked_Tracks)
 
     playlist_Name = localization_Data["playlist_Name"]

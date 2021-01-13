@@ -132,7 +132,7 @@ def create_Super_Shuffle(user_ID, language_Name, tracks_Count=None):
             "playlist_Description":language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playlist_Generated_ByJarvis"],
         }
     
-        spotify_Service.check_User_Liked_Songs(user_Unique_ID, 200)
+        spotify_Service.check_User_Liked_Songs(user_Unique_ID, 100)
         playlist_ID = spotify_Service.super_Shuffle(user_Unique_ID, localization_Data=localization_Data, tracks_Count=tracks_Count)
         playlist_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, playlist_ID)
         
@@ -237,6 +237,7 @@ def process_TopArtists_List(user_ID, time_Range, list_Page):
     for item in range(start_Index, stop_Index):
         if item < len(top_Data["items"]):
             current_Page["items"][item] = {
+                "prefix":top_Data["items"][item]["prefix"],
                 "artist":top_Data["items"][item]["artist"],
                 "followers":top_Data["items"][item]["followers"]
             }
