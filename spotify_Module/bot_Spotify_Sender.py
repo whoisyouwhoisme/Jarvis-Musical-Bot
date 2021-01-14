@@ -525,20 +525,21 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
 
     song_ID = playing_Data["song_ID"]
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
-    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playing_Data["external_URL"])
     keyboard.add(play_On_Spotify)
-    keyboard.add(open_On_Spotify)
 
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем кнопку
         youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
     nowPlaying_Info = {}
-
     artists_Enum = ", ".join(playing_Data["artists"])
+    song_Link = playing_Data["external_URL"]
+    song_Name = playing_Data["song_Name"]
+    html_Link = f'<a href="{song_Link}">{song_Name}</a>'
+
+    nowPlaying_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + html_Link + "\n"
     nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
     nowPlaying_Info["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
-    nowPlaying_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + playing_Data["song_Name"] + "\n"
     nowPlaying_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
     nowPlaying_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
     
