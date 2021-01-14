@@ -594,9 +594,7 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
 
     album_ID = album_Data["id"]
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#album#{album_ID}")
-    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=album_Data["external_URL"])
     keyboard.add(play_On_Spotify)
-    keyboard.add(open_On_Spotify)
 
     album_Info = {}
     artists_Enum = ", ".join(album_Data["artists"])
@@ -649,9 +647,7 @@ def share_Inline_Artist(inline_ID, artist_Data, language_Name):
 
     artist_ID = artist_Data["id"]
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#artist#{artist_ID}")
-    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=artist_Data["external_URL"])
     keyboard.add(play_On_Spotify)
-    keyboard.add(open_On_Spotify)
 
     artist_Info = {}
     artist_Link = artist_Data["external_URL"]
@@ -700,9 +696,7 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
 
     playlist_ID = playlist_Data["playlist_ID"]
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
-    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
     keyboard.add(play_On_Spotify)
-    keyboard.add(open_On_Spotify)
 
     playlist_Info = {}
     playlist_Link = playlist_Data["external_URL"]
