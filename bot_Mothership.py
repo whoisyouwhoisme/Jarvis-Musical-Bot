@@ -1,6 +1,8 @@
 import telebot
 import json
 from spotify_Module import bot_Spotify_Module
+from spotify_Module import bot_Inline_Handler
+from spotify_Module import bot_Callback_Handler
 
 with open("bot_Keys.json") as json_File:
     bot_Keys_File = json.load(json_File)
@@ -10,12 +12,12 @@ spotify_Bot = telebot.TeleBot(bot_Keys_File["telegram"]["telegram_Key"])
 
 
 @spotify_Bot.callback_query_handler(func=lambda call: True) #Слушатель callback кнопок
-def get_Callback_Data(callback_Data):
-    bot_Spotify_Module.callback_Handler(callback_Data)
+def get_Callback_Data(call):
+    bot_Callback_Handler.process_Callback_Data(call)
 
 @spotify_Bot.inline_handler(func=lambda query: len(query.query) > 0) #Слушатель Inline режима
 def get_Inline_Data(query):
-    bot_Spotify_Module.inline_Handler(query)
+    bot_Inline_Handler.process_Inline_Data(query)
 
 @spotify_Bot.message_handler(commands=["logout"]) #Слушатель команды Logout
 def logout_Command_Handler(message):

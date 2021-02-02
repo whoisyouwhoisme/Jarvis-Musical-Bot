@@ -174,11 +174,11 @@
 
             "musicQuiz_Preparing": "*Your game session is being prepared*, please wait.",
 
-            "musicQuiz_Incorrect_Answer": "🔴 <b>Unfortunately, no!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
+            "musicQuiz_Incorrect_Answer": "🔴 <b>Unfortunately, no!</b> \n\nThis is: \n<b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
     
-            "musicQuiz_Correct_Answer": "🟢 <b>Great!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
+            "musicQuiz_Correct_Answer": "🟢 <b>Great!</b> \n\nThis is: \n<b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
     
-            "musicQuiz_Answer_Timeout": "🔴 <b>Unfortunately, the time to answer the question has run out!</b> \n\nThis is: <b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
+            "musicQuiz_Answer_Timeout": "🔴 <b>Unfortunately, the time to answer the question has run out!</b> \n\nThis is: \n<b>{right_Answer}</b> \n\nAnswer Time: <b>{took_Time_Answer} sec</b>",
     
             "musicQuiz_End": "*The quiz is over!* \n\nYour Result Is *{correct_Answers} / {total_Rounds}*",
     

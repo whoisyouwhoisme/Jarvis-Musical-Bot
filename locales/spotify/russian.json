@@ -174,11 +174,11 @@
 
             "musicQuiz_Preparing": "*Твоя игровая сессия подготавливается*, пожалуйста, потерпи.",
 
-            "musicQuiz_Incorrect_Answer": "🔴 <b>К сожалению, нет!</b> \n\nЭто: <b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
+            "musicQuiz_Incorrect_Answer": "🔴 <b>К сожалению, нет!</b> \n\nЭто: \n<b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
     
-            "musicQuiz_Correct_Answer": "🟢 <b>Отлично!</b> \n\nЭто: <b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
+            "musicQuiz_Correct_Answer": "🟢 <b>Отлично!</b> \n\nЭто: \n<b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
     
-            "musicQuiz_Answer_Timeout": "🔴 <b>К сожалению, время на ответ закончилось!</b> \n\nЭто: <b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
+            "musicQuiz_Answer_Timeout": "🔴 <b>К сожалению, время на ответ закончилось!</b> \n\nЭто: \n<b>{right_Answer}</b> \n\nВремя ответа: <b>{took_Time_Answer} сек</b>",
     
             "musicQuiz_End": "*Викторина окончена!* \n\nТвой результат *{correct_Answers} / {total_Rounds}*",
     
