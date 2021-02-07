@@ -203,7 +203,7 @@ def chat_Messages_Handler(message):
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
             else:
-                if message.content_type == "photo":
+                if message.content_type == "photo": #СПАСИБО КИРЮШЕ ЗА ПАСХАЛКУ
                     bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["britt_Robertson"])
                 
                 else:
