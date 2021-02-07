@@ -85,6 +85,14 @@
             "inline_Help": "*How to use Inline mode?* \n\n*1.* Go to the chat where you want to share the current playback. \n*2.* Enter one of the commands: \n*@JarvisMusicalBot share song* _- Share Now Playing Song_ \n*@JarvisMusicalBot share context* _- Share Now Playing Context (Album, Artist, Playlist)_ \n\n*3.* Click on the picture or song that will appear near the input line. \n*4.* Congratulations, you shared the content! \n\nIf your friend is logged into *Jarvis*, when he clicks the *'Play on Spotify'* button, his *Spotify* client will play the content that you shared."
         },
 
+        "easter_Eggs": {
+            "britt_Robertson": "*Hmm, let me take a look 🤔* \n\nIf this isn't a photo of *Brittany Robertson*, then don't even try.",
+
+            "42": "*Life, the Universe and Everything*",
+
+            "blade_Runner": "I've seen things, you people wouldn't believe, hmm. \n\nAttack ships on fire off the shoulder of Orion. \n\nI've watched see Beams glitter in the dark near the Tannhauser Gate. \n\nAll those moments, will be lost in time like tears in rain..."
+        },
+
         "errors": {
             "cannot_Authorize": "*I cannot authorize you on Spotify.* \n\nMaybe you have blocked the bot in your *Spotify* account, use the /logout command and log in again.",
 
@@ -120,7 +128,7 @@
 
             "language_Changed": "Language changed successfully.",
 
-            "astray_Notification": "If you suddenly get astray, you can use the */menu* command to return to the main menu.",
+            "astray_Notification": "*Are you lost?* \n\nYou can use the */menu* command to return to the main menu.",
 
             "choose_Category": "Choose category",
 

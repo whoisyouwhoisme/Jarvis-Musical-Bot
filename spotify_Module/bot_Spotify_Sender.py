@@ -284,6 +284,14 @@ def astray_Notification(chat_id, language_Name):
 
 
 
+def send_Easter_Egg(chat_id, message):
+    """
+    Пасхалки!
+    """
+    spotify_Bot.send_message(chat_id, message, parse_mode="Markdown")
+
+
+
 def insufficient_Data_For_Top(chat_id, language_Name):
     """
     Не хватает песен для составления топа

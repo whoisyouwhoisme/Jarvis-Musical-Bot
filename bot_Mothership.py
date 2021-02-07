@@ -35,7 +35,7 @@ def language_Command_Handler(message):
 def contacts_Command_Handler(message):
     bot_Spotify_Module.contacts_Command(message)
 
-@spotify_Bot.message_handler(content_types=["text"]) #Слушатель текстовых сообщений
+@spotify_Bot.message_handler(content_types=["text", "photo"]) #Слушатель текстовых сообщений
 def get_Text_Message(message):
     bot_Spotify_Module.chat_Messages_Handler(message)
     print("ID: ", message.from_user.id, " Message: ", message.text)

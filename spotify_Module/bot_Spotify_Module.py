@@ -18,6 +18,7 @@ from spotify_Module import bot_Spotify_Sender
 from spotify_Module import bot_SuperShuffle
 from spotify_Module import bot_LibraryTops
 from spotify_Module import bot_MusicQuiz
+from spotify_Module import bot_Player_Control
 
 from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
@@ -103,6 +104,7 @@ def contacts_Command(message):
 
 
 logger.info("Spotify Module Ready")
+
 
 
 
@@ -201,7 +203,28 @@ def chat_Messages_Handler(message):
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
             else:
-                bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
+                if message.content_type == "photo":
+                    bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["britt_Robertson"])
+                
+                else:
+                    message_Text = message.text.lower()
+                
+                    if message_Text == "42":
+                        bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["42"])
+                        bot_Player_Control.start_Playback("track", "7qXddTDsEuxInJ8jzX1D9a", user_ID=user_ID, user_Language=user_Language)
+
+                    elif message_Text == "tears in rain":
+                        bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["blade_Runner"])
+                        bot_Player_Control.start_Playback("track", "2LxEIWrZkzfc55c3rk05DH", user_ID=user_ID, user_Language=user_Language)
+
+                    elif message_Text == "grogu":
+                        bot_Player_Control.start_Playback("track", "0PqdMQecGbrFd2c35l4ROS", user_ID=user_ID, user_Language=user_Language)
+
+                    elif message_Text == "the oa":
+                        bot_Player_Control.start_Playback("track", "0wokCRaKD0zPNhMRXAgVsr", user_ID=user_ID, user_Language=user_Language)                                        
+
+                    else:
+                        bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
 
         #ПУНКТ СУПЕР-ШАФФЛА

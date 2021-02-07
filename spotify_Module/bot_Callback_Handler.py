@@ -3,7 +3,9 @@ from spotify_Module import spotify_Service
 from spotify_Module import spotify_Exceptions
 from spotify_Module import bot_Spotify_Sender
 from spotify_Module import bot_LibraryTops
+from spotify_Module import bot_Player_Control
 from spotify_Module.spotify_Logger import logger
+
 
 
 def process_Callback_Data(data):
@@ -16,44 +18,7 @@ def process_Callback_Data(data):
 
         if callback_Request[0] == "player": #Если сообщение из раздела плеера
             if callback_Request[1] == "play":
-                try:
-                    if callback_Request[2] == "album":
-                        playlist_ID = "spotify:album:" + callback_Request[3]
-                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
-
-                    elif callback_Request[2] == "artist":
-                        playlist_ID = "spotify:artist:" + callback_Request[3]
-                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
-
-                    elif callback_Request[2] == "playlist":
-                        playlist_ID = "spotify:playlist:" + callback_Request[3]
-                        spotify_Service.start_Playback(db_Manager.get_User_UniqueID(user_ID), playback_Context=playlist_ID)
-
-                    elif callback_Request[2] == "track":
-                        track_ID = "spotify:track:" + callback_Request[3]
-                        spotify_Service.add_Track_To_Queue(db_Manager.get_User_UniqueID(user_ID), track_Uri=track_ID)
-
-                except spotify_Exceptions.no_ActiveDevices:
-                    bot_Spotify_Sender.no_ActiveDevices(user_ID, user_Language)
-
-                except spotify_Exceptions.premium_Required:
-                    bot_Spotify_Sender.premium_Required(user_ID, language_Name=user_Language)
-
-                except spotify_Exceptions.playback_Error:
-                    bot_Spotify_Sender.playback_Error(user_ID, language_Name=user_Language)
-                
-                except spotify_Exceptions.http_Error:
-                    bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
-
-                except:
-                    bot_Spotify_Sender.unknown_Error(user_ID, language_Name=user_Language)
-                
-                else:
-                    if callback_Request[2] == "album" or callback_Request[2] == "artist" or callback_Request[2] == "playlist":
-                        bot_Spotify_Sender.playback_Started(user_ID, language_Name=user_Language)
-                    
-                    elif callback_Request[2] == "track":
-                        bot_Spotify_Sender.song_Added_To_Queue(user_ID, language_Name=user_Language)
+                bot_Player_Control.start_Playback(callback_Request[2], callback_Request[3], user_ID=user_ID, user_Language=user_Language)
         
         if data.message: #По каким-то причинам у сообщений отправленных из Inline нету тела сообщения
             message_ID = data.message.message_id
