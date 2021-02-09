@@ -2,7 +2,7 @@ import time
 import random
 import urllib
 from spotify_Module import localization
-from spotify_Module import bot_Spotify_Sender
+from spotify_Module import bot_Sender
 from libraries import database_Manager as db_Manager
 from spotify_Module import spotify_Exceptions
 from spotify_Module.spotify_Logger import logger
@@ -26,42 +26,42 @@ def to_Main_Menu(user_ID):
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
     user_Language = db_Manager.get_User_Language(user_ID)
-    bot_Spotify_Sender.controls_Main_Menu(user_ID, language_Name=user_Language)
+    bot_Sender.controls_Main_Menu(user_ID, language_Name=user_Language)
 
 
 
 def process_Type_Selector_Message(user_ID, message_Text, user_Language):
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["liked_Songs"]:
-        bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
+        bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Liked_Songs(user_ID, language_Name=user_Language)
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["top_Songs"]:
         db_Manager.write_User_Position(user_ID, "user_MusicQuiz_Time")
-        bot_Spotify_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
+        bot_Sender.tops_Time_Period(user_ID, language_Name=user_Language)
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"]:
         to_Main_Menu(user_ID)
 
     else:
-        bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
+        bot_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
 
 
 def process_Time_Selector_Message(user_ID, message_Text, user_Language):
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
-        bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
+        bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="short_term")
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
-        bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
+        bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="medium_term")
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
-        bot_Spotify_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
+        bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
     else:
-        bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)    
+        bot_Sender.astray_Notification(user_ID, language_Name=user_Language)    
 
 
 
@@ -69,13 +69,13 @@ def process_InGame_Message(user_ID, message_Text, user_Language):
     try:
         if message_Text == musicQuiz_User_Stats[user_ID]["round_Answer"]: #Если сообщение пользователя = правильный ответ
             if (int(time.time()) - musicQuiz_User_Stats[user_ID]["round_Prepared_Timestamp"]) <= 10: #Если с момента создания раунда прошло не более 10 секунд включительно
-                bot_Spotify_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Засчитать ответ
+                bot_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Засчитать ответ
                 musicQuiz_User_Stats[user_ID]["correct_Answers"] += 1
             else:
-                bot_Spotify_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Иначе поражение
+                bot_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Иначе поражение
 
         else:
-            bot_Spotify_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Поражение если ответ неправильный
+            bot_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Поражение если ответ неправильный
 
 
 
@@ -86,12 +86,12 @@ def process_InGame_Message(user_ID, message_Text, user_Language):
         if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #Пока раунд < кол-во раундов, отправлять раунды, иначе отправить конец викторины и вернуть в главное меню
             process_MusicQuiz_Round(user_ID, language_Name=user_Language, game_Round=musicQuiz_User_Stats[user_ID]["game_Round"])
         else:
-            bot_Spotify_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
+            bot_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
             to_Main_Menu(user_ID)
 
     except Exception as error:
         logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING ROUND FOR USER {user_ID} ERROR: {error}")
-        bot_Spotify_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=user_Language)
+        bot_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=user_Language)
         to_Main_Menu(user_ID)    
 
 
@@ -142,11 +142,11 @@ def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
         
     except:
         logger.error(f"ERROR OCCURED WHEN PROCESSING MUSIC QUIZ FOR USER {user_ID}")
-        bot_Spotify_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=language_Name)
+        bot_Sender.musicQuiz_Error_RoundProcess(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     else:
-        bot_Spotify_Sender.send_MusicQuiz_Round(user_ID, musicQuiz_Round_Data, language_Name=language_Name)
+        bot_Sender.send_MusicQuiz_Round(user_ID, musicQuiz_Round_Data, language_Name=language_Name)
 
 
 
@@ -164,26 +164,26 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
-        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
+        bot_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
+        bot_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
+        bot_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.musicQuiz_Error_NoTracks:
-        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
+        bot_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
         logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING GAME FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
+        bot_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
@@ -215,26 +215,26 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
         logger.info(f"Creating Liked Songs Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tracks:
-        bot_Spotify_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
+        bot_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Error:
-        bot_Spotify_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
+        bot_Sender.cannot_Authorize(user_ID, language_Name=language_Name)
         logger.error(f"HTTP ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Connection_Error:
-        bot_Spotify_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
+        bot_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.musicQuiz_Error_NoTracks:
-        bot_Spotify_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
+        bot_Sender.musicQuiz_Error_NoTracks(user_ID, language_Name=language_Name)
         logger.error(f"MUSIC QUIZ ERROR WHEN PREPARING GAME FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 
     except:
-        bot_Spotify_Sender.unknown_Error(user_ID, language_Name=language_Name)
+        bot_Sender.unknown_Error(user_ID, language_Name=language_Name)
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING LIKED SONGS MUSIC QUIZ FOR USER {user_ID}")
         to_Main_Menu(user_ID)
 

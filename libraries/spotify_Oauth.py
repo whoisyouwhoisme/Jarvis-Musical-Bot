@@ -1,7 +1,7 @@
 import requests
 import json
 import time
-from spotify_Module import bot_Spotify_Sender
+from spotify_Module import bot_Sender
 from spotify_Module import spotify_Exceptions
 from libraries import database_Manager
 from base64 import b64encode
@@ -184,5 +184,5 @@ def auth_User(user_Auth_Code, user_Unique_ID):
     database_Manager.register_Spotify(user_Unique_ID, user_Profile["id"], user_Profile["display_name"], user_Auth_Code, payload_Data["access_token"], payload_Data["refresh_token"], auth_Timestamp, auth_Timestamp)
     database_Manager.write_User_Position(user_Telegram_ID, "main_Menu")
     
-    bot_Spotify_Sender.auth_Complete(user_Telegram_ID, user_Profile["display_name"], language_Name=user_Language)
-    bot_Spotify_Sender.controls_Main_Menu(user_Telegram_ID, language_Name=user_Language)
+    bot_Sender.auth_Complete(user_Telegram_ID, user_Profile["display_name"], language_Name=user_Language)
+    bot_Sender.controls_Main_Menu(user_Telegram_ID, language_Name=user_Language)

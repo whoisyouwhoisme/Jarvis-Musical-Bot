@@ -13,7 +13,7 @@ import random
 import urllib
 
 from spotify_Module import localization
-from spotify_Module import bot_Spotify_Sender
+from spotify_Module import bot_Sender
 
 from spotify_Module import bot_SuperShuffle
 from spotify_Module import bot_LibraryTops
@@ -37,7 +37,7 @@ def to_Main_Menu(user_ID):
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
     user_Language = db_Manager.get_User_Language(user_ID)
-    bot_Spotify_Sender.controls_Main_Menu(user_ID, language_Name=user_Language)
+    bot_Sender.controls_Main_Menu(user_ID, language_Name=user_Language)
 
 
 
@@ -59,7 +59,7 @@ def logout_Command(message):
         db_Manager.delete_User(user_Unique_ID, "users_TopArtists")
 
         logger.info(f"Logout Successful For User {user_ID}")
-        bot_Spotify_Sender.user_Leaving(message.from_user.id, language_Name=user_Language)
+        bot_Sender.user_Leaving(message.from_user.id, language_Name=user_Language)
 
 
 
@@ -71,7 +71,7 @@ def language_Command(message):
     if db_Manager.check_Spotify_Login(user_ID):
         user_ID = message.from_user.id
         logger.info(f"Sending Language Selector Keyboard For User {user_ID}")
-        bot_Spotify_Sender.language_Selector(user_ID, db_Manager.get_User_Language(user_ID))
+        bot_Sender.language_Selector(user_ID, db_Manager.get_User_Language(user_ID))
         db_Manager.write_User_Position(user_ID, "language_Select")
 
 
@@ -99,7 +99,7 @@ def contacts_Command(message):
 
     logger.info(f"Sending Contacts For User {user_ID}")
     user_Language = db_Manager.get_User_Language(user_ID)
-    bot_Spotify_Sender.send_Developer_Contacts(user_ID, language_Name=user_Language)
+    bot_Sender.send_Developer_Contacts(user_ID, language_Name=user_Language)
 
 
 
@@ -138,7 +138,7 @@ def chat_Messages_Handler(message):
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Auth_Link = spotify_Oauth.generate_Auth_Link(user_Unique_ID)
-        bot_Spotify_Sender.spotify_Login_Offer(user_ID, spotify_Auth_Link, language_Name=user_Language)
+        bot_Sender.spotify_Login_Offer(user_ID, spotify_Auth_Link, language_Name=user_Language)
 
 
 
@@ -148,28 +148,28 @@ def chat_Messages_Handler(message):
 
         #Заглушка если in Work позиция
         if user_Position_Cache == "work_In_Progress":
-            bot_Spotify_Sender.denied_Work_Reason(user_ID, language_Name=user_Language)
+            bot_Sender.denied_Work_Reason(user_ID, language_Name=user_Language)
 
 
         #Меню смены языка
         if user_Position_Cache == "language_Select":
             if message.text == "English":
                 db_Manager.write_User_Language(user_ID, "ENG")
-                bot_Spotify_Sender.language_Changed(user_ID, "ENG")
+                bot_Sender.language_Changed(user_ID, "ENG")
                 to_Main_Menu(user_ID)
 
             elif message.text == "Russian":
                 db_Manager.write_User_Language(user_ID, "RUS")
-                bot_Spotify_Sender.language_Changed(user_ID, "RUS")
+                bot_Sender.language_Changed(user_ID, "RUS")
                 to_Main_Menu(user_ID)
             
             else:
-                bot_Spotify_Sender.astray_Notification(user_ID, db_Manager.get_User_Language(user_ID))
+                bot_Sender.astray_Notification(user_ID, db_Manager.get_User_Language(user_ID))
 
 
         if db_Manager.get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
             to_Main_Menu(user_ID)
-            bot_Spotify_Sender.jarvis_Updated(user_ID, language_Name=user_Language, jarvis_Version=bot_Version)
+            bot_Sender.jarvis_Updated(user_ID, language_Name=user_Language, jarvis_Version=bot_Version)
             db_Manager.write_User_BotVersion(user_ID, bot_Version)
 
 
@@ -179,42 +179,42 @@ def chat_Messages_Handler(message):
         if user_Position_Cache == "main_Menu":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"]: #Пункт Inline Help
                 logger.info(f"Sending Inline Help for user {user_ID}")
-                bot_Spotify_Sender.inline_Mode_Help(user_ID, language_Name=user_Language)
+                bot_Sender.inline_Mode_Help(user_ID, language_Name=user_Language)
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
                 db_Manager.write_User_Position(user_ID, "user_SuperShuffle")
-                bot_Spotify_Sender.superShuffle_Description(user_ID, language_Name=user_Language)
-                bot_Spotify_Sender.shuffle_Tracks_Count(user_ID, language_Name=user_Language)
+                bot_Sender.superShuffle_Description(user_ID, language_Name=user_Language)
+                bot_Sender.shuffle_Tracks_Count(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Super Shuffle Selector For User {user_ID}")
 
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"]: #Пункт топов
                 logger.info(f"User {user_ID} Entered To Your Tops")
                 db_Manager.write_User_Position(user_ID, "user_YourTops")
-                bot_Spotify_Sender.yourTops_Description(user_ID, language_Name=user_Language)
-                bot_Spotify_Sender.tops_Type_Select(user_ID, language_Name=user_Language)
+                bot_Sender.yourTops_Description(user_ID, language_Name=user_Language)
+                bot_Sender.tops_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Your Tops Selector For User {user_ID}")
             
             elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]: #Пункт музыкальной викторины
                 logger.info(f"User {user_ID} Entered To Music Quiz")
                 db_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
-                bot_Spotify_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
-                bot_Spotify_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
+                bot_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
+                bot_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
             else:
                 if message.content_type == "photo": #СПАСИБО КИРЮШЕ ЗА ПАСХАЛКУ
-                    bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["britt_Robertson"])
+                    bot_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["britt_Robertson"])
                 
                 else:
                     message_Text = message.text.lower()
                 
                     if message_Text == "42":
-                        bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["42"])
+                        bot_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["42"])
                         bot_Player_Control.start_Playback("track", "7qXddTDsEuxInJ8jzX1D9a", user_ID=user_ID, user_Language=user_Language)
 
                     elif message_Text == "tears in rain":
-                        bot_Spotify_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["blade_Runner"])
+                        bot_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["blade_Runner"])
                         bot_Player_Control.start_Playback("track", "2LxEIWrZkzfc55c3rk05DH", user_ID=user_ID, user_Language=user_Language)
 
                     elif message_Text == "grogu":
@@ -224,7 +224,7 @@ def chat_Messages_Handler(message):
                         bot_Player_Control.start_Playback("track", "0wokCRaKD0zPNhMRXAgVsr", user_ID=user_ID, user_Language=user_Language)                                        
 
                     else:
-                        bot_Spotify_Sender.astray_Notification(user_ID, language_Name=user_Language)
+                        bot_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
 
         #ПУНКТ СУПЕР-ШАФФЛА
