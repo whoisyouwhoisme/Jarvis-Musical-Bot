@@ -16,13 +16,16 @@ def process_Inline_Data(data):
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
         if inline_Request == "share":
+            logger.info(f"Song Sharing For User {user_ID}")
             song_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language)
         
         if inline_Request == "share context":
+            logger.info(f"Context Sharing For User {user_ID}")
             context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language)
         
         if inline_Request[:6] == "search":
             if len(inline_Request[7:]) > 0:
+                logger.info(f"Song Searching For User {user_ID}")
                 search_Request = inline_Request[7:]
                 items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Language)
     else:
@@ -44,12 +47,12 @@ def song_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
         bot_Inline_Sender.inline_Private_Session(inline_ID, user_Language)
 
     except spotify_Exceptions.http_Error:
-        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
 
     except:
-        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
     
     else:
         bot_Inline_Sender.share_Inline_NowPlaying(inline_ID, user_Data, user_Language)
@@ -81,12 +84,12 @@ def context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
         bot_Inline_Sender.inline_Private_Session(inline_ID, user_Language)
 
     except spotify_Exceptions.http_Error:
-        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
 
     except:
-        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
     
     else:
         if current_Context["context_Type"] == "album":
@@ -108,12 +111,12 @@ def items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Langua
         bot_Inline_Sender.search_No_Results(inline_ID, user_Language)
         
     except spotify_Exceptions.http_Error:
-        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
 
     except:
-        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
     
     else:
         bot_Inline_Sender.search_Results(inline_ID, search_Results, user_Language)

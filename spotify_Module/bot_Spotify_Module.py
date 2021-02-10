@@ -49,9 +49,9 @@ def logout_Command(message):
     """
     user_ID = message.from_user.id
     if db_Manager.check_Bot_Reg(user_ID):
+        logger.info(f"Preparing Logout For User {user_ID}")
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         user_Language = db_Manager.get_User_Language(user_ID)
-        logger.info(f"Preparing Logout For User {user_ID}")
         
         db_Manager.delete_User(user_Unique_ID, "bot_Users")
         db_Manager.delete_User(user_Unique_ID, "spotify_Users")
@@ -69,8 +69,8 @@ def language_Command(message):
     """
     user_ID = message.from_user.id
     if db_Manager.check_Spotify_Login(user_ID):
-        user_ID = message.from_user.id
         logger.info(f"Sending Language Selector Keyboard For User {user_ID}")
+        user_ID = message.from_user.id
         bot_Sender.language_Selector(user_ID, db_Manager.get_User_Language(user_ID))
         db_Manager.write_User_Position(user_ID, "language_Select")
 
@@ -110,7 +110,7 @@ logger.info("Spotify Module Ready")
 
 def chat_Messages_Handler(message):
     user_ID = message.from_user.id
-    logger.info(f"New Message: {message.text} From: {message.from_user.id}")
+    logger.info(f"New Message: {message.text} From: {user_ID}")
 
     if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
