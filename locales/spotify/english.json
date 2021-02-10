@@ -67,6 +67,10 @@
             "private_Session_Enabled": {
                 "title": "Private Session Enabled",
                 "description": "To access the data, the private session must be disabled"
+            },
+            "no_Search_Results": {
+                "title": "Search Found Nothing",
+                "description": "Looks like you're looking for some shit"                
             }
         }
     },
@@ -82,7 +86,7 @@
     "chat_Messages": {
 
         "messages": {
-            "inline_Help": "*How to use Inline mode?* \n\n*1.* Go to the chat where you want to share the current playback. \n*2.* Enter one of the commands: \n*@JarvisMusicalBot share song* _- Share Now Playing Song_ \n*@JarvisMusicalBot share context* _- Share Now Playing Context (Album, Artist, Playlist)_ \n\n*3.* Click on the picture or song that will appear near the input line. \n*4.* Congratulations, you shared the content! \n\nIf your friend is logged into *Jarvis*, when he clicks the *'Play on Spotify'* button, his *Spotify* client will play the content that you shared."
+            "inline_Help": "*How to use Inline mode?* \n\n*1.* Go to the chat where you want to share the current playback. \n*2.* Enter one of the commands: \n*@JarvisMusicalBot share* _- Share Now Playing Song_ \n*@JarvisMusicalBot share context* _- Share Now Playing Context (Album, Artist, Playlist)_ \n\n*3.* Click on the picture or song that will appear near the input line. \n*4.* Congratulations, you shared the content! \n\nIf your friend is logged into *Jarvis*, when he clicks the *'Play on Spotify'* button, his *Spotify* client will play the content that you shared."
         },
 
         "easter_Eggs": {

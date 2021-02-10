@@ -87,3 +87,9 @@ class private_Session_Enabled(spotify_Exception):
     Активирована приватная сессия
     """
     pass
+
+class search_No_Results(spotify_Exception):
+    """
+    Нет результатов поиска
+    """
+    pass

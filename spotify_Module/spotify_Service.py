@@ -3,7 +3,7 @@ import time
 import json
 import random
 from libraries import database_Manager
-from libraries import spotify_Lib
+from libraries import spotify_Api
 from libraries import spotify_Oauth
 from libraries import youtube_Lib
 from spotify_Module import spotify_Exceptions
@@ -37,7 +37,7 @@ def get_Current_Playing(user_Unique_ID):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Playback = spotify_Lib.get_Current_Playback(user_Auth_Token)
+    user_Playback = spotify_Api.get_Current_Playback(user_Auth_Token)
 
     if user_Playback["device"]["is_private_session"]:
         raise spotify_Exceptions.private_Session_Enabled
@@ -92,7 +92,7 @@ def get_Current_Context(user_Unique_ID):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Playback = spotify_Lib.get_Current_Playback(user_Auth_Token)
+    user_Playback = spotify_Api.get_Current_Playback(user_Auth_Token)
 
     if user_Playback["device"]["is_private_session"]:
         raise spotify_Exceptions.private_Session_Enabled
@@ -128,16 +128,16 @@ def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
+    user_Devices = spotify_Api.get_User_Devices(user_Auth_Token)
 
     if not user_Devices["devices"]: #Проверка наличия активного устройства
         raise spotify_Exceptions.no_ActiveDevices
 
     try:
         if playback_Context:
-            spotify_Lib.start_Playback(user_Auth_Token, playback_Context=playback_Context)
+            spotify_Api.start_Playback(user_Auth_Token, playback_Context=playback_Context)
         elif playback_Uris:
-            spotify_Lib.start_Playback(user_Auth_Token, playback_Uris=playback_Uris)
+            spotify_Api.start_Playback(user_Auth_Token, playback_Uris=playback_Uris)
 
     except spotify_Exceptions.http_Error as error:
         if error.http_Code == 404:
@@ -165,13 +165,13 @@ def add_Track_To_Queue(user_Unique_ID, track_Uri):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Devices = spotify_Lib.get_User_Devices(user_Auth_Token)
+    user_Devices = spotify_Api.get_User_Devices(user_Auth_Token)
 
     if not user_Devices["devices"]: #Проверка наличия активного устройства
         raise spotify_Exceptions.no_ActiveDevices
     
     try:
-        spotify_Lib.add_Track_To_Queue(user_Auth_Token, track_Uri=track_Uri)
+        spotify_Api.add_Track_To_Queue(user_Auth_Token, track_Uri=track_Uri)
 
     except spotify_Exceptions.http_Error as error:
         if error.http_Code == 404:
@@ -195,7 +195,7 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    playlist_Info = spotify_Lib.get_Playlist_Info(user_Auth_Token, playlist_ID)
+    playlist_Info = spotify_Api.get_Playlist_Info(user_Auth_Token, playlist_ID)
 
     playlist_Data = {}
     playlist_Data["name"] = playlist_Info["name"]
@@ -219,7 +219,7 @@ def get_Album_Data(user_Unique_ID, album_ID):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    album_Info = spotify_Lib.get_Album_Info(user_Auth_Token, album_ID)
+    album_Info = spotify_Api.get_Album_Info(user_Auth_Token, album_ID)
 
     album_Data = {"artists":[]}
 
@@ -248,7 +248,7 @@ def get_Artist_Data(user_Unique_ID, artist_ID):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    artist_Info = spotify_Lib.get_Artist_Info(user_Auth_Token, artist_ID)
+    artist_Info = spotify_Api.get_Artist_Info(user_Auth_Token, artist_ID)
 
     artist_Data = {"genres":[]}
 
@@ -277,12 +277,117 @@ def check_User_Liked_Songs(user_Unique_ID, minimum_Count):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Data = spotify_Lib.get_Saved_Tracks(user_Auth_Token)
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
 
     if user_Data["total"] >= minimum_Count:
         return True
     else:
         raise spotify_Exceptions.no_Tracks
+
+
+
+def search_Item(user_Unique_ID, search_Query, search_Types="track", limit=5, offset=0):
+    """
+    Поиск в Spotify
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    search_Query - Поисковой запрос
+
+    search_Types - Типы для поиска, исполнитель, альбом, трек
+
+    limit - Лимит элементов поиска
+
+    offset - Смещение элементов поиска
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    search_Data = spotify_Api.search_Item(user_Auth_Token, search_Query, search_Types, limit, offset)
+
+    total_Results = 0
+    for search_Type in search_Data:
+        total_Results += search_Data[search_Type]["total"]
+        
+        if not total_Results:
+            raise spotify_Exceptions.search_No_Results
+    
+    search_Results = {
+        "albums":[],
+        "artists":[],
+        "tracks":[],
+        "playlists":[],
+    }
+    for search_Type, _ in search_Data.items():
+        if search_Type == "albums":
+            for album in range(len(search_Data[search_Type]["items"])):
+                album_Item = search_Data[search_Type]["items"][album]
+
+                album_Data = {"artists":[]}
+
+                for artist in range(len(album_Item["artists"])):
+                    album_Data["artists"] += [album_Item["artists"][artist]["name"]]
+
+                album_Data["external_URL"] = album_Item["external_urls"]["spotify"]
+                album_Data["id"] = album_Item["id"]
+                album_Data["images"] = album_Item["images"]
+                album_Data["name"] = album_Item["name"]
+                album_Data["release_Date"] = album_Item["release_date"]
+                album_Data["total_Tracks"] = album_Item["total_tracks"]
+
+                search_Results["albums"].append(album_Data)
+
+        elif search_Type == "artists":
+            for artist in range(len(search_Data[search_Type]["items"])):
+                artist_Item = search_Data[search_Type]["items"][artist]
+
+                artist_Data = {"genres":[]}
+
+                for genre in range(len(artist_Item["genres"])):
+                    artist_Data["genres"] += [artist_Item["genres"][genre]]
+
+                artist_Data["external_URL"] = artist_Item["external_urls"]["spotify"]
+                artist_Data["followers"] = artist_Item["followers"]["total"]
+                artist_Data["id"] = artist_Item["id"]
+                artist_Data["images"] = artist_Item["images"]
+                artist_Data["name"] = artist_Item["name"]
+
+                search_Results["artists"].append(artist_Data)
+
+        elif search_Type == "tracks":
+            for track in range(len(search_Data[search_Type]["items"])):
+                track_Item = search_Data[search_Type]["items"][track]
+
+                track_Data = {"artists":[]}
+                for artist in range(len(track_Item["artists"])):
+                    track_Data["artists"] += [track_Item["artists"][artist]["name"]]
+
+                track_Data["album_Name"] = track_Item["album"]["name"]
+                track_Data["song_Name"] = track_Item["name"]
+                track_Data["song_Duration"] = track_Item["duration_ms"]
+                track_Data["release_Date"] = track_Item["album"]["release_date"]
+                track_Data["song_ID"] = track_Item["id"]
+                track_Data["external_URL"] = track_Item["external_urls"]["spotify"]
+                track_Data["images"] = track_Item["album"]["images"]
+                
+                search_Results["tracks"].append(track_Data)
+
+        elif search_Type == "playlists":
+            for playlist in range(len(search_Data[search_Type]["items"])):
+                playlist_Item = search_Data[search_Type]["items"][playlist]
+
+                playlist_Data = {}
+                playlist_Data["name"] = playlist_Item["name"]
+                playlist_Data["description"] = playlist_Item["description"]
+                playlist_Data["external_URL"] = playlist_Item["external_urls"]["spotify"]
+                playlist_Data["playlist_ID"] = playlist_Item["id"]
+                playlist_Data["total_Tracks"] = playlist_Item["tracks"]["total"]
+                playlist_Data["images"] = playlist_Item["images"]
+
+                search_Results["playlists"].append(playlist_Data)
+
+    return search_Results
 
 
 
@@ -300,7 +405,7 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "tracks", entities_Limit, offset, time_Range)
+    user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "tracks", entities_Limit, offset, time_Range)
 
     if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
         raise spotify_Exceptions.no_Tops_Data
@@ -380,7 +485,7 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "artists", entities_Limit, offset, time_Range)
+    user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "artists", entities_Limit, offset, time_Range)
 
     if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
         raise spotify_Exceptions.no_Tops_Data
@@ -471,13 +576,13 @@ def create_Top_Tracks_Playlist(user_Unique_ID, localization_Data, time_Range):
     playlist_Name = localization_Data["playlist_Name"].format(time_Range=localization_Data["playlist_TimeRange"])
     playlist_Name = time.strftime(playlist_Name)
     playlist_Description = localization_Data["playlist_Description"]
-    new_Playlist_ID = spotify_Lib.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"]
+    new_Playlist_ID = spotify_Api.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"]
 
     top_Tracks = []
     for track in range(len(top_Data["items"])):
         top_Tracks.append(top_Data["items"][track]["URI"])
 
-    spotify_Lib.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, top_Tracks)
+    spotify_Api.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, top_Tracks)
 
     return new_Playlist_ID
 
@@ -495,7 +600,7 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Top = spotify_Lib.get_User_Tops(user_Auth_Token, "tracks", 50, 0, time_Range)
+    user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "tracks", 50, 0, time_Range)
 
     if not user_Top["total"] >= 50: #Проверка на наличие хотя бы одного элемента
         raise spotify_Exceptions.no_Tops_Data
@@ -544,13 +649,13 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
 
-    user_Data = spotify_Lib.get_Saved_Tracks(user_Auth_Token)
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
     total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
 
     offset = 0
     liked_Tracks = []
     for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
-        user_Tracks = spotify_Lib.get_Saved_Tracks(user_Auth_Token, 50, offset)
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, 50, offset)
 
         offset += 50
 
@@ -599,13 +704,13 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     user_Auth_Token = database_User_Data[0][4]
     user_Spotify_ID = database_User_Data[0][1]
 
-    user_Data = spotify_Lib.get_Saved_Tracks(user_Auth_Token)
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
     total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
 
     offset = 0
     liked_Tracks = []
     for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
-        user_Tracks = spotify_Lib.get_Saved_Tracks(user_Auth_Token, 50, offset)
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, 50, offset)
 
         offset += 50
 
@@ -618,7 +723,7 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     playlist_Name = localization_Data["playlist_Name"]
     playlist_Name = time.strftime(playlist_Name)
     playlist_Description = localization_Data["playlist_Description"]
-    new_Playlist_ID = spotify_Lib.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"] #Создать плейлист и получить его ID
+    new_Playlist_ID = spotify_Api.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"] #Создать плейлист и получить его ID
 
     offset = 100
     if tracks_Count: #Если указано кол-во треков то вырезаем кол-во треков, если нет - вся выборка
@@ -628,7 +733,7 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
 
     for user_Tracks in range(total_Iterations): #Закидываем все песни в плейлист
         playlist_Tracks = liked_Tracks[offset - 100:offset]
-        spotify_Lib.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, playlist_Tracks)
+        spotify_Api.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, playlist_Tracks)
         offset += 100
 
     return new_Playlist_ID

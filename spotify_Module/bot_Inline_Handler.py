@@ -1,7 +1,7 @@
 from libraries import database_Manager as db_Manager
 from spotify_Module import spotify_Service
 from spotify_Module import spotify_Exceptions
-from spotify_Module import bot_Sender
+from spotify_Module import bot_Inline_Sender
 from spotify_Module.spotify_Logger import logger
 
 
@@ -15,14 +15,18 @@ def process_Inline_Data(data):
         user_Language = db_Manager.get_User_Language(user_ID)
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
-        if inline_Request == "share song":
-            song_Sharing(user_ID=user_ID, inline_ID=inline_ID, user_Unique_ID=user_Unique_ID, user_Language=user_Language)
+        if inline_Request == "share":
+            song_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language)
         
         if inline_Request == "share context":
-            context_Sharing(user_ID=user_ID, inline_ID=inline_ID, user_Unique_ID=user_Unique_ID, user_Language=user_Language)
-
+            context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language)
+        
+        if inline_Request[:6] == "search":
+            if len(inline_Request[7:]) > 0:
+                search_Request = inline_Request[7:]
+                items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Language)
     else:
-        bot_Sender.inline_Spotify_Not_Authorized(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Spotify_Not_Authorized(inline_ID, user_Language)
 
 
 
@@ -31,24 +35,24 @@ def song_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
         user_Data = spotify_Service.get_Current_Playing(user_Unique_ID)
 
     except spotify_Exceptions.no_Data:
-        bot_Sender.inline_NowPlaying_Error(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_NowPlaying_Error(inline_ID, user_Language)
 
     except spotify_Exceptions.no_Playback:
-        bot_Sender.inline_NowPlaying_Nothing(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_NowPlaying_Nothing(inline_ID, user_Language)
 
     except spotify_Exceptions.private_Session_Enabled:
-        bot_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Private_Session(inline_ID, user_Language)
 
     except spotify_Exceptions.http_Error:
-        bot_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
     except:
-        bot_Sender.inline_Unknown_Error(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
     
     else:
-        bot_Sender.share_Inline_NowPlaying(inline_ID, user_Data, language_Name=user_Language)
+        bot_Inline_Sender.share_Inline_NowPlaying(inline_ID, user_Data, user_Language)
 
 
 
@@ -68,28 +72,48 @@ def context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
             context_Data = spotify_Service.get_Playlist_Data(user_Unique_ID, context_ID)
     
     except spotify_Exceptions.no_Playback:
-        bot_Sender.inline_NowPlaying_Nothing(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_NowPlaying_Nothing(inline_ID, user_Language)
     
     except spotify_Exceptions.no_Playing_Context:
-        bot_Sender.inline_No_Context(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_No_Context(inline_ID, user_Language)
 
     except spotify_Exceptions.private_Session_Enabled:
-        bot_Sender.inline_Private_Session(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Private_Session(inline_ID, user_Language)
 
     except spotify_Exceptions.http_Error:
-        bot_Sender.inline_Auth_Error(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
 
     except:
-        bot_Sender.inline_Unknown_Error(inline_ID, language_Name=user_Language)
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
         logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
     
     else:
         if current_Context["context_Type"] == "album":
-            bot_Sender.share_Inline_Album(inline_ID, context_Data, language_Name=user_Language)
+            bot_Inline_Sender.share_Inline_Album(inline_ID, context_Data, user_Language)
 
         elif current_Context["context_Type"] == "artist":
-            bot_Sender.share_Inline_Artist(inline_ID, context_Data, language_Name=user_Language)
+            bot_Inline_Sender.share_Inline_Artist(inline_ID, context_Data, user_Language)
 
         elif current_Context["context_Type"] == "playlist":
-            bot_Sender.share_Inline_Playlist(inline_ID, context_Data, language_Name=user_Language)
+            bot_Inline_Sender.share_Inline_Playlist(inline_ID, context_Data, user_Language)
+
+
+
+def items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Language):
+    try:
+        search_Results = spotify_Service.search_Item(user_Unique_ID, search_Request, limit=10)
+
+    except spotify_Exceptions.search_No_Results:
+        bot_Inline_Sender.search_No_Results(inline_ID, user_Language)
+        
+    except spotify_Exceptions.http_Error:
+        bot_Inline_Sender.inline_Auth_Error(inline_ID, user_Language)
+        logger.error(f"INLINE MODE ERROR. OAUTH ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+
+    except:
+        bot_Inline_Sender.inline_Unknown_Error(inline_ID, user_Language)
+        logger.error(f"INLINE MODE ERROR. UNKNOWN ERROR WHEN SENDING NOW PLAYING FOR USER {user_ID}")
+    
+    else:
+        bot_Inline_Sender.search_Results(inline_ID, search_Results, user_Language)

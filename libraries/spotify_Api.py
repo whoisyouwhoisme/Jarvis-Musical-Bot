@@ -269,7 +269,31 @@ def get_User_Devices(auth_Token):
     """
     request_Headers = return_Request_Headers(auth_Token)
 
-    response = get_Request(f"https://api.spotify.com/v1/me/player/devices", headers=request_Headers)
+    response = get_Request("https://api.spotify.com/v1/me/player/devices", headers=request_Headers)
+
+    return response.json()
+
+
+
+def search_Item(auth_Token, search_Query, search_Types="track", limit=5, offset=0):
+    """
+    Поиск в Spotify
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    search_Query - Поисковой запрос
+
+    search_Types - Типы для поиска, исполнитель, альбом, трек
+
+    limit - Лимит элементов поиска
+
+    offset - Смещение элементов поиска
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/search?q={search_Query}&type={search_Types}&limit={limit}&offset={offset}", headers=request_Headers)
 
     return response.json()
 
