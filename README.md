@@ -87,7 +87,7 @@ The result of a successful WebHook connection will be the response:
 ###### Sharing Songs
 ![Sharing songs](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20song%20sharing.png?raw=true "Sharing songs")
 ###### Songs Searching
-![Songs Searching](screenshots/inline search.png "Songs Searching")
+![Songs Searching](https://raw.githubusercontent.com/Koteyk0o/Jarvis-Musical-Bot/master/screenshots/inline%20search.png "Songs Searching")
 ###### Sharing Context (Album, Artist, Playlist)
 ![Sharing context](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/inline%20context%20sharing.png?raw=true "Sharing context")
 ###### Language changing
