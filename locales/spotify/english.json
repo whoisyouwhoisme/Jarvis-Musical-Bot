@@ -13,10 +13,10 @@
             "liked_Songs": "Liked Songs",
             "top_Songs": "Top Songs",
             "create_Playlist": "Create Playlist",
-            "open_On_Spotify": "Open on Spotify site",
+            "open_On_Spotify": "Open on Spotify Website",
             "play_On_Spotify": "Play on Spotify",
-            "previous_Page": "< Previous page",
-            "next_Page": "Next page >"
+            "previous_Page": "< Previous Page",
+            "next_Page": "Next Page >"
         },
 
         "service_Buttons": {

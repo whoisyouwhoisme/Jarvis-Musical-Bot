@@ -105,7 +105,7 @@ def context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
 
 def items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Language):
     try:
-        search_Results = spotify_Service.search_Item(user_Unique_ID, search_Request, limit=10)
+        search_Results = spotify_Service.search_Item(user_Unique_ID, search_Request, limit=15)
 
     except spotify_Exceptions.search_No_Results:
         bot_Inline_Sender.search_No_Results(inline_ID, user_Language)
