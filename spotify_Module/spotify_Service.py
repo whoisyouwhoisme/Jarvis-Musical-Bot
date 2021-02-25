@@ -461,11 +461,13 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
                         NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
                     else:
                         if old_Index < index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "▼ " #Если песня опустилась ниже
+                            index_Offset = str(index_New - old_Index)
+                            NEW_TopData["items"][index_New]["prefix"] = f" - (+{index_Offset}) ▼ " #Если песня опустилась ниже
                         elif old_Index > index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "▲ " #Если песня поднялась выше
+                            index_Offset = str(index_New - old_Index)
+                            NEW_TopData["items"][index_New]["prefix"] = f" - ({index_Offset}) ▲ " #Если песня поднялась выше
                         elif old_Index == index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "  " #Если изменений не произошло
+                            NEW_TopData["items"][index_New]["prefix"] = "" #Если изменений не произошло
 
     return NEW_TopData
 
@@ -521,7 +523,7 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
         elif time_Range == "long_term":
             user_Artists = database_User_Artists[0][3]
         
-        if user_Artists: #Проверяем есть ли старый кэш песен
+        if user_Artists: #Проверяем есть ли старый кэш исполнителей
             OLD_TopData = json.loads(user_Artists) #Десериализуем строку в словарь
 
             if OLD_TopData["top_Info"]["time_Range"] == time_Range: #Если временной период выборки совпадает, то делаем сравнение
@@ -537,14 +539,16 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
                     try:
                         old_Index = OLD_URIS.index(NEW_URIS[index_New])
                     except:
-                        NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
+                        NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такого исполнителя нет, ставим метку нового исполнителя
                     else:
                         if old_Index < index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "▼ " #Если песня опустилась ниже
+                            index_Offset = str(index_New - old_Index)
+                            NEW_TopData["items"][index_New]["prefix"] = f" - (+{index_Offset}) ▼ " #Если исполнитель опустился ниже
                         elif old_Index > index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "▲ " #Если песня поднялась выше
+                            index_Offset = str(index_New - old_Index)
+                            NEW_TopData["items"][index_New]["prefix"] = f" - ({index_Offset}) ▲ " #Если исполнитель поднялся выше
                         elif old_Index == index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "  " #Если изменений не произошло
+                            NEW_TopData["items"][index_New]["prefix"] = "" #Если изменений не произошло
 
     return NEW_TopData
 

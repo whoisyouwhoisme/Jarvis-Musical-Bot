@@ -215,7 +215,7 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
         prefix = top_Data["items"][top_Item]["prefix"]
         artists = top_Data["items"][top_Item]["artists"]
         name = top_Data["items"][top_Item]["name"]
-        chat_Top_Data[top_Item] = f"<b>{prefix}{top_Item + 1}.</b> {artists} - {name} \n\n"
+        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
     if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
@@ -266,7 +266,7 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
         prefix = top_Data["items"][top_Item]["prefix"]
         artist = top_Data["items"][top_Item]["artist"]
         followers = top_Data["items"][top_Item]["followers"]
-        chat_Top_Data[top_Item] = f"<b>{prefix}{top_Item + 1}.</b> {artist} - {followers} Followers \n\n"
+        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers <b>{prefix}</b>\n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
     if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
