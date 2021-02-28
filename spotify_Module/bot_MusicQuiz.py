@@ -32,6 +32,7 @@ def to_Main_Menu(user_ID):
 
 def process_Type_Selector_Message(user_ID, message_Text, user_Language):
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["liked_Songs"]:
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Liked_Songs(user_ID, language_Name=user_Language)
 
@@ -49,14 +50,17 @@ def process_Type_Selector_Message(user_ID, message_Text, user_Language):
 
 def process_Time_Selector_Message(user_ID, message_Text, user_Language):
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"]:
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="short_term")
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["6_Months"]:
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="medium_term")
 
     elif message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["time_Buttons"]["all_Time"]:
+        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         bot_Sender.musicQuiz_Preparing(user_ID, language_Name=user_Language)
         create_MusicQuiz_Top_Tracks(user_ID, language_Name=user_Language, time_Range="long_term")
 
@@ -159,7 +163,6 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
     time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
     """
     try:
-        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(db_Manager.get_User_UniqueID(user_ID), time_Range)
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
@@ -188,16 +191,20 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
         to_Main_Menu(user_ID)
 
     else:
-        musicQuiz_User_Songs[user_ID] = musicQuiz_Data
-        musicQuiz_User_Stats[user_ID] = {
-            "game_Round":0,
-            "round_Prepared_Timestamp":0,
-            "round_Answer":"",
-            "correct_Answers":0,
-            "total_Rounds":10,
-        }
-        db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
+        if not db_Manager.get_User_Position(user_ID) == "main_Menu":
+            musicQuiz_User_Songs[user_ID] = musicQuiz_Data
+            musicQuiz_User_Stats[user_ID] = {
+                "game_Round":0,
+                "round_Prepared_Timestamp":0,
+                "round_Answer":"",
+                "correct_Answers":0,
+                "total_Rounds":10,
+            }
+            db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
+            process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
+        
+        else:
+            logger.error(f"MUSIC QUIZ PREPARED FOR USER {user_ID}, BUT THE USER LEFT THE GAME")
 
 
 
@@ -208,7 +215,6 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
     user_ID - Telegram ID пользователя
     """
     try:
-        db_Manager.write_User_Position(user_ID, "work_In_Progress")
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Service.check_User_Liked_Songs(user_Unique_ID, 50)
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Liked_Songs(user_Unique_ID)
@@ -239,13 +245,17 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
         to_Main_Menu(user_ID)
 
     else:
-        musicQuiz_User_Songs[user_ID] = musicQuiz_Data
-        musicQuiz_User_Stats[user_ID] = {
-            "game_Round":0,
-            "round_Prepared_Timestamp":0,
-            "round_Answer":"",
-            "correct_Answers":0,
-            "total_Rounds":10,
-        }
-        db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
-        process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
+        if not db_Manager.get_User_Position(user_ID) == "main_Menu":
+            musicQuiz_User_Songs[user_ID] = musicQuiz_Data
+            musicQuiz_User_Stats[user_ID] = {
+                "game_Round":0,
+                "round_Prepared_Timestamp":0,
+                "round_Answer":"",
+                "correct_Answers":0,
+                "total_Rounds":10,
+            }
+            db_Manager.write_User_Position(user_ID, "user_MusicQuiz_inGame")
+            process_MusicQuiz_Round(user_ID, language_Name=language_Name, game_Round=0)
+        
+        else:
+            logger.error(f"MUSIC QUIZ PREPARED FOR USER {user_ID}, BUT THE USER LEFT THE GAME")
