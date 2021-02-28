@@ -214,7 +214,7 @@
 
             "disable_Bot": "*To completely disable the Jarvis, go to the Spotify website.*",
     
-            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n*@JarvisMusicalBot share song* _- Share Now Playing Song_ \n*@JarvisMusicalBot share context* _- Share Now Playing Context (Album, Artist, Playlist)_ \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
+            "auth_Complete": "Welcome aboard, *{user_Nickname}!* \n\nYour *Spotify* account is successfully connected! \n\n*Some useful commands:* \n*/language* - Change Bot language \n*/menu* - Return to main menu \n*/logout* - Disable bot for your account \n*/contacts* - Contacts for communication with the developer \n\n*Using Inline Mode:* \n*@JarvisMusicalBot share* _- Share Now Playing Song_ \n\n*@JarvisMusicalBot share context* _- Share Now Playing Context (Album, Artist, Playlist)_ \n\n*@JarvisMusicalBot search REQUEST* _- Find a song through search (e.g. @JarvisMusicalBot search space oddity)_ \n\nFollow the instructions in the menu to get more information on working with Inline mode. \n\nEnjoy the bot. \nIf you have any questions, you can contact the developer.",
     
             "developer_Contacts": "Having problems? Have questions? Want to report a bug?"
         },
