@@ -19,7 +19,8 @@ def controls_Main_Menu(chat_id, language_Name):
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"])
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
 
@@ -40,8 +41,8 @@ def language_Selector(chat_id, language_Name):
     Клавиатура выбора языка
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    keyboard.row("English")
-    keyboard.row("Russian")
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["language"]["ENG"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["language"]["RUS"])
 
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["choose_Language"], parse_mode="Markdown", reply_markup=keyboard)
 

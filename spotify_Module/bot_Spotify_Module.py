@@ -156,12 +156,12 @@ def chat_Messages_Handler(message):
 
         #Меню смены языка
         if user_Position_Cache == "language_Select":
-            if message.text == "English":
+            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["language"]["ENG"]:
                 db_Manager.write_User_Language(user_ID, "ENG")
                 bot_Sender.language_Changed(user_ID, "ENG")
                 to_Main_Menu(user_ID)
 
-            elif message.text == "Russian":
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["language"]["RUS"]:
                 db_Manager.write_User_Language(user_ID, "RUS")
                 bot_Sender.language_Changed(user_ID, "RUS")
                 to_Main_Menu(user_ID)

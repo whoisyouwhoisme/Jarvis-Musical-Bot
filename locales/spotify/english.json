@@ -35,6 +35,11 @@
             "100_Songs": "100 Songs",
             "200_Songs": "200 Songs",
             "all_Offset": "All Songs"
+        },
+
+        "language": {
+            "ENG": "English (English)",
+            "RUS": "Russian (Russian)"
         }
     },
 
