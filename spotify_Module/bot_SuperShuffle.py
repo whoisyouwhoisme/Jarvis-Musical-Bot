@@ -76,7 +76,7 @@ def create_SuperShuffle(user_ID, language_Name, tracks_Count=None):
         logger.info(f"Creating Super Shuffle For User {user_ID}")
 
     except spotify_Exceptions.no_Tracks:
-        bot_Sender.insufficient_Data_For_Shuffle(user_ID, language_Name=language_Name)
+        bot_Sender.not_Enough_Songs(user_ID, language_Name=language_Name, songs_Count=100)
 
     except spotify_Exceptions.http_Error:
         bot_Sender.cannot_Authorize(user_ID, language_Name=language_Name)

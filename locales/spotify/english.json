@@ -7,6 +7,7 @@
             "your_Tops": "Your Tops",
             "youtube_Clip": "YouTube Clip",
             "musicQuiz": "Music Quiz",
+            "blocked_Tracks": "Blocked Tracks",
             "back_To_Menu": "Back to Menu",
             "songs": "Songs",
             "artists": "Artists",
@@ -104,13 +105,17 @@
     
             "unknown_Error": "*Unknown error.* \n\nIf the error persists, contact the developer via the */contacts* command",
     
-            "denied_Work_Reason": "At the moment, you can not use this function, please wait.",
+            "denied_Work_Reason": "*Data processing in progress.* \n\nAt the moment, you can not use this function, please wait.",
 
             "start_Playing_NoDevice": "*Unable to start playback.* \n\nNo active devices.",
 
             "start_Playing_PremiumRequired": "*Unable to start playback.* \n\nSpotify Premium subscription is required.",
 
-            "start_Playing_RequestError": "*Unable to start playback.* \n\nUnable to process media-request."
+            "start_Playing_RequestError": "*Unable to start playback.* \n\nUnable to process media-request.",
+
+            "not_Enough_Minimum_Songs": "*Your music library is not enough songs.* \n\nThe minimum number of songs for this feature is: *{songs_Count}*",
+
+            "not_Enough_Songs": "*Your music library is not enough songs.* \n\nListen and add more songs to your library and the feature will become available."
         },
 
         "sharing_Headers": {
@@ -129,6 +134,8 @@
             "youtube_Clip_Not_Available": "YouTube Clip not available for this song.",
 
             "playlist_Preparing": "*Your playlist is being prepared, please wait.* \n\nIt might take a couple of minutes.",
+
+            "downloading_Information": "*Loading information.* \n\nThis can take up to a couple of minutes.",
 
             "language_Changed": "Language changed successfully.",
 
@@ -172,8 +179,6 @@
         },
 
         "superShuffle": {
-            "insufficient_Data_For_Shuffle": "*You don't have enough songs for Super-Shuffle.* \n\nAdd more songs and this feature will be available (minimum 100 songs)",
-
             "tracks_Count_Question": "How many songs should I add to the playlist?",
 
             "your_SuperShuffle": "Super-Shuffle %Y-%m-%d %H:%M",
@@ -200,9 +205,17 @@
 
             "musicQuiz_Question": "Listen the song, and select an answer 🤔",
 
-            "insufficient_Data_For_MusicQuiz": "*You don't have enough songs for Music Quiz.* \n\nListen to more songs, and someday you can play a Music Quiz.",
-
             "musicQuiz_Rules": "The *Music Quiz* consists of 10 songs from your music library. \n\n*Rules of the game:* \n1. You are given a 30 second segment of a song. \n2. You are given 10 seconds to answer, if you did not answer in time - the answer will be considered incorrect. \n3. You are given four choices, one of which is correct. \n4. Don't cheat! 🤔 \n\nYou can exit the game by entering the command */menu*"
+        },
+
+        "blocked_Tracks": {
+            "description": "In this section you can see which tracks are blocked in your Liked Songs section. \n\n*Spotify has algorithms to find a substitute for a blocked song, so if a song is on this list, it cannot be played at all.*",
+
+            "message_Header": "<b>List of your blocked songs.</b>",
+
+            "your_Account_Country": "Your account country: <b>{user_Country}</b>",
+
+            "blocked_Songs_Number": "Number of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
         },
 
         "authorization": {

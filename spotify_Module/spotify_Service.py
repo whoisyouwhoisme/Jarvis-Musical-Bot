@@ -277,7 +277,8 @@ def check_User_Liked_Songs(user_Unique_ID, minimum_Count):
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
 
     if user_Data["total"] >= minimum_Count:
         return True
@@ -388,6 +389,45 @@ def search_Item(user_Unique_ID, search_Query, search_Types="track", limit=5, off
                 search_Results["playlists"].append(playlist_Data)
 
     return search_Results
+
+
+
+def get_User_Blocked_Tracks(user_Unique_ID):
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
+
+    if user_Data["total"] == 0:
+        raise spotify_Exceptions.no_Tracks
+
+    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+
+    offset = 0
+    blocked_Tracks = {
+        "user_Country":user_Country,
+        "blocked_Count":0,
+        "tracks_Count":user_Data["total"],
+        "tracks":[]
+        }
+    
+    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
+
+        offset += 50
+
+        for track in range(len(user_Tracks["items"])): #Перебрать все песни в текущей итерации
+                if not user_Tracks["items"][track]["track"]["is_playable"]:
+                    blocked_Tracks["tracks"].append(
+                        {
+                            "name":user_Tracks["items"][track]["track"]["name"],
+                            "artist":user_Tracks["items"][track]["track"]["artists"][0]["name"],
+                        }
+                    )
+    
+    blocked_Tracks["blocked_Count"] = len(blocked_Tracks["tracks"])
+    return blocked_Tracks
 
 
 
@@ -653,7 +693,8 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
 
-    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
     total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
 
     offset = 0
@@ -708,13 +749,14 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     user_Auth_Token = database_User_Data[0][4]
     user_Spotify_ID = database_User_Data[0][1]
 
-    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token)
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
     total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
 
     offset = 0
     liked_Tracks = []
     for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
-        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, 50, offset)
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
 
         offset += 50
 

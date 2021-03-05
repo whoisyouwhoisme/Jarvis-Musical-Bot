@@ -221,7 +221,7 @@ def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
         logger.info(f"Creating Liked Songs Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tracks:
-        bot_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
+        bot_Sender.not_Enough_Songs(user_ID, language_Name=language_Name, songs_Count=50)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Error:

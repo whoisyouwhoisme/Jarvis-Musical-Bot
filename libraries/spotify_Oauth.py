@@ -3,6 +3,7 @@ import json
 import time
 from spotify_Module import bot_Sender
 from spotify_Module import spotify_Exceptions
+from libraries import spotify_Api
 from libraries import database_Manager
 from base64 import b64encode
 
@@ -11,7 +12,7 @@ with open("bot_Keys.json") as bot_Keys_File:
 
 client_ID = bot_Keys["spotify"]["client_ID"]
 client_Secret = bot_Keys["spotify"]["client_Secret"]
-api_Scopes = "user-read-playback-state user-read-currently-playing user-modify-playback-state streaming user-library-read user-read-recently-played user-top-read playlist-modify-private"
+api_Scopes = "user-read-playback-state user-read-currently-playing user-modify-playback-state streaming user-library-read user-read-recently-played user-top-read playlist-modify-private user-read-private"
 spotify_Redirect_URI = bot_Keys["spotify"]["redirect_URI"]
 
 
@@ -118,38 +119,6 @@ def request_Refreshed_Token(user_Refresh_Token):
 
 
 
-def get_User_Profile(auth_Token):
-    """
-    Получить профиль пользователя в Spotify, в случае успеха возвращает ответ в формате json
-
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
-
-    auth_Token - Токен доступа к API Spotify
-    """
-    request_Headers = {
-        "Accept":"application/json",
-        "Content-Type":"application/json",
-        "Authorization":"Bearer " + auth_Token,
-    }
-
-    try:
-        response = requests.get("https://api.spotify.com/v1/me", headers=request_Headers, timeout=(3, 5))
-        response.raise_for_status()
-
-    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
-        raise spotify_Exceptions.http_Connection_Error
-
-    except requests.exceptions.HTTPError:
-        raise spotify_Exceptions.http_Error(response.status_code, response.reason)
-
-    except:
-        raise spotify_Exceptions.http_Unknown_Error
-
-    else:
-        return response.json()
-
-
-
 def refresh_Access_Token(user_Unique_ID):
     """
     Получение обновленного токена доступа и запись его в базу данных
@@ -174,7 +143,7 @@ def auth_User(user_Auth_Code, user_Unique_ID):
     user_Unique_ID - Уникальный ID пользователя
     """
     payload_Data = request_Access_Tokens(user_Auth_Code)
-    user_Profile = get_User_Profile(payload_Data["access_token"])
+    user_Profile = spotify_Api.get_User_Profile(payload_Data["access_token"])
 
     user_Telegram_ID = database_Manager.search_In_Database(user_Unique_ID, "bot_Users", "user_Unique_ID")[0][0]
     user_Language = database_Manager.get_User_Language(user_Telegram_ID)

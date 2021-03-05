@@ -19,6 +19,7 @@ from spotify_Module import bot_SuperShuffle
 from spotify_Module import bot_LibraryTops
 from spotify_Module import bot_MusicQuiz
 from spotify_Module import bot_Player_Control
+from spotify_Module import bot_BlockedTracks
 
 from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
@@ -201,6 +202,12 @@ def chat_Messages_Handler(message):
                 bot_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
                 bot_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
+
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"]: #Пункт музыкальной викторины
+                logger.info(f"User {user_ID} Entered To Blocked Tracks")
+                db_Manager.write_User_Position(user_ID, "user_BlockedTracks")
+                bot_Sender.blocked_Tracks_Description(user_ID, language_Name=user_Language)
+                bot_BlockedTracks.send_BlockedTracks(user_ID, language_Name=user_Language)
 
             else:
                 if message.content_type == "photo": #СПАСИБО КИРЮШЕ ЗА ПАСХАЛКУ

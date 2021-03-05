@@ -109,7 +109,7 @@ def get_Current_Playback(auth_Token):
 
 
 
-def get_Saved_Tracks(auth_Token, limit=10, offset=0):
+def get_Saved_Tracks(auth_Token, market="US", limit=10, offset=0):
     """
     Получить песни из раздела Liked Songs, в случае успеха возвращает ответ в формате json
 
@@ -122,7 +122,7 @@ def get_Saved_Tracks(auth_Token, limit=10, offset=0):
     offset - Смещение выборки
     """
     request_Headers = return_Request_Headers(auth_Token)
-    response = get_Request(f"https://api.spotify.com/v1/me/tracks?limit={limit}&offset={offset}", headers=request_Headers)
+    response = get_Request(f"https://api.spotify.com/v1/me/tracks?market={market}&limit={limit}&offset={offset}", headers=request_Headers)
 
     return response.json()
 
@@ -277,7 +277,7 @@ def get_User_Devices(auth_Token):
 
 def search_Item(auth_Token, search_Query, search_Types="track", limit=5, offset=0):
     """
-    Поиск в Spotify
+    Поиск в Spotify, в случае успеха возвращает ответ в формате json
 
     В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
 
@@ -344,3 +344,19 @@ def add_Track_To_Queue(auth_Token, track_Uri):
     response = post_Request(f"https://api.spotify.com/v1/me/player/queue?uri={track_Uri}", headers=request_Headers)
 
     return response
+
+
+
+def get_User_Profile(auth_Token):
+    """
+    Получить профиль пользователя в Spotify, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Токен доступа к API Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request("https://api.spotify.com/v1/me", headers=request_Headers)
+
+    return response.json()
