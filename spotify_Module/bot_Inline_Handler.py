@@ -6,6 +6,16 @@ from spotify_Module.spotify_Logger import logger
 
 
 
+def process_User_Language(language_Code):
+    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
+        user_Language = "RUS"
+    else:
+        user_Language = "ENG"
+    
+    return user_Language
+
+
+
 def process_Inline_Data(data):
     user_ID = data.from_user.id
     inline_ID = data.id
@@ -29,7 +39,7 @@ def process_Inline_Data(data):
                 search_Request = inline_Request[7:]
                 items_Search(user_ID, inline_ID, search_Request, user_Unique_ID, user_Language)
     else:
-        bot_Inline_Sender.inline_Spotify_Not_Authorized(inline_ID, user_Language)
+        bot_Inline_Sender.inline_Spotify_Not_Authorized(inline_ID, process_User_Language(data.from_user.language_code))
 
 
 

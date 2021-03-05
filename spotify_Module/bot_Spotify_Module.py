@@ -42,6 +42,16 @@ def to_Main_Menu(user_ID):
 
 
 
+def process_User_Language(language_Code):
+    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
+        user_Language = "RUS"
+    else:
+        user_Language = "ENG"
+    
+    return user_Language
+
+
+
 def logout_Command(message):
     """
     Обработка команды выхода
@@ -116,16 +126,8 @@ def chat_Messages_Handler(message):
     if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
         logger.info(f"User {user_ID} Not In Reg Table. Registration...")
         reg_Timestamp = int(time.time())
-
-        language_Code = message.from_user.language_code
-
-        if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
-            user_Language = "RUS"
-        else:
-            user_Language = "ENG"
-
         generated_Unique_ID = db_Manager.generate_Unique_ID()
-        db_Manager.register_User(user_ID, generated_Unique_ID, user_Language, bot_Version, reg_Timestamp)
+        db_Manager.register_User(user_ID, generated_Unique_ID, process_User_Language(message.from_user.language_code), bot_Version, reg_Timestamp)
 
 
 
