@@ -338,7 +338,7 @@ def not_Enough_Songs(chat_id, language_Name, songs_Count=None):
     Недостаточно песен
     """
     if songs_Count:
-        message_Text = language_Vocabluary[language_Name]["chat_Messages"]["errors"]["insufficient_Data_For_MusicQuiz"].format(songs_Count=songs_Count)
+        message_Text = language_Vocabluary[language_Name]["chat_Messages"]["errors"]["not_Enough_Minimum_Songs"].format(songs_Count=songs_Count)
     else:
         message_Text = language_Vocabluary[language_Name]["chat_Messages"]["errors"]["not_Enough_Songs"]
 
