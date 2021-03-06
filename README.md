@@ -14,6 +14,7 @@ Authorization practically does not collect any private data, except user nicknam
 - Your Tops. Displays the tops of songs / artists for a certain period of time. Shows changes in the top, which tracks listened more often, less often, or what new tracks appeared in the tops. You can create a playlist from tops of top songs.
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
 - Multi-Language. Support English and Russian languages.
+- Blocked Songs List. The bot shows how many and which songs are blocked for your region.
 
 ## To install the bot:
 **1.** Setting up WebHook:
@@ -102,3 +103,5 @@ The result of a successful WebHook connection will be the response:
 ![Top Tracks Playlist](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/top%20tracks%20playlist.png?raw=true "Top Tracks Playlist")
 ###### Music Quiz
 ![Music Quiz](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/music%20quiz.png?raw=true "Music Quiz")
+###### Blocked Songs
+![Blocked Songs](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/blocked_Tracks.png?raw=true "Blocked Songs")
