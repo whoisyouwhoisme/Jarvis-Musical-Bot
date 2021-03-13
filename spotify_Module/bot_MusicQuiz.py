@@ -167,7 +167,7 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
         logger.info(f"Creating Top Tracks Music Quiz For User {user_ID}")
 
     except spotify_Exceptions.no_Tops_Data:
-        bot_Sender.insufficient_Data_For_MusicQuiz(user_ID, language_Name=language_Name)
+        bot_Sender.not_Enough_Songs(user_ID, language_Name=language_Name, songs_Count=50)
         to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Error:

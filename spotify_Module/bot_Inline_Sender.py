@@ -64,7 +64,8 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     if playing_Data["preview_URL"]:
         results = telebot.types.InlineQueryResultAudio(1,
         playing_Data["preview_URL"],
-        title="Song Preview",
+        title=playing_Data["song_Name"],
+        performer=artists_Enum,
         caption=playback_Text,
         parse_mode="HTML",
         reply_markup=keyboard)
@@ -271,12 +272,21 @@ def search_Results(inline_ID, search_Results, language_Name):
             
         song_Info["playback_Summary"] = song_Info["song_Name"] + song_Info["artists"] + song_Info["album_Name"] + song_Info["release_date"] + song_Info["song_Duration"]
 
-        answer_Results.append(telebot.types.InlineQueryResultArticle(song,
-        title=song_Item["song_Name"],
-        input_message_content=telebot.types.InputTextMessageContent(song_Info["playback_Summary"], parse_mode="HTML"),
-        reply_markup=keyboard,
-        description=artists_Enum,
-        thumb_url=song_Info["article_Cover"]))
+        if song_Item["preview_URL"]:
+            answer_Results.append(telebot.types.InlineQueryResultAudio(song,
+            song_Item["preview_URL"],
+            title=song_Item["song_Name"],
+            performer=artists_Enum,
+            caption=song_Info["playback_Summary"],
+            parse_mode="HTML",
+            reply_markup=keyboard))
+        else:
+            answer_Results.append(telebot.types.InlineQueryResultArticle(song,
+            title=song_Item["song_Name"],
+            input_message_content=telebot.types.InputTextMessageContent(song_Info["playback_Summary"], parse_mode="HTML"),
+            reply_markup=keyboard,
+            description=artists_Enum,
+            thumb_url=song_Info["article_Cover"]))        
         
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=answer_Results, cache_time=0)
 

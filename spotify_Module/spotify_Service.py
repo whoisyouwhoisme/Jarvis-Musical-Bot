@@ -369,6 +369,7 @@ def search_Item(user_Unique_ID, search_Query, search_Types="track", limit=5, off
                 track_Data["song_Duration"] = track_Item["duration_ms"]
                 track_Data["release_Date"] = track_Item["album"]["release_date"]
                 track_Data["song_ID"] = track_Item["id"]
+                track_Data["preview_URL"] = track_Item["preview_url"]
                 track_Data["external_URL"] = track_Item["external_urls"]["spotify"]
                 track_Data["images"] = track_Item["album"]["images"]
                 

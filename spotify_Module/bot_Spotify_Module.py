@@ -7,10 +7,6 @@
 """
 
 import time
-import json
-import math
-import random
-import urllib
 
 from spotify_Module import localization
 from spotify_Module import bot_Sender
