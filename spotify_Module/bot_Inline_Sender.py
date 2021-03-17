@@ -27,14 +27,13 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
         youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
-    artists_Enum = ", ".join(playing_Data["artists"])
     song_Link = playing_Data["external_URL"]
     song_Name = playing_Data["song_Name"]
     html_Link = f'<a href="{song_Link}">{song_Name}</a>'
 
     nowPlaying_Info = {}
     nowPlaying_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + html_Link + "\n"
-    nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
+    nowPlaying_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(playing_Data["artists"]) + "\n"
     nowPlaying_Info["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + playing_Data["album_Name"] + "\n"
     nowPlaying_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
     nowPlaying_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
@@ -65,7 +64,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
         results = telebot.types.InlineQueryResultAudio(1,
         playing_Data["preview_URL"],
         title=playing_Data["song_Name"],
-        performer=artists_Enum,
+        performer=playing_Data["artists"][0],
         caption=playback_Text,
         parse_mode="HTML",
         reply_markup=keyboard)
@@ -74,7 +73,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
         title=playing_Data["song_Name"],
         input_message_content=telebot.types.InputTextMessageContent(playback_Text, parse_mode="HTML"),
         reply_markup=keyboard,
-        description=artists_Enum,
+        description=playing_Data["artists"][0],
         thumb_url=nowPlaying_Info["article_Cover"])
     
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
@@ -91,14 +90,13 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#album#{album_ID}")
     keyboard.add(play_On_Spotify)
 
-    artists_Enum = ", ".join(album_Data["artists"])
     album_Link = album_Data["external_URL"]
     album_Name = album_Data["name"]
     html_Link = f'<a href="{album_Link}">{album_Name}</a>'
     
     album_Info = {}
     album_Info["name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["name"] + html_Link + "\n"
-    album_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
+    album_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(album_Data["artists"]) + "\n"
     album_Info["label"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["label"] + album_Data["label"] + "\n"
     album_Info["release_Date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + album_Data["release_Date"] + "\n"
     album_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(album_Data["total_Tracks"]) + "\n"
@@ -244,14 +242,13 @@ def search_Results(inline_ID, search_Results, language_Name):
         play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
         keyboard.add(play_On_Spotify)
 
-        artists_Enum = ", ".join(song_Item["artists"])
         song_Link = song_Item["external_URL"]
         song_Name = song_Item["song_Name"]
         html_Link = f'<a href="{song_Link}">{song_Name}</a>'
 
         song_Info = {}
         song_Info["song_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["song"] + html_Link + "\n"
-        song_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + artists_Enum + "\n"
+        song_Info["artists"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["artist"] + ", ".join(song_Item["artists"]) + "\n"
         song_Info["album_Name"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["album"] + song_Item["album_Name"] + "\n"
         song_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + song_Item["release_Date"] + "\n"    
         song_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(song_Item["song_Duration"] / 1000))
@@ -276,7 +273,7 @@ def search_Results(inline_ID, search_Results, language_Name):
             answer_Results.append(telebot.types.InlineQueryResultAudio(song,
             song_Item["preview_URL"],
             title=song_Item["song_Name"],
-            performer=artists_Enum,
+            performer=song_Item["artists"][0],
             caption=song_Info["playback_Summary"],
             parse_mode="HTML",
             reply_markup=keyboard))
@@ -285,7 +282,7 @@ def search_Results(inline_ID, search_Results, language_Name):
             title=song_Item["song_Name"],
             input_message_content=telebot.types.InputTextMessageContent(song_Info["playback_Summary"], parse_mode="HTML"),
             reply_markup=keyboard,
-            description=artists_Enum,
+            description=song_Item["artists"][0],
             thumb_url=song_Info["article_Cover"]))        
         
     spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=answer_Results, cache_time=0)
