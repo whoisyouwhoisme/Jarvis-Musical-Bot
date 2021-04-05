@@ -228,7 +228,7 @@
         },
 
         "library_Statistics": {
-            "description": "In this section you can see statistics for your song library. \n\nAt the moment, there are 3 types of statistics available. \n\n*Statistics for years*, songs from which years you have the most. \n\n*Statistics on artists*, songs of which artists you have the most. \n\n*Statistics on genres*, songs of which genres you have the most.",
+            "description": "In this section you can see statistics for your song library. \n\nAt the moment, there are 3 types of statistics available. \n\n*Statistics for decades*, songs from which decades you have the most. \n\n*Statistics on artists*, songs of which artists you have the most. \n\n*Statistics on genres*, songs of which genres you have the most.",
 
             "statistic_Section": "What statistics do you want to see?",
 
