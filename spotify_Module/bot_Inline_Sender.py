@@ -20,11 +20,11 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     song_ID = playing_Data["song_ID"]
-    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
     keyboard.add(play_On_Spotify)
 
     if playing_Data["youtube_URL"]: #Если клип песни есть, создаем кнопку
-        youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
+        youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
     song_Link = playing_Data["external_URL"]
@@ -87,7 +87,7 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     album_ID = album_Data["id"]
-    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#album#{album_ID}")
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#album#{album_ID}")
     keyboard.add(play_On_Spotify)
 
     album_Link = album_Data["external_URL"]
@@ -137,7 +137,7 @@ def share_Inline_Artist(inline_ID, artist_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     artist_ID = artist_Data["id"]
-    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#artist#{artist_ID}")
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#artist#{artist_ID}")
     keyboard.add(play_On_Spotify)
 
     artist_Link = artist_Data["external_URL"]
@@ -184,7 +184,7 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     playlist_ID = playlist_Data["playlist_ID"]
-    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
     keyboard.add(play_On_Spotify)
 
     playlist_Link = playlist_Data["external_URL"]
@@ -239,7 +239,7 @@ def search_Results(inline_ID, search_Results, language_Name):
         keyboard = telebot.types.InlineKeyboardMarkup()
 
         song_ID = song_Item["song_ID"]
-        play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
+        play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
         keyboard.add(play_On_Spotify)
 
         song_Link = song_Item["external_URL"]

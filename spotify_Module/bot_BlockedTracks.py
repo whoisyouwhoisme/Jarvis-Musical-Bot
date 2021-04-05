@@ -8,10 +8,6 @@ from spotify_Module.spotify_Logger import logger
 
 
 
-language_Vocabluary = localization.load_Vocabluary()
-
-
-
 def to_Main_Menu(user_ID):
     """
     Вернуть пользователя в главное меню

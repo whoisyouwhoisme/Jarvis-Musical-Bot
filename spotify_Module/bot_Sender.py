@@ -20,7 +20,7 @@ def controls_Main_Menu(chat_id, language_Name):
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"])
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"])
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
 
@@ -30,7 +30,7 @@ def spotify_Login_Offer(chat_id, spotify_Auth_Link, language_Name):
     Просьба о входе в аккаунт Spotify
     """
     login_Keyboard = telebot.types.InlineKeyboardMarkup()
-    login_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["service_Buttons"]["authorize_Spotify"], url=spotify_Auth_Link)
+    login_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["authorize_Spotify"], url=spotify_Auth_Link)
     login_Keyboard.add(login_Button)
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["spotify_Login_Offer"], parse_mode="Markdown", reply_markup=login_Keyboard)
 
@@ -67,7 +67,7 @@ def user_Leaving(chat_id, language_Name):
 
     #Второе сообщение с кнопкой отключения бота
     keyboard = telebot.types.InlineKeyboardMarkup()
-    disable_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["service_Buttons"]["disable_Jarvis"], url="https://www.spotify.com/account/apps/")
+    disable_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["disable_Jarvis"], url="https://www.spotify.com/account/apps/")
     keyboard.add(disable_Button)
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["disable_Bot"], parse_mode="Markdown", reply_markup=keyboard)
 
@@ -428,6 +428,25 @@ def inline_Mode_Help(chat_id, language_Name):
 
 
 
+def library_Statistics_Description(chat_id, language_Name):
+    """
+    Описание раздела статистика библиотеки
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["description"], parse_mode="Markdown")
+
+
+
+def library_Statistics_Type(chat_id, language_Name):
+    """
+    Вопрос пользователю о типе статистики
+    """
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Decades"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Artists"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Genres"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"])
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["statistic_Section"], reply_markup=keyboard)
+
+
+
 def playlist_Ready(chat_id, playlist_Data, language_Name):
     """
     Плейлист готов
@@ -435,8 +454,8 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     playlist_ID = playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
-    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
-    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
+    play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
+    open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
     keyboard.add(play_On_Spotify)
     keyboard.add(open_On_Spotify)
 
@@ -461,10 +480,10 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     time_Range = top_Data["time_Range"]
 
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{next_Page}")
 
     if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
         keyboard.add(previous_Page_Button, next_Page_Button)
@@ -515,6 +534,56 @@ def blocked_Tracks(chat_id, blocked_Data, language_Name):
 
 
 
+def decades_Statistic(chat_id, statistic_Data, language_Name):
+    """
+    Вывод статистики по декадам
+    """
+    message = {}
+    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["decades_Statistic_Header"]
+    message["total_Songs"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["total_Tracks"].format(total_Songs=statistic_Data["total_Tracks"])
+    message["summary"] = message["header"] + "\n\n" + message["total_Songs"] + "\n\n"
+    
+    for decade in range(len(statistic_Data["statistic_Data"])):
+        decade_Item = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["decade_Statistic"].format(decade=statistic_Data["statistic_Data"][decade]["decade"], songs_Count=statistic_Data["statistic_Data"][decade]["tracks_In_Decade"], percent_Of_Total=statistic_Data["statistic_Data"][decade]["percent_Of_Total"])
+        message["summary"] += decade_Item + "\n\n"
+
+    spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+
+
+
+def artists_Statistic(chat_id, statistic_Data, language_Name):
+    """
+    Вывод статистики по исполнителям
+    """
+    message = {}
+    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["artists_Statistic_Header"]
+    message["total_Songs"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["total_Tracks"].format(total_Songs=statistic_Data["total_Tracks"])
+    message["summary"] = message["header"] + "\n\n" + message["total_Songs"] + "\n\n"
+    
+    for artist in range(len(statistic_Data["statistic_Data"])):
+        artist_Item = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["artist_Statistic"].format(artist=statistic_Data["statistic_Data"][artist]["artist"], songs_Count=statistic_Data["statistic_Data"][artist]["artist_Tracks"], percent_Of_Total=statistic_Data["statistic_Data"][artist]["percent_Of_Total"])
+        message["summary"] += artist_Item + "\n\n"
+
+    spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+
+
+
+def genres_Statistic(chat_id, statistic_Data, language_Name):
+    """
+    Вывод статистики по жанрам
+    """
+    message = {}
+    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["genres_Statistic_Header"]
+    message["summary"] = message["header"] + "\n\n"
+    
+    for genre in range(len(statistic_Data)):
+        genre_Item = f"<b>{genre + 1}.</b> {statistic_Data[genre]}"
+        message["summary"] += genre_Item + "\n\n"
+
+    spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+
+
+
 def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     """
     Вывод топа песен пользователя
@@ -524,12 +593,12 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     time_Range = top_Data["time_Range"]
 
     previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["previous_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{previous_Page}")
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{previous_Page}")
 
     next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["next_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{next_Page}")
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{next_Page}")
 
-    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["create_Playlist"], callback_data=f"interface#topTracks#createPlaylist#{time_Range}")
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["create_Playlist"], callback_data=f"interface#topTracks#createPlaylist#{time_Range}")
 
     keyboard.add(create_Playlist_Button) #Кнопка создания плейлиста
 

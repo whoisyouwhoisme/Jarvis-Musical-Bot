@@ -668,7 +668,6 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
             "artists":top_Tracks[item]["artists"],
             "audio_URL":top_Tracks[item]["preview_URL"],
         })
-        time.sleep(0.5)
 
         top_Tracks.pop(item) #Удалить их из выборки топа
 
@@ -701,7 +700,7 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
     offset = 0
     liked_Tracks = []
     for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
-        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, 50, offset)
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
 
         offset += 50
 
@@ -722,7 +721,6 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
             "artists":liked_Tracks[item]["artists"],
             "audio_URL":liked_Tracks[item]["preview_URL"],
         })
-        time.sleep(0.5)
 
         liked_Tracks.pop(item) #Удалить их из выборки топа
 
@@ -734,6 +732,54 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
         raise spotify_Exceptions.musicQuiz_Error_NoTracks
 
     return musicQuiz_Items
+
+
+
+def get_Saved_Raw_Tracks(user_Unique_ID):
+    """
+    Получить все треки пользователя в виде списка
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
+
+    if user_Data["total"] == 0:
+        raise spotify_Exceptions.no_Tracks
+
+    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+
+    offset = 0
+    liked_Tracks = []
+    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
+        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
+
+        offset += 50
+
+        for track in range(len(user_Tracks["items"])):
+            liked_Tracks.append(user_Tracks["items"][track])
+        
+    return liked_Tracks
+
+
+
+def get_Several_Artists(user_Unique_ID, artists_IDs):
+    """
+    Получить информацию об нескольких исполнителях
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    artists_IDs - СПИСОК уникальных ID исполнителей в Spotify
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    artists_Data = spotify_Api.get_Several_Artists_Info(user_Auth_Token, artists_IDs)
+
+    return artists_Data
 
 
 

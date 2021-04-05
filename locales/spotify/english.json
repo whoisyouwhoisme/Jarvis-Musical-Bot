@@ -2,27 +2,31 @@
     "keyboard_Buttons": {
 
         "menu_Buttons": {
-            "inline_Help": "Inline Mode Help",
+            "inline_Help": "Inline mode help",
             "super_Shuffle": "Super-Shuffle",
-            "your_Tops": "Your Tops",
-            "youtube_Clip": "YouTube Clip",
-            "musicQuiz": "Music Quiz",
-            "blocked_Tracks": "Blocked Tracks",
+            "your_Tops": "Your tops",
+            "musicQuiz": "Music quiz",
+            "blocked_Tracks": "Blocked tracks",
             "back_To_Menu": "Back to Menu",
             "songs": "Songs",
             "artists": "Artists",
-            "liked_Songs": "Liked Songs",
-            "top_Songs": "Top Songs",
-            "create_Playlist": "Create Playlist",
-            "open_On_Spotify": "Open on Spotify Website",
-            "play_On_Spotify": "Play on Spotify",
-            "previous_Page": "< Previous Page",
-            "next_Page": "Next Page >"
+            "liked_Songs": "Liked songs",
+            "top_Songs": "Top songs",
+            "library_Statistics": "Library statistics",
+            "by_Decades": "By decades",
+            "by_Artists": "By artists",
+            "by_Genres": "By genres"
         },
 
-        "service_Buttons": {
+        "inline_Buttons": {
             "authorize_Spotify": "Authorize on Spotify",
-            "disable_Jarvis": "Disable Jarvis on Spotify Website"
+            "disable_Jarvis": "Disable Jarvis on Spotify Website",
+            "youtube_Clip": "YouTube clip",
+            "create_Playlist": "Create playlist",
+            "open_On_Spotify": "Open on Spotify Website",
+            "play_On_Spotify": "Play on Spotify",
+            "previous_Page": "< Previous page",
+            "next_Page": "Next page >"
         },
 
         "time_Buttons": {
@@ -63,19 +67,19 @@
                 "description": "But it's never too late to fix this 🙃"
             },
             "oauth_Error": {
-                "title": "Authorization Error",
+                "title": "Authorization error",
                 "description": "You might have blocked the bot in your Spotify account"
             },
             "no_Playback_Context": {
-                "title": "No Playback Context",
+                "title": "No playback context",
                 "description": "Possibly a single song is playing, or playing songs from the Liked Songs section"
             },
             "private_Session_Enabled": {
-                "title": "Private Session Enabled",
+                "title": "Private session enabled",
                 "description": "To access the data, the private session must be disabled"
             },
             "no_Search_Results": {
-                "title": "Search Found Nothing",
+                "title": "Search found nothing",
                 "description": "Looks like you're looking for some shit"                
             }
         }
@@ -156,7 +160,7 @@
 
             "added_To_Queue": "*The song has been added to the play queue.*",
 
-            "jarvis_Updated": "*The Jarvis has been updated.* (Version *{jarvis_Version}*) \n\nYou have been moved to the main menu."
+            "jarvis_Updated": "*The Jarvis has been updated.* \n\nVersion *{jarvis_Version}* \n\nYou have been moved to the main menu."
         },
 
         "yourTops": {
@@ -223,6 +227,24 @@
             "blocked_Songs_Number": "Number of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
         },
 
+        "library_Statistics": {
+            "description": "In this section you can see statistics for your song library. \n\nAt the moment, there are 3 types of statistics available. \n\n*Statistics for years*, songs from which years you have the most. \n\n*Statistics on artists*, songs of which artists you have the most. \n\n*Statistics on genres*, songs of which genres you have the most.",
+
+            "statistic_Section": "What statistics do you want to see?",
+
+            "decades_Statistic_Header": "<b>Statistics of your songs by decades.</b>",
+
+            "artists_Statistic_Header": "<b>Statistics of your songs by artists.</b>",
+
+            "genres_Statistic_Header": "<b>Statistics of your songs by genres.</b>",
+
+            "total_Tracks": "Total songs: <b>{total_Songs}</b>",
+
+            "decade_Statistic": "Decade: <b>{decade}s</b> \nSongs: <b>{songs_Count} - {percent_Of_Total}%</b>",
+
+            "artist_Statistic": "Artist: <b>{artist}</b> \nSongs: <b>{songs_Count} - {percent_Of_Total}%</b>"
+        },
+
         "authorization": {
             "spotify_Login_Offer": "Hi, i'm *Jarvis*, Your personal Spotify bot. \n\nIt seems you are not signed in to your *Spotify* account. Please log in to your account. \n\n*You can disconnect your account at any time using the /logout command.*",
 
@@ -258,13 +280,13 @@
 
             "duration": "<b>Duration:</b> ",
 
-            "release_date": "<b>Release Date:</b> ",
+            "release_date": "<b>Release date:</b> ",
 
-            "youtube_Clip": "<b>YouTube Clip:</b> ",
+            "youtube_Clip": "<b>YouTube clip:</b> ",
 
             "spotify_URL": "<b>Spotify URL:</b> ",
 
-            "last_Update": "<b>Last Update:</b> "
+            "last_Update": "<b>Last update:</b> "
         }
     }
 }

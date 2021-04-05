@@ -16,12 +16,13 @@ from spotify_Module import bot_LibraryTops
 from spotify_Module import bot_MusicQuiz
 from spotify_Module import bot_Player_Control
 from spotify_Module import bot_BlockedTracks
+from spotify_Module import bot_LibraryStatistics
 
 from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
 from libraries import database_Manager as db_Manager
 
-bot_Version = 0.3
+bot_Version = 0.4
 
 language_Vocabluary = localization.load_Vocabluary()
 
@@ -120,10 +121,17 @@ def chat_Messages_Handler(message):
     logger.info(f"New Message: {message.text} From: {user_ID}")
 
     if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
-        logger.info(f"User {user_ID} Not In Reg Table. Registration...")
-        reg_Timestamp = int(time.time())
         generated_Unique_ID = db_Manager.generate_Unique_ID()
-        db_Manager.register_User(user_ID, generated_Unique_ID, process_User_Language(message.from_user.language_code), bot_Version, reg_Timestamp)
+        user_LanguageCode = message.from_user.language_code
+
+        user_FirstName = message.from_user.first_name
+        user_UserName = message.from_user.username
+        user_LastName = message.from_user.last_name
+
+        reg_Timestamp = int(time.time())
+
+        logger.info(f"User {user_ID} ({user_FirstName}, {user_LastName}, {user_UserName}) Not In Reg Table. Registration...")
+        db_Manager.register_User(user_ID, generated_Unique_ID, process_User_Language(user_LanguageCode), bot_Version, reg_Timestamp)
 
 
 
@@ -201,11 +209,18 @@ def chat_Messages_Handler(message):
                 bot_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"]: #Пункт музыкальной викторины
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"]: #Пункт заблокированных треков
                 logger.info(f"User {user_ID} Entered To Blocked Tracks")
                 db_Manager.write_User_Position(user_ID, "user_BlockedTracks")
                 bot_Sender.blocked_Tracks_Description(user_ID, language_Name=user_Language)
                 bot_BlockedTracks.send_BlockedTracks(user_ID, language_Name=user_Language)
+            
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"]: #Пункт статистики
+                logger.info(f"User {user_ID} Entered To Library Statistics")
+                db_Manager.write_User_Position(user_ID, "user_LibraryStatistics_Type")
+                bot_Sender.library_Statistics_Description(user_ID, language_Name=user_Language)
+                bot_Sender.library_Statistics_Type(user_ID, language_Name=user_Language)
+                logger.info(f"Sending Statistics Type Selector For User {user_ID}")
 
             else:
                 if message.content_type == "photo": #СПАСИБО КИРЮШЕ ЗА ПАСХАЛКУ
@@ -262,3 +277,8 @@ def chat_Messages_Handler(message):
         
         if user_Position_Cache == "user_MusicQuiz_inGame":
             bot_MusicQuiz.process_InGame_Message(user_ID, message_Text=message.text, user_Language=user_Language)
+        
+
+        #Пункт статистики
+        if user_Position_Cache == "user_LibraryStatistics_Type":
+            bot_LibraryStatistics.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)

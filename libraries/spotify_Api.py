@@ -258,6 +258,26 @@ def get_Artist_Info(auth_Token, artist_ID):
 
 
 
+def get_Several_Artists_Info(auth_Token, artists_IDs):
+    """
+    Получить информацию о НЕСКОЛЬКИХ исполнителях, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    artist_ID - СПИСОК уникальных ID исполнителей в Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    artists_IDs_String = ",".join(artists_IDs)
+
+    response = get_Request(f"https://api.spotify.com/v1/artists?ids={artists_IDs_String}", headers=request_Headers)
+
+    return response.json()
+
+
+
 
 def get_User_Devices(auth_Token):
     """ 
