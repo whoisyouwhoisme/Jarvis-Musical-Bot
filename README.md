@@ -15,6 +15,7 @@ Authorization practically does not collect any private data, except user nicknam
 - Music Quiz. Music quiz from Liked Songs / Your Tops.
 - Multi-Language. Support English and Russian languages.
 - Blocked Songs List. The bot shows how many and which songs are blocked for your region.
+- Library statistics. Statistics based on the tracks available in your library. Statistics for decades, artists, genres.
 
 ## To install the bot:
 **1.** Setting up WebHook:
@@ -105,3 +106,5 @@ The result of a successful WebHook connection will be the response:
 ![Music Quiz](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/music%20quiz.png?raw=true "Music Quiz")
 ###### Blocked Songs
 ![Blocked Songs](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/blocked_Tracks.png?raw=true "Blocked Songs")
+###### Library statistics
+![Library statistics](https://github.com/Koteyk0o/Jarvis-Musical-Bot/blob/master/screenshots/library%20statistics.png?raw=true "Library statistics")
