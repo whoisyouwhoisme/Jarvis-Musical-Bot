@@ -15,7 +15,12 @@
             "library_Statistics": "Library statistics",
             "by_Decades": "By decades",
             "by_Artists": "By artists",
-            "by_Genres": "By genres"
+            "by_Genres": "By genres",
+            "library_Helper": "Library Helper",
+            "library_Duplicates": "Library Duplicates Remover",
+            "playlist_Duplicates": "Playlist Duplicates Remover",
+            "delete": "Delete",
+            "leave_As_Is": "Leave as is"
         },
 
         "inline_Buttons": {
@@ -108,23 +113,27 @@
         },
 
         "errors": {
-            "cannot_Authorize": "*I cannot authorize you on Spotify.* \n\nMaybe you have blocked the bot in your *Spotify* account, use the /logout command and log in again.",
+            "cannot_Authorize": "*I cannot authorize you on Spotify* \n\nMaybe you have blocked the bot in your *Spotify* account, use the /logout command and log in again.",
 
-            "servers_Link_Error": "Unable to connect to *Spotify* servers. \n\nPerhaps this is *Spotify* server error, and you need to wait.",
+            "servers_Link_Error": "Unable to connect to *Spotify* servers \n\nPerhaps this is *Spotify* server error, and you need to wait.",
     
-            "unknown_Error": "*Unknown error.* \n\nIf the error persists, contact the developer via the */contacts* command",
+            "unknown_Error": "*Unknown error* \n\nIf the error persists, contact the developer via the */contacts* command",
     
-            "denied_Work_Reason": "*Data processing in progress.* \n\nAt the moment, you can not use this function, please wait.",
+            "denied_Work_Reason": "*Data processing in progress* \n\nAt the moment, you can not use this function, please wait.",
 
-            "start_Playing_NoDevice": "*Unable to start playback.* \n\nNo active devices.",
+            "start_Playing_NoDevice": "*Unable to start playback* \n\nNo active devices.",
 
-            "start_Playing_PremiumRequired": "*Unable to start playback.* \n\nSpotify Premium subscription is required.",
+            "start_Playing_PremiumRequired": "*Unable to start playback* \n\nSpotify Premium subscription is required.",
 
-            "start_Playing_RequestError": "*Unable to start playback.* \n\nUnable to process media-request.",
+            "start_Playing_RequestError": "*Unable to start playback* \n\nUnable to process media-request.",
 
-            "not_Enough_Minimum_Songs": "*Your music library is not enough songs.* \n\nThe minimum number of songs for this feature is: *{songs_Count}*",
+            "not_Enough_Minimum_Songs": "*Your music library is not enough songs* \n\nThe minimum number of songs for this feature is: *{songs_Count}*",
 
-            "not_Enough_Songs": "*Your music library is not enough songs.* \n\nListen and add more songs to your library and the feature will become available."
+            "not_Enough_Songs": "*Your music library is not enough songs* \n\nListen and add more songs to your library and the feature will become available.",
+
+            "no_Playlists": "*Error* \n\nYou do not have any playlists",
+
+            "playlist_NotFound": "*Error* \n\nPlaylist not found."
         },
 
         "sharing_Headers": {
@@ -144,7 +153,7 @@
 
             "playlist_Preparing": "*Your playlist is being prepared, please wait.* \n\nIt might take a couple of minutes.",
 
-            "downloading_Information": "*Loading information.* \n\nThis can take up to a couple of minutes.",
+            "downloading_Information": "*Loading information...* \n\nPlease wait.",
 
             "language_Changed": "Language changed successfully.",
 
@@ -243,6 +252,32 @@
             "decade_Statistic": "Decade: <b>{decade}s</b> \nSongs: <b>{songs_Count} - {percent_Of_Total}%</b>",
 
             "artist_Statistic": "Artist: <b>{artist}</b> \nSongs: <b>{songs_Count} - {percent_Of_Total}%</b>"
+        },
+
+        "library_Helper": {
+            "description": "The library helper will help with the library. For example, it can remove duplicate songs.",
+
+            "duplicates_Remover": {
+                "description_Playlists": "*This feature will help you remove duplicate songs from your playlists.* \n\nYou just need to select a playlist, I will find duplicates, show them, and suggest deleting them if you want.",
+
+                "description_Library": "*This feature will help you remove duplicate songs from your Liked Songs section.* \n\nI will find duplicates, show them, and suggest deleting them if you want.",
+
+                "list_Description": "<b>Duplicate songs found:</b>",
+
+                "duplicates_Not_Found": "*Congratulations!* \n\nNo duplicate songs found.",
+
+                "playlist_Selector": "Select playlist",
+
+                "removing_Success": "*Congratulations!* \n\nDuplicate songs have been removed.",
+
+                "removing_In_Progress": "*Removing duplicate songs in progress* \n\nPlease wait.",
+
+                "removing_Failure": "*Error deleting songs. All of your songs have been completely removed.* \n\nHahaha, calmly, this is a joke. In fact, I was unable to delete the songs and the songs stayed where they were.",
+
+                "delete_Question": "What to do with duplicate songs? Delete? Or leave it as it is?",
+
+                "duplicates_Message": "Song: <b>{song_Artists} - {song_Name}</b> \nAmount: <b>{duplicates_Amount} songs</b>"
+            }
         },
 
         "authorization": {

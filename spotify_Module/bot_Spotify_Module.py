@@ -17,12 +17,13 @@ from spotify_Module import bot_MusicQuiz
 from spotify_Module import bot_Player_Control
 from spotify_Module import bot_BlockedTracks
 from spotify_Module import bot_LibraryStatistics
+from spotify_Module import bot_LibraryHelper
 
 from spotify_Module.spotify_Logger import logger
 from libraries import spotify_Oauth
 from libraries import database_Manager as db_Manager
 
-bot_Version = 0.4
+bot_Version = 0.5
 
 language_Vocabluary = localization.load_Vocabluary()
 
@@ -222,6 +223,12 @@ def chat_Messages_Handler(message):
                 bot_Sender.library_Statistics_Type(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Statistics Type Selector For User {user_ID}")
 
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Helper"]: #Пункт помощника библиотеки
+                logger.info(f"User {user_ID} Entered To Library Helper")
+                db_Manager.write_User_Position(user_ID, "user_LibraryHelper_Menu")
+                bot_Sender.send_LibraryHelper_Menu(user_ID, language_Name=user_Language)
+                logger.info(f"Sending Library Helper Selector For User {user_ID}")
+
             else:
                 if message.content_type == "photo": #СПАСИБО КИРЮШЕ ЗА ПАСХАЛКУ
                     bot_Sender.send_Easter_Egg(user_ID, language_Vocabluary[user_Language]["chat_Messages"]["easter_Eggs"]["britt_Robertson"])
@@ -282,3 +289,16 @@ def chat_Messages_Handler(message):
         #Пункт статистики
         if user_Position_Cache == "user_LibraryStatistics_Type":
             bot_LibraryStatistics.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
+        
+        #Пункт помощника библиотеки
+        if user_Position_Cache == "user_LibraryHelper_Menu":
+            bot_LibraryHelper.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
+        
+        if user_Position_Cache == "user_PlaylistDuplicates_SelectPlaylist":
+            bot_LibraryHelper.analyze_Playlist(user_ID, user_Language=user_Language, playlist_Name=message.text)
+        
+        if user_Position_Cache == "user_PlaylistDuplicates_MakeChoice":
+            bot_LibraryHelper.process_Removing_Choice(user_ID, user_Language=user_Language, message_Text=message.text, tracks_Section="playlist")
+
+        if user_Position_Cache == "user_LikedSongsDuplicates_MakeChoice":
+            bot_LibraryHelper.process_Removing_Choice(user_ID, user_Language=user_Language, message_Text=message.text, tracks_Section="likedSongs")

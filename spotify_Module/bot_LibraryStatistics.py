@@ -38,6 +38,9 @@ def in_Work(user_ID):
 
 
 def process_Type_Selector_Message(user_ID, message_Text, user_Language):
+    """
+    Обработчик сообщений клавиатуры
+    """
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["by_Decades"]:
         in_Work(user_ID)
         create_Decades_Statistic(user_ID, language_Name=user_Language)
@@ -60,7 +63,7 @@ def process_Type_Selector_Message(user_ID, message_Text, user_Language):
 
 def create_Decades_Statistic(user_ID, language_Name):
     """
-    Подготавливает статистику по декадам
+    Отправляет статистику по декадам
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -113,6 +116,9 @@ def create_Decades_Statistic(user_ID, language_Name):
 
 
 def create_Artists_Statistic(user_ID, language_Name):
+    """
+    Отправляет статистику по исполнителям
+    """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         saved_Tracks = spotify_Service.get_Saved_Raw_Tracks(user_Unique_ID)
@@ -162,6 +168,9 @@ def create_Artists_Statistic(user_ID, language_Name):
 
 
 def create_Genres_Statistic(user_ID, language_Name):
+    """
+    Отправляет статистику по жанрам
+    """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         saved_Tracks = spotify_Service.get_Saved_Raw_Tracks(user_Unique_ID)

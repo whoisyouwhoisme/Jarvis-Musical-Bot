@@ -1,4 +1,3 @@
-import urllib
 from spotify_Module import bot_Sender
 from spotify_Module import localization
 from spotify_Module import spotify_Service

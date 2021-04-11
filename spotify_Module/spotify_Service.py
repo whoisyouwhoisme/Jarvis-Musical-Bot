@@ -682,13 +682,9 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
 
 
 
-def create_MusicQuiz_Liked_Songs(user_Unique_ID):
+def download_User_LikedSongs(user_Unique_ID):
     """
-    Создать музыкальную викторину из Liked Songs
-
-    user_Unique_ID - Внутренний уникальный ID пользователя
-
-    В случае ошибки возвращает исключение musicQuiz_Error_NoTracks (не хватает треков для викторины)
+    Получить все треки пользователя из Любимые треки в виде списка
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -709,8 +705,23 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
                 liked_Tracks.append({
                     "name":user_Tracks["items"][track]["track"]["name"],
                     "artists":user_Tracks["items"][track]["track"]["artists"][0]["name"],
-                    "preview_URL":user_Tracks["items"][track]["track"]["preview_url"],
+                    "uri":user_Tracks["items"][track]["track"]["uri"],
+                    "preview_URL":user_Tracks["items"][track]["track"]["preview_url"]
                 })
+
+    return liked_Tracks
+
+
+
+def create_MusicQuiz_Liked_Songs(user_Unique_ID):
+    """
+    Создать музыкальную викторину из Liked Songs
+
+    user_Unique_ID - Внутренний уникальный ID пользователя
+
+    В случае ошибки возвращает исключение musicQuiz_Error_NoTracks (не хватает треков для викторины)
+    """
+    liked_Tracks = download_User_LikedSongs(user_Unique_ID)
 
     random.shuffle(liked_Tracks) #Перемешать элементы топа
 
@@ -783,6 +794,111 @@ def get_Several_Artists(user_Unique_ID, artists_IDs):
 
 
 
+def get_User_Playlists(user_Unique_ID):
+    """
+    Получить все плейлисты доступные пользователю
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    user_Playlists = spotify_Api.get_User_Playlists(user_Auth_Token)
+
+    if user_Playlists["total"] == 0:
+        raise spotify_Exceptions.no_Playlists
+
+    user_Playlists_Data = []
+    for item in range(len(user_Playlists["items"])):
+        playlist_Item = user_Playlists["items"][item]
+        user_Playlists_Data.append({
+            "playlist_Name":playlist_Item["name"],
+            "playlist_Uri":playlist_Item["uri"]
+        })
+    
+    return user_Playlists_Data
+
+
+
+def get_Playlist_Tracks(user_Unique_ID, playlist_Uri):
+    """
+    Получить все треки из плейлиста в виде списка
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
+
+    playlist_Data = spotify_Api.get_Playlist_Tracks(user_Auth_Token, playlist_Uri=playlist_Uri, entities_Limit=1, market=user_Country)
+
+    total_Iterations = math.ceil(playlist_Data["total"] / 100) #Поделить кол-во песен на запросы по 100 песен
+    offset = 0
+    playlist_Tracks = []
+    for _ in range(total_Iterations):
+        playlist_Data = spotify_Api.get_Playlist_Tracks(user_Auth_Token, playlist_Uri=playlist_Uri, market=user_Country, entities_Limit=100, offset=offset)
+
+        offset += 100
+
+        for track in range(len(playlist_Data["items"])):
+            playlist_Tracks.append({
+                    "name":playlist_Data["items"][track]["track"]["name"],
+                    "artists":playlist_Data["items"][track]["track"]["artists"][0]["name"],
+                    "uri":playlist_Data["items"][track]["track"]["uri"]
+                })
+    
+    return playlist_Tracks
+
+
+
+def delete_Playlist_Tracks(user_Unique_ID, playlist_Uri, tracks_To_Delete):
+    """
+    Удаляет треки из плейлиста
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    total_Iterations = math.ceil(len(tracks_To_Delete) / 100) #Поделить кол-во песен на запросы по 100 песен
+
+    job_Successful = True
+    for _ in range(total_Iterations):
+        response = spotify_Api.delete_Playlist_Tracks(user_Auth_Token, playlist_ID=playlist_Uri, playlist_Tracks=tracks_To_Delete)
+
+        if response == 200:
+            pass
+        else:
+            job_Successful = False
+    
+    return job_Successful
+
+
+
+def delete_Liked_Tracks(user_Unique_ID, tracks_To_Delete):
+    """
+    Удаляет треки из раздела Любимые треки
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+
+    tracks_IDs = []
+    for track in range(len(tracks_To_Delete)):
+        track_Item = tracks_To_Delete[track].split(":")
+        print(track_Item)
+        print(track_Item[-1])
+
+        tracks_IDs.append(track_Item[-1]) #ID песни находится в конце
+
+    total_Iterations = math.ceil(len(tracks_To_Delete) / 50) #Поделить кол-во песен на запросы по 50 песен
+
+    job_Successful = True
+    for _ in range(total_Iterations):
+        response = spotify_Api.delete_Liked_Tracks(user_Auth_Token, tracks_ID=tracks_IDs)
+
+        if response == 200:
+            pass
+        else:
+            job_Successful = False
+    
+    return job_Successful
+
+
+
 def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     """
     Создать супер-шаффл из Liked Songs
@@ -796,21 +912,13 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     user_Auth_Token = database_User_Data[0][4]
     user_Spotify_ID = database_User_Data[0][1]
 
-    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
-    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
-    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+    liked_Tracks_Data = download_User_LikedSongs(user_Unique_ID)
 
-    offset = 0
     liked_Tracks = []
-    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
-        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
+    for track in range(len(liked_Tracks_Data)): #Вытащить из списка песен только их uri
+        liked_Tracks.append(liked_Tracks_Data[track]["uri"])
 
-        offset += 50
-
-        for track in range(len(user_Tracks["items"])): #Достать uri песни из всех данных
-            liked_Tracks.append(user_Tracks["items"][track]["track"]["uri"])
-
-    for user_Tracks in range(100): #Перемешать все песни 100 раз
+    for _ in range(100): #Перемешать все песни 100 раз
         random.shuffle(liked_Tracks)
 
     playlist_Name = localization_Data["playlist_Name"]
@@ -824,7 +932,7 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     else:
         total_Iterations = math.ceil(len(liked_Tracks) / offset)
 
-    for user_Tracks in range(total_Iterations): #Закидываем все песни в плейлист
+    for _ in range(total_Iterations): #Закидываем все песни в плейлист
         playlist_Tracks = liked_Tracks[offset - 100:offset]
         spotify_Api.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, playlist_Tracks)
         offset += 100

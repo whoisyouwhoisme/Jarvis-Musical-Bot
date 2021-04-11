@@ -12,7 +12,22 @@ with open("bot_Keys.json") as bot_Keys_File:
 
 client_ID = bot_Keys["spotify"]["client_ID"]
 client_Secret = bot_Keys["spotify"]["client_Secret"]
-api_Scopes = "user-read-playback-state user-read-currently-playing user-modify-playback-state streaming user-library-read user-read-recently-played user-top-read playlist-modify-private user-read-private"
+
+api_Scopes = [
+    "user-read-playback-state", 
+    "user-read-currently-playing", 
+    "user-modify-playback-state", 
+    "streaming user-library-read", 
+    "user-read-recently-played", 
+    "user-top-read", 
+    "playlist-modify-private", 
+    "user-read-private", 
+    "playlist-read-private", 
+    "playlist-modify-public", 
+    "playlist-modify-private", 
+    "user-library-modify"
+    ]
+
 spotify_Redirect_URI = bot_Keys["spotify"]["redirect_URI"]
 
 
@@ -23,12 +38,9 @@ def generate_Auth_Link(user_Unique_ID):
 
     user_Unique_ID - Уникальный ID пользователя
     """
-    api_Auth_Link = "https://accounts.spotify.com/authorize"
+    auth_Scopes = "+".join(api_Scopes)
 
-    auth_Scopes = api_Scopes.split()
-    auth_Scopes = "+".join(auth_Scopes)
-
-    spotify_Auth_Link = api_Auth_Link + "?client_id=" + client_ID + "&redirect_uri=" + spotify_Redirect_URI + "&response_type=code" + "&scope=" + auth_Scopes + "&state=" + user_Unique_ID
+    spotify_Auth_Link = f"https://accounts.spotify.com/authorize?client_id={client_ID}&redirect_uri={spotify_Redirect_URI}&response_type=code&scope={auth_Scopes}&state={user_Unique_ID}"
 
     return spotify_Auth_Link
 

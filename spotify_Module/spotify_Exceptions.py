@@ -93,3 +93,9 @@ class search_No_Results(spotify_Exception):
     Нет результатов поиска
     """
     pass
+
+class no_Playlists(spotify_Exception):
+    """
+    Нет доступных плейлистов
+    """
+    pass

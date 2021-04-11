@@ -91,6 +91,30 @@ def post_Request(request_Link, headers, data=None):
 
 
 
+def delete_Request(request_Link, headers, data=None):
+    """
+    Функция выполняет DELETE запрос, в случае успеха возвращает ответ
+
+    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    """
+    try:
+        response = requests.delete(request_Link, headers=headers, data=data, timeout=(3, 5))
+        response.raise_for_status()
+
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError):
+        raise spotify_Exceptions.http_Connection_Error
+
+    except requests.exceptions.HTTPError:
+        raise spotify_Exceptions.http_Error(response.status_code, response.reason)
+
+    except:
+        raise spotify_Exceptions.http_Unknown_Error
+
+    else:
+        return response
+
+
+
 def get_Current_Playback(auth_Token):
     """
     Получить текущее проигрывание пользователя, в случае успеха возвращает ответ в формате json
@@ -154,6 +178,42 @@ def create_Playlist(auth_Token, user_ID, playlist_Name, playlist_Description=Non
     response = post_Request(f"https://api.spotify.com/v1/users/{user_ID}/playlists", headers=request_Headers, data=request_Data)
 
     return response.json()
+
+
+
+def get_User_Playlists(auth_Token, entities_Limit=4, offset=0):
+    """
+    Получить все плейлисты доступные пользователю, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/me/playlists?limit={entities_Limit}&offset={offset}", headers=request_Headers)
+
+    return response.json()
+
+
+
+def get_Playlist_Tracks(auth_Token, playlist_Uri, entities_Limit=100, offset=0, market="US"):
+    """
+    Получить треки из плейлиста, в случае успеха возвращает ответ в формате json
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+
+    auth_Token - Ключ авторизации
+
+    entities_Limit - Лимит песен (не более 100)
+
+    offset - Смещение выборки
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/playlists/{playlist_Uri}/tracks?market={market}&fields=total%2Citems(track.name%2Ctrack.artists%2Ctrack.uri)&limit={entities_Limit}&offset={offset}", headers=request_Headers)
+
+    return response.json()    
 
 
 
@@ -380,3 +440,49 @@ def get_User_Profile(auth_Token):
     response = get_Request("https://api.spotify.com/v1/me", headers=request_Headers)
 
     return response.json()
+
+
+
+def delete_Playlist_Tracks(auth_Token, playlist_ID, playlist_Tracks):
+    """
+    Удаляет треки из плейлиста, возвращает HTTP код ответа
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    
+    auth_Token - Токен доступа к API Spotify
+
+    playlist_ID - Уникальный ID плейлиста в Spotify
+
+    playlist_Tracks - СПИСОК из URI треков Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    tracks_Data = {"tracks":[]}
+    for track in range(len(playlist_Tracks)):
+        tracks_Data["tracks"].append({"uri":playlist_Tracks[track],"positions":[0]})
+
+    request_Data = json.dumps(tracks_Data)
+
+    response = delete_Request(f"https://api.spotify.com/v1/playlists/{playlist_ID}/tracks", headers=request_Headers, data=request_Data)
+
+    return response.status_code
+
+
+
+def delete_Liked_Tracks(auth_Token, tracks_ID):
+    """
+    Удаляет треки из раздела Любимые треки, возвращает HTTP код ответа
+
+    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    
+    auth_Token - Токен доступа к API Spotify
+
+    tracks_ID - СПИСОК из URI треков Spotify
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    request_Data = json.dumps(tracks_ID)
+
+    response = delete_Request("https://api.spotify.com/v1/me/tracks", headers=request_Headers, data=request_Data)
+
+    return response.status_code

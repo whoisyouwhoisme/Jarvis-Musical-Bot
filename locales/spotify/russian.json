@@ -15,7 +15,12 @@
             "library_Statistics": "Статистика библиотеки",
             "by_Decades": "По десятилетиям",
             "by_Artists": "По исполнителям",
-            "by_Genres": "По жанрам"            
+            "by_Genres": "По жанрам",
+            "library_Helper": "Помощник библиотеки",
+            "library_Duplicates": "Удаление дубликатов в библиотеке",
+            "playlist_Duplicates": "Удаление дубликатов в плейлисте",
+            "delete": "Удалить",
+            "leave_As_Is": "Оставить как есть"            
         },
 
         "inline_Buttons": {
@@ -108,23 +113,27 @@
         },        
 
         "errors": {
-            "cannot_Authorize": "*Я не могу авторизовать тебя в Spotify.* \n\nВозможно, ты заблокировал бота в *Spotify* аккаунте, используй команду /logout и авторизуйся заново.",
+            "cannot_Authorize": "*Я не могу авторизовать тебя в Spotify* \n\nВозможно, ты заблокировал бота в *Spotify* аккаунте, используй команду /logout и авторизуйся заново.",
 
-            "servers_Link_Error": "Нет подключения к серверам *Spotify*. \n\nСкорее всего это ошибка *Spotify*, и надо просто потерпеть.",
+            "servers_Link_Error": "Нет подключения к серверам *Spotify* \n\nСкорее всего это ошибка *Spotify*, и надо просто потерпеть.",
     
-            "unknown_Error": "*Неизвестная ошибка.* \n\nЕсли ошибка повторяется свяжитесь с разработчиком с помощью команды */contacts*",
+            "unknown_Error": "*Неизвестная ошибка* \n\nЕсли ошибка повторяется свяжитесь с разработчиком с помощью команды */contacts*",
     
-            "denied_Work_Reason": "*Выполняется работа с данными.* \n\nВ данный момент ты не можешь использовать эту функцию, пожалуйста, потерпи.",
+            "denied_Work_Reason": "*Выполняется работа с данными* \n\nВ данный момент ты не можешь использовать эту функцию, пожалуйста, потерпи.",
 
-            "start_Playing_NoDevice": "*Невозможно запустить проигрывание.* \n\nНет активных устройств.",
+            "start_Playing_NoDevice": "*Невозможно запустить проигрывание* \n\nНет активных устройств.",
 
-            "start_Playing_PremiumRequired": "*Невозможно запустить проигрывание.* \n\nТребуется Spotify Premium подписка.",
+            "start_Playing_PremiumRequired": "*Невозможно запустить проигрывание* \n\nТребуется Spotify Premium подписка.",
 
-            "start_Playing_RequestError": "*Невозможно запустить проигрывание.* \n\nНевозможно обработать медиа-запрос.",
+            "start_Playing_RequestError": "*Невозможно запустить проигрывание* \n\nНевозможно обработать медиа-запрос.",
 
-            "not_Enough_Minimum_Songs": "*В твоей медиатеке не хватает песен.* \n\nМинимальное количество песен для этой функции: *{songs_Count}*",
+            "not_Enough_Minimum_Songs": "*В твоей медиатеке не хватает песен* \n\nМинимальное количество песен для этой функции: *{songs_Count}*",
 
-            "not_Enough_Songs": "*В твоей медиатеке не хватает песен.* \n\nСлушай и добавляй больше песен в свою медиатеку, и функция станет доступной."
+            "not_Enough_Songs": "*В твоей медиатеке не хватает песен* \n\nСлушай и добавляй больше песен в свою медиатеку, и функция станет доступной.",
+
+            "no_Playlists": "*Error* \n\nYou do not have any playlists.",
+
+            "playlist_NotFound": "*Error* \n\nPlaylist not found."            
         },
 
         "sharing_Headers": {
@@ -144,7 +153,7 @@
 
             "playlist_Preparing": "*Твой плейлист подготавливается, пожалуйста, потерпи.* \n\nЭто может занять пару минут.",
 
-            "downloading_Information": "*Загрузка информации.* \n\nЭто может занять пару минут.",
+            "downloading_Information": "*Загрузка информации.* \n\nПожалуйста, потерпи.",
 
             "language_Changed": "Язык успешно изменён.",
 
@@ -243,6 +252,32 @@
             "decade_Statistic": "Года: <b>{decade}-е</b> \nПесен: <b>{songs_Count} - {percent_Of_Total}%</b>",
 
             "artist_Statistic": "Исполнитель: <b>{artist}</b> \nПесен: <b>{songs_Count} - {percent_Of_Total}%</b>"
+        },
+
+        "library_Helper": {
+            "description": "The library helper will help with the library. For example, it can remove duplicate songs.",
+
+            "duplicates_Remover": {
+                "description_Playlists": "*This feature will help you remove duplicate songs from your playlists.* \n\nYou just need to select a playlist, I will find duplicates, show them, and suggest deleting them if you want.",
+
+                "description_Library": "*This feature will help you remove duplicate songs from your Liked Songs section.* \n\nI will find duplicates, show them, and suggest deleting them if you want.",
+
+                "list_Description": "<b>Duplicate songs found:</b>",
+
+                "duplicates_Not_Found": "*Congratulations!* \n\nNo duplicate songs found.",
+
+                "playlist_Selector": "Select playlist",
+
+                "removing_Success": "*Congratulations!* \n\nDuplicate songs have been removed.",
+
+                "removing_In_Progress": "*Removing duplicate songs in progress* \n\nPlease wait.",
+
+                "removing_Failure": "*Error deleting songs. All of your songs have been completely removed.* \n\nHahaha, calmly, this is a joke. In fact, I was unable to delete the songs and the songs stayed where they were.",
+
+                "delete_Question": "What to do with duplicate songs? Delete? Or leave it as it is?",
+
+                "duplicates_Message": "Song: <b>{song_Artists} - {song_Name}</b> \nAmount: <b>{duplicates_Amount} songs</b>"
+            }
         },
 
         "authorization": {

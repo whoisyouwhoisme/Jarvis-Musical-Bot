@@ -20,7 +20,8 @@ def controls_Main_Menu(chat_id, language_Name):
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"])
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"])
-    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Helper"])
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
 
@@ -266,7 +267,6 @@ def musicQuiz_Incorrect_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
     """
     Неправильный ответ викторины
     """
-
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
     message_Text = language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Incorrect_Answer"].format(right_Answer=right_Answer, took_Time_Answer=took_Time_Answer)
@@ -280,7 +280,6 @@ def musicQuiz_Correct_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
     """
     Правильный ответ викторины
     """
-
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
     message_Text = language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Correct_Answer"].format(right_Answer=right_Answer, took_Time_Answer=took_Time_Answer)
@@ -294,7 +293,6 @@ def musicQuiz_Answer_Timeout(chat_id, musicQuiz_Round_Stats, language_Name):
     """
     Закончилось время на ответ викторины
     """
-
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
     message_Text = language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Answer_Timeout"].format(right_Answer=right_Answer, took_Time_Answer=took_Time_Answer)
@@ -581,6 +579,114 @@ def genres_Statistic(chat_id, statistic_Data, language_Name):
         message["summary"] += genre_Item + "\n\n"
 
     spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+
+
+
+def duplicates_Found(chat_id, duplicates_Data, language_Name):
+    #keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+
+    #keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["delete"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["leave_As_Is"])
+
+    message = {}
+    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["list_Description"]
+    message["summary"] = message["header"] + "\n\n"
+    for duplicate in range(len(duplicates_Data["tracks"])):
+        duplicate_Item = language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["duplicates_Message"].format(song_Artists=duplicates_Data["tracks"][duplicate]["artists"], song_Name=duplicates_Data["tracks"][duplicate]["name"], duplicates_Amount=duplicates_Data["tracks"][duplicate]["duplicate_Count"])
+        message["summary"] += duplicate_Item + "\n\n"
+    
+    spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+
+
+
+def send_LibraryHelper_Menu(chat_id, language_Name):
+    """
+    Отправить меню помощника библиотеки
+    """
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Duplicates"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["playlist_Duplicates"])
+
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
+
+
+
+def send_Playlist_Selector(chat_id, playlists_Names, language_Name):
+    """
+    Отправить пользователю клавиатуру с плейлистами
+    """
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+
+    keyboard.row(playlists_Names[0]["playlist_Name"])
+    keyboard.row(playlists_Names[1]["playlist_Name"])
+    keyboard.row(playlists_Names[2]["playlist_Name"])
+    keyboard.row(playlists_Names[3]["playlist_Name"])
+
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["playlist_Selector"], reply_markup=keyboard, parse_mode="Markdown")
+
+
+
+def duplicates_Remover_Description(chat_id, section_Name, language_Name):
+    """
+    Описание функции удаления дубликатов из плейлистов
+
+    section_Name - playlist ИЛИ liked_Songs
+    """
+    if section_Name == "playlist":
+        message = language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["description_Playlists"]
+    elif section_Name == "liked_Songs":
+        message = language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["description_Library"]
+
+    spotify_Bot.send_message(chat_id, message, parse_mode="Markdown")
+
+
+
+def no_Playlists(chat_id, language_Name):
+    """
+    Нет доступных плейлистов
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["no_Playlists"], parse_mode="Markdown")
+
+
+
+def playlist_NotFound(chat_id, language_Name):
+    """
+    Плейлист не найден
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["playlist_NotFound"], parse_mode="Markdown")
+
+
+
+def duplicates_Not_Found(chat_id, language_Name):
+    """
+    Дубликаты не найдены
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["duplicates_Not_Found"], parse_mode="Markdown")
+
+
+
+def removing_Success(chat_id, language_Name):
+    """
+    Удаление успешно
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_Success"], parse_mode="Markdown")
+
+
+
+def removing_Failure(chat_id, language_Name):
+    """
+    Удаление произошло с ошибками
+    """
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_Failure"], parse_mode="Markdown")
+
+
+
+def removing_In_Progress(chat_id, language_Name):
+    """
+    Удаление в процессе
+    """
+    markup = telebot.types.ReplyKeyboardRemove(selective=False)
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_In_Progress"], reply_markup=markup, parse_mode="Markdown")
 
 
 
