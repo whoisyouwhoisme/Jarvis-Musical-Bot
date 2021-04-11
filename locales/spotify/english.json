@@ -272,7 +272,7 @@
 
                 "removing_In_Progress": "*Removing duplicate songs in progress* \n\nPlease wait.",
 
-                "removing_Failure": "*Error deleting songs. All of your songs have been completely removed.* \n\nHahaha, calmly, this is a joke. In fact, I was unable to delete the songs and the songs stayed where they were.",
+                "removing_Failure": "*Error deleting songs. All of your songs have been completely removed.* \n\nHahaha, calmly, this is a joke. In fact, I was unable to delete the songs and the songs stayed where they were, delete them manually.",
 
                 "delete_Question": "What to do with duplicate songs? Delete? Or leave it as it is?",
 

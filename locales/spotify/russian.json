@@ -255,28 +255,28 @@
         },
 
         "library_Helper": {
-            "description": "The library helper will help with the library. For example, it can remove duplicate songs.",
+            "description": "Помощник библиотеки поможет разобраться с твоей библиотекой. Например, он может удалить дубликаты песен.",
 
             "duplicates_Remover": {
-                "description_Playlists": "*This feature will help you remove duplicate songs from your playlists.* \n\nYou just need to select a playlist, I will find duplicates, show them, and suggest deleting them if you want.",
+                "description_Playlists": "*Эта функция поможет тебе удалить дубликаты песен из плейлистов.* \n\nТебе нужно выбрать плейлист, я найду дубликаты, покажу их, и предложу тебе удалить их.",
 
-                "description_Library": "*This feature will help you remove duplicate songs from your Liked Songs section.* \n\nI will find duplicates, show them, and suggest deleting them if you want.",
+                "description_Library": "*Эта функция поможет тебе удалить дубликаты песен из раздела Любимые треки.* \n\nЯ найду дубликаты, покажу их, и предложу тебе удалить их.",
 
-                "list_Description": "<b>Duplicate songs found:</b>",
+                "list_Description": "<b>Дубликаты песен найдены:</b>",
 
-                "duplicates_Not_Found": "*Congratulations!* \n\nNo duplicate songs found.",
+                "duplicates_Not_Found": "*Поздравляю!* \n\nДубликаты песен не найдены.",
 
-                "playlist_Selector": "Select playlist",
+                "playlist_Selector": "Выбери плейлист",
 
-                "removing_Success": "*Congratulations!* \n\nDuplicate songs have been removed.",
+                "removing_Success": "*Поздравляю!* \n\nДубликаты песен были удалены.",
 
-                "removing_In_Progress": "*Removing duplicate songs in progress* \n\nPlease wait.",
+                "removing_In_Progress": "*Удаление дубликатов песен в процессе* \n\nПожалуйста, потерпи.",
 
-                "removing_Failure": "*Error deleting songs. All of your songs have been completely removed.* \n\nHahaha, calmly, this is a joke. In fact, I was unable to delete the songs and the songs stayed where they were.",
+                "removing_Failure": "*Ошибка удаления песен. Все твои песни были полностью удалены.* \n\nХахаха, спокойно, это шутка. К сожалению я не смог удалить песни, и они остались на своих местах, удали их вручную.",
 
-                "delete_Question": "What to do with duplicate songs? Delete? Or leave it as it is?",
+                "delete_Question": "Что я должен сделать с дубликатами песен? Удалить их? Оставить как есть?",
 
-                "duplicates_Message": "Song: <b>{song_Artists} - {song_Name}</b> \nAmount: <b>{duplicates_Amount} songs</b>"
+                "duplicates_Message": "Песня: <b>{song_Artists} - {song_Name}</b> \nКоличество: <b>{duplicates_Amount} песен</b>"
             }
         },
 
