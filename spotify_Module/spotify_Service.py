@@ -799,20 +799,23 @@ def get_User_Playlists(user_Unique_ID):
     Получить все плейлисты доступные пользователю
     """
     check_Token_Lifetime(user_Unique_ID)
-    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    database_User_Data = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")
+    user_Auth_Token = database_User_Data[0][4]
+    user_Spotify_ID = database_User_Data[0][1]
 
     user_Playlists = spotify_Api.get_User_Playlists(user_Auth_Token)
-
-    if user_Playlists["total"] == 0:
-        raise spotify_Exceptions.no_Playlists
 
     user_Playlists_Data = []
     for item in range(len(user_Playlists["items"])):
         playlist_Item = user_Playlists["items"][item]
-        user_Playlists_Data.append({
-            "playlist_Name":playlist_Item["name"],
-            "playlist_Uri":playlist_Item["uri"]
-        })
+        if playlist_Item["owner"]["id"] == user_Spotify_ID:
+            user_Playlists_Data.append({
+                "playlist_Name":playlist_Item["name"],
+                "playlist_Uri":playlist_Item["uri"]
+            })
+    
+    if len(user_Playlists_Data) == 0:
+        raise spotify_Exceptions.no_Playlists
     
     return user_Playlists_Data
 

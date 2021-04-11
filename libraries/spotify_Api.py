@@ -181,7 +181,7 @@ def create_Playlist(auth_Token, user_ID, playlist_Name, playlist_Description=Non
 
 
 
-def get_User_Playlists(auth_Token, entities_Limit=4, offset=0):
+def get_User_Playlists(auth_Token, entities_Limit=20, offset=0):
     """
     Получить все плейлисты доступные пользователю, в случае успеха возвращает ответ в формате json
 

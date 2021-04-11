@@ -99,3 +99,9 @@ class no_Playlists(spotify_Exception):
     Нет доступных плейлистов
     """
     pass
+
+class playlist_Not_Found(spotify_Exception):
+    """
+    Плейлист не найден
+    """
+    pass

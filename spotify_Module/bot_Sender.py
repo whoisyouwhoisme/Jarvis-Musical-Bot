@@ -606,6 +606,7 @@ def send_LibraryHelper_Menu(chat_id, language_Name):
 
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["library_Duplicates"])
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["playlist_Duplicates"])
+    keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["back_To_Menu"])
 
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["choose_Category"], reply_markup=keyboard)
 
@@ -617,10 +618,8 @@ def send_Playlist_Selector(chat_id, playlists_Names, language_Name):
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
-    keyboard.row(playlists_Names[0]["playlist_Name"])
-    keyboard.row(playlists_Names[1]["playlist_Name"])
-    keyboard.row(playlists_Names[2]["playlist_Name"])
-    keyboard.row(playlists_Names[3]["playlist_Name"])
+    for playlist in range(len(playlists_Names[:4])):
+        keyboard.row(playlists_Names[playlist]["playlist_Name"])
 
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["playlist_Selector"], reply_markup=keyboard, parse_mode="Markdown")
 

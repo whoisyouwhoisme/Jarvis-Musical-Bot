@@ -210,7 +210,7 @@ def analyze_Playlist(user_ID, user_Language, playlist_Name):
                 break
         
         if not selected_Playlist_Uri:
-            bot_Sender.playlist_NotFound(user_ID, language_Name=user_Language)
+            raise spotify_Exceptions.playlist_Not_Found
         
         else:
             playlist_Tracks = spotify_Service.get_Playlist_Tracks(user_Unique_ID, selected_Playlist_Uri[17:])
@@ -238,6 +238,10 @@ def analyze_Playlist(user_ID, user_Language, playlist_Name):
                             "duplicate_Count":duplicate_Tracks[duplicate_Track]["count"]
                         })
                         break
+    
+    except spotify_Exceptions.playlist_Not_Found:
+        bot_Sender.playlist_NotFound(user_ID, language_Name=user_Language)
+        to_Main_Menu(user_ID)
 
     except spotify_Exceptions.http_Error:
         bot_Sender.cannot_Authorize(user_ID, language_Name=user_Language)
