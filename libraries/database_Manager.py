@@ -218,21 +218,17 @@ def get_User_Position(user_Telegram_ID):
     Get user position from database
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
-    
-    if search_Data:
+
+    try:
         user_Position = search_Data[0][4]
-
-        if user_Position:
-            logger.info(f"Get User Position For User {user_Telegram_ID}")
-            return user_Position
-
-        else:
-            logger.info(f"CANNOT Get User Position For User {user_Telegram_ID}, sending value 'undefined_Position'")
-            return "undefined_Position"
     
-    else:
+    except:
         logger.info(f"CANNOT Get User Position For User {user_Telegram_ID}, sending value 'undefined_Position'")
         return "undefined_Position"
+
+    else:
+        logger.info(f"Get User Position For User {user_Telegram_ID}")
+        return user_Position
 
 
 
@@ -242,20 +238,16 @@ def get_User_Language(user_Telegram_ID):
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
 
-    if search_Data:
+    try:
         user_Language = search_Data[0][2]
-
-        if user_Language:
-            logger.info(f"Get User Language For User {user_Telegram_ID}")
-            return user_Language
-
-        else:
-            logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_Telegram_ID}")
-            return "ENG"
     
-    else:
+    except:
         logger.info(f"Cannot Get User Language, Sending Standart Value For User {user_Telegram_ID}")
         return "ENG"
+    
+    else:
+        logger.info(f"Get User Language For User {user_Telegram_ID}")
+        return user_Language
 
 
 
@@ -265,20 +257,16 @@ def get_User_BotVersion(user_Telegram_ID):
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
 
-    if search_Data:
+    try:
         bot_Version = search_Data[0][3]
-
-        if bot_Version:
-            logger.info(f"User {user_Telegram_ID} Bot Version: {bot_Version}")
-            return bot_Version
-        
-        else:
-            logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_Telegram_ID}")
-            return 0
-
-    else:
+    
+    except:
         logger.info(f"Cannot Get User Bot Version, Sending Standart Value For User {user_Telegram_ID}")
         return 0
+    
+    else:
+        logger.info(f"User {user_Telegram_ID} Bot Version: {bot_Version}")
+        return bot_Version
 
 
 

@@ -136,11 +136,11 @@ def analyze_Liked_Tracks(user_ID, user_Language):
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
-        user_Liked_Tracks = spotify_Service.download_User_LikedSongs(user_Unique_ID)
+        user_Liked_Tracks = spotify_Service.get_Saved_Raw_Tracks(user_Unique_ID)
 
         liked_Tracks_Uris = []
         for track in range(len(user_Liked_Tracks)):
-            liked_Tracks_Uris.append(user_Liked_Tracks[track]["uri"])
+            liked_Tracks_Uris.append(user_Liked_Tracks[track]["track"]["uri"])
         
         duplicate_Tracks = []
         for item, count in Counter(liked_Tracks_Uris).items():
@@ -153,11 +153,11 @@ def analyze_Liked_Tracks(user_ID, user_Language):
         duplicate_Tracks_Info = {"tracks":[]}
         for duplicate_Track in range(len(duplicate_Tracks)):
             for track in range(len(user_Liked_Tracks)):
-                if duplicate_Tracks[duplicate_Track]["uri"] == user_Liked_Tracks[track]["uri"]:
+                if duplicate_Tracks[duplicate_Track]["uri"] == user_Liked_Tracks[track]["track"]["uri"]:
                     duplicate_Tracks_Info["tracks"].append({
-                        "name":user_Liked_Tracks[track]["name"],
-                        "artists":user_Liked_Tracks[track]["artists"],
-                        "uri":user_Liked_Tracks[track]["uri"],
+                        "name":user_Liked_Tracks[track]["track"]["name"],
+                        "artists":user_Liked_Tracks[track]["track"]["artists"][0]["name"],
+                        "uri":user_Liked_Tracks[track]["track"]["uri"],
                         "duplicate_Count":duplicate_Tracks[duplicate_Track]["count"]
                     })
                     break

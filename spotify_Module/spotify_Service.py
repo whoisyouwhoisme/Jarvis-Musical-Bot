@@ -680,70 +680,6 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
 
 
 
-def download_User_LikedSongs(user_Unique_ID):
-    """
-    Get all user tracks from Favorite tracks as a list
-    """
-    check_Token_Lifetime(user_Unique_ID)
-    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
-
-    user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
-    user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
-    total_Iterations = math.ceil(user_Data["total"] / 50) #Divide the number of songs for requests by 50 songs
-
-    offset = 0
-    liked_Tracks = []
-    for user_Tracks in range(total_Iterations): #Get all user tracks
-        user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
-
-        offset += 50
-
-        for track in range(len(user_Tracks["items"])): #Bring all elements to human form
-            if user_Tracks["items"][track]["track"]["preview_url"]: #Add only preview songs to the list
-                liked_Tracks.append({
-                    "name":user_Tracks["items"][track]["track"]["name"],
-                    "artists":user_Tracks["items"][track]["track"]["artists"][0]["name"],
-                    "uri":user_Tracks["items"][track]["track"]["uri"],
-                    "preview_URL":user_Tracks["items"][track]["track"]["preview_url"]
-                })
-
-    return liked_Tracks
-
-
-
-def create_MusicQuiz_Liked_Songs(user_Unique_ID):
-    """
-    Create a Music Quiz from Liked Songs
-
-    user_Unique_ID - Internal unique user ID
-
-    Returns the musicQuiz_Error_NoTracks exception in case of an error (there are not enough tracks for the quiz)
-    """
-    liked_Tracks = download_User_LikedSongs(user_Unique_ID)
-
-    random.shuffle(liked_Tracks)
-
-    right_Answers = []
-    for item in range(10): #Select 10 tracks for right answers
-        right_Answers.append({
-            "name":liked_Tracks[item]["name"],
-            "artists":liked_Tracks[item]["artists"],
-            "audio_URL":liked_Tracks[item]["preview_URL"],
-        })
-
-        liked_Tracks.pop(item) #Remove them from the top selection
-
-    musicQuiz_Items = {}
-    musicQuiz_Items["right_Answers"] = right_Answers
-    musicQuiz_Items["other_Answers"] = liked_Tracks
-
-    if len(musicQuiz_Items["right_Answers"]) < 10 or len(musicQuiz_Items["other_Answers"]) < 20:
-        raise spotify_Exceptions.musicQuiz_Error_NoTracks
-
-    return musicQuiz_Items
-
-
-
 def get_Saved_Raw_Tracks(user_Unique_ID):
     """
     Get all user tracks as a list
@@ -772,6 +708,49 @@ def get_Saved_Raw_Tracks(user_Unique_ID):
             liked_Tracks.append(user_Tracks["items"][track])
         
     return liked_Tracks
+
+
+
+def create_MusicQuiz_Liked_Songs(user_Unique_ID):
+    """
+    Create a Music Quiz from Liked Songs
+
+    user_Unique_ID - Internal unique user ID
+
+    Returns the musicQuiz_Error_NoTracks exception in case of an error (there are not enough tracks for the quiz)
+    """
+    liked_Tracks_Data = get_Saved_Raw_Tracks(user_Unique_ID)
+
+    liked_Tracks = []
+    for track in range(len(liked_Tracks_Data)):
+        if liked_Tracks_Data[track]["track"]["preview_url"]:
+            liked_Tracks.append({
+                "name":liked_Tracks_Data[track]["track"]["name"],
+                "artists":liked_Tracks_Data[track]["track"]["artists"][0]["name"],
+                "uri":liked_Tracks_Data[track]["track"]["uri"],
+                "preview_URL":liked_Tracks_Data[track]["track"]["preview_url"]
+            })
+
+    random.shuffle(liked_Tracks)
+
+    right_Answers = []
+    for item in range(10): #Select 10 tracks for right answers
+        right_Answers.append({
+            "name":liked_Tracks[item]["name"],
+            "artists":liked_Tracks[item]["artists"],
+            "audio_URL":liked_Tracks[item]["preview_URL"],
+        })
+
+        liked_Tracks.pop(item) #Remove them from the top selection
+
+    musicQuiz_Items = {}
+    musicQuiz_Items["right_Answers"] = right_Answers
+    musicQuiz_Items["other_Answers"] = liked_Tracks
+
+    if len(musicQuiz_Items["right_Answers"]) < 10 or len(musicQuiz_Items["other_Answers"]) < 20:
+        raise spotify_Exceptions.musicQuiz_Error_NoTracks
+
+    return musicQuiz_Items
 
 
 
@@ -913,11 +892,11 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     user_Auth_Token = database_User_Data[0][4]
     user_Spotify_ID = database_User_Data[0][1]
 
-    liked_Tracks_Data = download_User_LikedSongs(user_Unique_ID)
+    liked_Tracks_Data = get_Saved_Raw_Tracks(user_Unique_ID)
 
     liked_Tracks = []
     for track in range(len(liked_Tracks_Data)): #Pull only their uri from the list of songs
-        liked_Tracks.append(liked_Tracks_Data[track]["uri"])
+        liked_Tracks.append(liked_Tracks_Data[track]["track"]["uri"])
 
     for _ in range(100): #Shuffle all songs 100 times
         random.shuffle(liked_Tracks)
