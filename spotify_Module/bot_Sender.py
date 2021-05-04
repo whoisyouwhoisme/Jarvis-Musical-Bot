@@ -15,7 +15,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def controls_Main_Menu(chat_id, language_Name):
     """
-    Клавиатура основного меню
+    Main menu keyboard
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"])
@@ -28,7 +28,7 @@ def controls_Main_Menu(chat_id, language_Name):
 
 def spotify_Login_Offer(chat_id, spotify_Auth_Link, language_Name):
     """
-    Просьба о входе в аккаунт Spotify
+    Asking to sign in to Spotify account
     """
     login_Keyboard = telebot.types.InlineKeyboardMarkup()
     login_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["authorize_Spotify"], url=spotify_Auth_Link)
@@ -39,7 +39,7 @@ def spotify_Login_Offer(chat_id, spotify_Auth_Link, language_Name):
 
 def language_Selector(chat_id, language_Name):
     """
-    Клавиатура выбора языка
+    Language selection keyboard
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["language"]["ENG"])
@@ -51,7 +51,7 @@ def language_Selector(chat_id, language_Name):
 
 def language_Changed(chat_id, language_Name):
     """
-    Язык сменен успешно
+    Language changed successfully
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["language_Changed"], parse_mode="Markdown")
 
@@ -59,14 +59,14 @@ def language_Changed(chat_id, language_Name):
 
 def user_Leaving(chat_id, language_Name):
     """
-    Уведомление пользователю об успешном выходе из бота
+    Notifying the user about the successful exit from the bot
     """
-    #Первое сообщение с кнопкой /start
+    #First message with /start button
     start_Keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
     start_Keyboard.row("/start")
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["user_Leaving"], parse_mode="Markdown", reply_markup=start_Keyboard)
 
-    #Второе сообщение с кнопкой отключения бота
+    #Second message with a button to disable the bot
     keyboard = telebot.types.InlineKeyboardMarkup()
     disable_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["disable_Jarvis"], url="https://www.spotify.com/account/apps/")
     keyboard.add(disable_Button)
@@ -76,7 +76,7 @@ def user_Leaving(chat_id, language_Name):
 
 def auth_Complete(chat_id, user_Nickname, language_Name):
     """
-    Успешная авторизация
+    Successful authorization
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["auth_Complete"].format(user_Nickname=user_Nickname), parse_mode="Markdown")
 
@@ -84,7 +84,7 @@ def auth_Complete(chat_id, user_Nickname, language_Name):
 
 def send_Developer_Contacts(chat_id, language_Name):
     """
-    Отправить контакты разработчика
+    Send developer contacts
     """
     links_Keyboard = telebot.types.InlineKeyboardMarkup(row_width=2)
     discord_Button = telebot.types.InlineKeyboardButton(text="Discord", url="https://discord.gg/Z4A4qdw")
@@ -96,7 +96,7 @@ def send_Developer_Contacts(chat_id, language_Name):
 
 def superShuffle_Description(chat_id, language_Name):
     """
-    Описание функции супер-шаффл
+    Super-shuffle description
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["superShuffle"]["superShuffle_Description"], parse_mode="Markdown")
 
@@ -104,7 +104,7 @@ def superShuffle_Description(chat_id, language_Name):
 
 def yourTops_Description(chat_id, language_Name):
     """
-    Описание функции ваши-топы
+    Your Tops description
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["yourTops_Description"], parse_mode="Markdown")
 
@@ -112,7 +112,7 @@ def yourTops_Description(chat_id, language_Name):
 
 def send_MusicQuiz_Round(chat_id, musicQuiz_Round_Data, language_Name):
     """
-    Отправить пользователю музыкальную викторину
+    Send user a round of music quiz
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     keyboard.row(musicQuiz_Round_Data["keyboard"][0])
@@ -130,7 +130,7 @@ def send_MusicQuiz_Round(chat_id, musicQuiz_Round_Data, language_Name):
 
 def musicQuiz_Rules(chat_id, language_Name):
     """
-    Отправить пользователю правила игры в музыкальную викторину
+    Send the user the rules of the game in the music quiz
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Rules"], parse_mode="Markdown")
 
@@ -138,7 +138,7 @@ def musicQuiz_Rules(chat_id, language_Name):
 
 def shuffle_Tracks_Count(chat_id, language_Name):
     """
-    Вопрос пользователю о количестве треков для супер-шаффла
+    Ask the user about the number of tracks for the super-shuffle
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=4, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["offset_Size"]["100_Songs"], language_Vocabluary[language_Name]["keyboard_Buttons"]["offset_Size"]["200_Songs"], language_Vocabluary[language_Name]["keyboard_Buttons"]["offset_Size"]["all_Offset"])
@@ -149,7 +149,7 @@ def shuffle_Tracks_Count(chat_id, language_Name):
 
 def tops_Type_Select(chat_id, language_Name):
     """
-    Вопрос пользователю о типе топа
+    Question to the user about the type of Your Tops
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["songs"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["artists"])
@@ -160,7 +160,7 @@ def tops_Type_Select(chat_id, language_Name):
 
 def tops_Time_Period(chat_id, language_Name):
     """
-    Вопрос пользователю о периоде выборки для топа
+    Question to the user about the sample period for the top
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["time_Buttons"]["4_Weeks"], language_Vocabluary[language_Name]["keyboard_Buttons"]["time_Buttons"]["6_Months"], language_Vocabluary[language_Name]["keyboard_Buttons"]["time_Buttons"]["all_Time"])
@@ -171,7 +171,7 @@ def tops_Time_Period(chat_id, language_Name):
 
 def musicQuiz_Type_Select(chat_id, language_Name):
     """
-    Вопрос пользователю о выборке для викторины
+    Ask the user about the sample for the quiz
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["liked_Songs"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["top_Songs"])
@@ -182,7 +182,7 @@ def musicQuiz_Type_Select(chat_id, language_Name):
 
 def top_Database_Error(chat_id, language_Name):
     """
-    Ошибка базы данных топов
+    Tops database error
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["database_Error"], parse_mode="Markdown")
 
@@ -190,7 +190,7 @@ def top_Database_Error(chat_id, language_Name):
 
 def astray_Notification(chat_id, language_Name):
     """
-    Сообщить пользователю о возможности вызова клавиатуры
+    Prompt the user to return to the main menu
     """ 
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["astray_Notification"], parse_mode="Markdown")
 
@@ -198,7 +198,7 @@ def astray_Notification(chat_id, language_Name):
 
 def send_Easter_Egg(chat_id, message):
     """
-    Пасхалки!
+    Easter eggs!
     """
     spotify_Bot.send_message(chat_id, message, parse_mode="Markdown")
 
@@ -206,7 +206,7 @@ def send_Easter_Egg(chat_id, message):
 
 def insufficient_Data_For_Top(chat_id, language_Name):
     """
-    Не хватает песен для составления топа
+    There are not enough songs to compose the top
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["insufficient_Data_For_Top"], parse_mode="Markdown")
 
@@ -214,7 +214,7 @@ def insufficient_Data_For_Top(chat_id, language_Name):
 
 def no_ActiveDevices(chat_id, language_Name):
     """
-    Нет активных устройств для начала воспроизведения
+    No active devices to start playback
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_NoDevice"], parse_mode="Markdown")
 
@@ -222,7 +222,7 @@ def no_ActiveDevices(chat_id, language_Name):
 
 def premium_Required(chat_id, language_Name):
     """
-    Для начала воспроизведения требуется премиум-подписка
+    Premium subscription required to start playback
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_PremiumRequired"], parse_mode="Markdown")
 
@@ -230,7 +230,7 @@ def premium_Required(chat_id, language_Name):
 
 def playback_Error(chat_id, language_Name):
     """
-    Невозможно начать воспроизведение
+    Unable to start playback
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["start_Playing_RequestError"], parse_mode="Markdown")
 
@@ -238,7 +238,7 @@ def playback_Error(chat_id, language_Name):
 
 def playback_Started(chat_id, language_Name):
     """
-    Воспроизведение началось
+    Playback has started
     """
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["playback_Started"]
     spotify_Bot.send_message(chat_id, playback_Text, parse_mode="Markdown")
@@ -247,7 +247,7 @@ def playback_Started(chat_id, language_Name):
 
 def song_Added_To_Queue(chat_id, language_Name):
     """
-    Песня была добавлена в список воспроизведения
+    The song has been added to the playlist
     """
     playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["added_To_Queue"]
     spotify_Bot.send_message(chat_id, playback_Text, parse_mode="Markdown")
@@ -256,7 +256,7 @@ def song_Added_To_Queue(chat_id, language_Name):
 
 def musicQuiz_Preparing(chat_id, language_Name):
     """
-    Игровая сессия подготавливается
+    The game session is being prepared
     """
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Preparing"], reply_markup=markup, parse_mode="Markdown")
@@ -265,7 +265,7 @@ def musicQuiz_Preparing(chat_id, language_Name):
 
 def musicQuiz_Incorrect_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
     """
-    Неправильный ответ викторины
+    Music quiz wrong answer
     """
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
@@ -278,7 +278,7 @@ def musicQuiz_Incorrect_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
 
 def musicQuiz_Correct_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
     """
-    Правильный ответ викторины
+    Music quiz right answer
     """
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
@@ -291,7 +291,7 @@ def musicQuiz_Correct_Answer(chat_id, musicQuiz_Round_Stats, language_Name):
 
 def musicQuiz_Answer_Timeout(chat_id, musicQuiz_Round_Stats, language_Name):
     """
-    Закончилось время на ответ викторины
+    Music quiz answer timeout
     """
     right_Answer = musicQuiz_Round_Stats["round_Answer"]
     took_Time_Answer = int(time.time()) - musicQuiz_Round_Stats["round_Prepared_Timestamp"]
@@ -304,7 +304,7 @@ def musicQuiz_Answer_Timeout(chat_id, musicQuiz_Round_Stats, language_Name):
 
 def musicQuiz_End(chat_id, musicQuiz_Statistic, language_Name):
     """
-    Конец музыкальной викторины
+    End of the music quiz
     """
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
 
@@ -317,7 +317,7 @@ def musicQuiz_End(chat_id, musicQuiz_Statistic, language_Name):
 
 def musicQuiz_Error_NoTracks(chat_id, language_Name):
     """
-    Ошибка MusicQuiz - не хватило треков для начала игры
+    MusicQuiz error - there were not enough tracks to start the game
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Error_NoSongs"], parse_mode="Markdown")
 
@@ -325,7 +325,7 @@ def musicQuiz_Error_NoTracks(chat_id, language_Name):
 
 def musicQuiz_Error_RoundProcess(chat_id, language_Name):
     """
-    Ошибка MusicQuiz - возникла ошибка при обработке раунда
+    MusicQuiz error - an error occurred while processing the round
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["musicQuiz"]["musicQuiz_Error_RoundProcess"], parse_mode="Markdown")
 
@@ -333,7 +333,7 @@ def musicQuiz_Error_RoundProcess(chat_id, language_Name):
 
 def not_Enough_Songs(chat_id, language_Name, songs_Count=None):
     """
-    Недостаточно песен
+    Not enough songs
     """
     if songs_Count:
         message_Text = language_Vocabluary[language_Name]["chat_Messages"]["errors"]["not_Enough_Minimum_Songs"].format(songs_Count=songs_Count)
@@ -346,7 +346,7 @@ def not_Enough_Songs(chat_id, language_Name, songs_Count=None):
 
 def blocked_Tracks_Description(chat_id, language_Name):
     """
-    Описание раздела Заблокированные песни
+    Section Description Blocked Songs
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["description"], parse_mode="Markdown")
 
@@ -354,7 +354,7 @@ def blocked_Tracks_Description(chat_id, language_Name):
 
 def downloading_Information(chat_id, language_Name, hide_Keyboard=True):
     """
-    Выполняется загрузка информации
+    Loading information
     """
     if hide_Keyboard:
         markup = telebot.types.ReplyKeyboardRemove(selective=False)
@@ -367,7 +367,7 @@ def downloading_Information(chat_id, language_Name, hide_Keyboard=True):
 
 def cannot_Authorize(chat_id, language_Name):
     """
-    Ошибка авторизации пользователя
+    User authorization error
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["cannot_Authorize"], parse_mode="Markdown")
 
@@ -375,7 +375,7 @@ def cannot_Authorize(chat_id, language_Name):
 
 def servers_Link_Error(chat_id, language_Name):
     """
-    Ошибка связи с серверами Спотифая
+    Error communicating with Spotify servers
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["servers_Link_Error"], parse_mode="Markdown")
 
@@ -383,7 +383,7 @@ def servers_Link_Error(chat_id, language_Name):
 
 def unknown_Error(chat_id, language_Name):
     """
-    Неизвестная ошибка
+    Unknown error
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["unknown_Error"], parse_mode="Markdown")
 
@@ -391,7 +391,7 @@ def unknown_Error(chat_id, language_Name):
 
 def denied_Work_Reason(chat_id, language_Name):
     """
-    Пока выполняется работа, вы не можете использовать эту функцию
+    While work is in progress, you cannot use this function
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["denied_Work_Reason"], parse_mode="Markdown")
 
@@ -399,7 +399,7 @@ def denied_Work_Reason(chat_id, language_Name):
 
 def playlist_Preparing(chat_id, language_Name, hide_Keyboard=True):
     """
-    Плейлист готовится
+    The playlist is being prepared
     """
     if hide_Keyboard:
         markup = telebot.types.ReplyKeyboardRemove(selective=False)
@@ -412,7 +412,7 @@ def playlist_Preparing(chat_id, language_Name, hide_Keyboard=True):
 
 def jarvis_Updated(chat_id, language_Name, jarvis_Version):
     """
-    Джарвис был обновлен
+    Jarvis has been updated
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["jarvis_Updated"].format(jarvis_Version=jarvis_Version), parse_mode="Markdown")
 
@@ -420,7 +420,7 @@ def jarvis_Updated(chat_id, language_Name, jarvis_Version):
 
 def inline_Mode_Help(chat_id, language_Name):
     """
-    Помощь по Inline режиму
+    Inline help
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["messages"]["inline_Help"], parse_mode="Markdown")
 
@@ -428,7 +428,7 @@ def inline_Mode_Help(chat_id, language_Name):
 
 def library_Statistics_Description(chat_id, language_Name):
     """
-    Описание раздела статистика библиотеки
+    Library statistics section description
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["description"], parse_mode="Markdown")
 
@@ -436,7 +436,7 @@ def library_Statistics_Description(chat_id, language_Name):
 
 def library_Statistics_Type(chat_id, language_Name):
     """
-    Вопрос пользователю о типе статистики
+    Ask the user about the type of statistics
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     keyboard.row(language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Decades"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Artists"], language_Vocabluary[language_Name]["keyboard_Buttons"]["menu_Buttons"]["by_Genres"])
@@ -447,11 +447,11 @@ def library_Statistics_Type(chat_id, language_Name):
 
 def playlist_Ready(chat_id, playlist_Data, language_Name):
     """
-    Плейлист готов
+    Playlist ready
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
-    playlist_ID = playlist_Data["playlist_ID"] #Шифровка callback даты для последующего парсинга (ограничение в 64 байта)
+    playlist_ID = playlist_Data["playlist_ID"] #Date callback encryption for subsequent parsing (64 bytes limit)
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#playlist#{playlist_ID}")
     open_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["open_On_Spotify"], url=playlist_Data["external_URL"])
     keyboard.add(play_On_Spotify)
@@ -469,21 +469,68 @@ def playlist_Ready(chat_id, playlist_Data, language_Name):
 
 
 
-def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
+def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     """
-    Вывод топа исполнителей пользователя
+    Displaying the user's top songs
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
     time_Range = top_Data["time_Range"]
 
-    previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
+    previous_Page = top_Data["current_Page"] - 1 #Previous page index
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{previous_Page}")
+
+    next_Page = top_Data["current_Page"] + 1 #Next page index
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{next_Page}")
+
+    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["create_Playlist"], callback_data=f"interface#topTracks#createPlaylist#{time_Range}")
+
+    keyboard.add(create_Playlist_Button) #Playlist creation button
+
+    if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Shit for making a pretty keyboard
+        keyboard.add(previous_Page_Button, next_Page_Button)
+    elif not top_Data["current_Page"] <= 1:
+        keyboard.add(previous_Page_Button)
+    elif not top_Data["current_Page"] >= top_Data["max_Pages"]:
+        keyboard.add(next_Page_Button)
+
+    time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
+    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
+
+    chat_Top_Data = {}
+    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+
+    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
+
+    for top_Item in top_Data["items"]: #Подготавливаем список песен
+        prefix = top_Data["items"][top_Item]["prefix"]
+        artists = top_Data["items"][top_Item]["artists"]
+        name = top_Data["items"][top_Item]["name"]
+        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
+        chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
+
+    if message_ID: #If a message ID is provided, then edit the message, if not, send a new one
+        spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
+    else:
+        spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
+
+
+
+def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
+    """
+    Displaying the user's top performers
+    """
+    keyboard = telebot.types.InlineKeyboardMarkup()
+
+    time_Range = top_Data["time_Range"]
+
+    previous_Page = top_Data["current_Page"] - 1 #Previous page index
     previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{previous_Page}")
 
-    next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
+    next_Page = top_Data["current_Page"] + 1 #Next page index
     next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#topArtists#page#{time_Range}#{next_Page}")
 
-    if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
+    if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Shit for making a pretty keyboard
         keyboard.add(previous_Page_Button, next_Page_Button)
     elif not top_Data["current_Page"] <= 1:
         keyboard.add(previous_Page_Button)
@@ -505,7 +552,7 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
         chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers <b>{prefix}</b>\n\n"
         chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
 
-    if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
+    if message_ID: #If a message ID is provided, then edit the message, if not, send a new one
         spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
     else:
         spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
@@ -514,7 +561,7 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
 
 def blocked_Tracks(chat_id, blocked_Data, language_Name):
     """
-    Вывод заблокированных песен
+    Output of locked songs
     """
     message = {}
     message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["message_Header"]
@@ -534,7 +581,7 @@ def blocked_Tracks(chat_id, blocked_Data, language_Name):
 
 def decades_Statistic(chat_id, statistic_Data, language_Name):
     """
-    Вывод статистики по декадам
+    Displaying statistics for decades
     """
     message = {}
     message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["decades_Statistic_Header"]
@@ -551,7 +598,7 @@ def decades_Statistic(chat_id, statistic_Data, language_Name):
 
 def artists_Statistic(chat_id, statistic_Data, language_Name):
     """
-    Вывод статистики по исполнителям
+    Displaying statistics on performers
     """
     message = {}
     message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["artists_Statistic_Header"]
@@ -568,7 +615,7 @@ def artists_Statistic(chat_id, statistic_Data, language_Name):
 
 def genres_Statistic(chat_id, statistic_Data, language_Name):
     """
-    Вывод статистики по жанрам
+    Displaying statistics by genre
     """
     message = {}
     message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["library_Statistics"]["genres_Statistic_Header"]
@@ -600,7 +647,7 @@ def duplicates_Found(chat_id, duplicates_Data, language_Name):
 
 def send_LibraryHelper_Menu(chat_id, language_Name):
     """
-    Отправить меню помощника библиотеки
+    Submit Library Helper Menu
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
@@ -614,7 +661,7 @@ def send_LibraryHelper_Menu(chat_id, language_Name):
 
 def send_Playlist_Selector(chat_id, playlists_Names, language_Name):
     """
-    Отправить пользователю клавиатуру с плейлистами
+    Send user keyboard with playlists
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
@@ -627,9 +674,9 @@ def send_Playlist_Selector(chat_id, playlists_Names, language_Name):
 
 def duplicates_Remover_Description(chat_id, section_Name, language_Name):
     """
-    Описание функции удаления дубликатов из плейлистов
+    Description of the function for removing duplicates from playlists
 
-    section_Name - playlist ИЛИ liked_Songs
+    section_Name - playlist OR liked_Songs
     """
     if section_Name == "playlist":
         message = language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["description_Playlists"]
@@ -642,7 +689,7 @@ def duplicates_Remover_Description(chat_id, section_Name, language_Name):
 
 def no_Playlists(chat_id, language_Name):
     """
-    Нет доступных плейлистов
+    No playlists available
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["no_Playlists"], parse_mode="Markdown")
 
@@ -650,7 +697,7 @@ def no_Playlists(chat_id, language_Name):
 
 def playlist_NotFound(chat_id, language_Name):
     """
-    Плейлист не найден
+    Playlist not found
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["playlist_NotFound"], parse_mode="Markdown")
 
@@ -658,7 +705,7 @@ def playlist_NotFound(chat_id, language_Name):
 
 def duplicates_Not_Found(chat_id, language_Name):
     """
-    Дубликаты не найдены
+    No duplicates found
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["duplicates_Not_Found"], parse_mode="Markdown")
 
@@ -666,7 +713,7 @@ def duplicates_Not_Found(chat_id, language_Name):
 
 def removing_Success(chat_id, language_Name):
     """
-    Удаление успешно
+    Removal successful
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_Success"], parse_mode="Markdown")
 
@@ -674,7 +721,7 @@ def removing_Success(chat_id, language_Name):
 
 def removing_Failure(chat_id, language_Name):
     """
-    Удаление произошло с ошибками
+    Deletion happened with errors
     """
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_Failure"], parse_mode="Markdown")
 
@@ -682,54 +729,7 @@ def removing_Failure(chat_id, language_Name):
 
 def removing_In_Progress(chat_id, language_Name):
     """
-    Удаление в процессе
+    Removal in progress
     """
     markup = telebot.types.ReplyKeyboardRemove(selective=False)
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["library_Helper"]["duplicates_Remover"]["removing_In_Progress"], reply_markup=markup, parse_mode="Markdown")
-
-
-
-def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
-    """
-    Вывод топа песен пользователя
-    """
-    keyboard = telebot.types.InlineKeyboardMarkup()
-
-    time_Range = top_Data["time_Range"]
-
-    previous_Page = top_Data["current_Page"] - 1 #Индекс предыдущей страницы
-    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{previous_Page}")
-
-    next_Page = top_Data["current_Page"] + 1 #Индекс следующей страницы
-    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#topTracks#page#{time_Range}#{next_Page}")
-
-    create_Playlist_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["create_Playlist"], callback_data=f"interface#topTracks#createPlaylist#{time_Range}")
-
-    keyboard.add(create_Playlist_Button) #Кнопка создания плейлиста
-
-    if not top_Data["current_Page"] <= 1 and not top_Data["current_Page"] >= top_Data["max_Pages"]: #Херня для создания красивой клавиатуры
-        keyboard.add(previous_Page_Button, next_Page_Button)
-    elif not top_Data["current_Page"] <= 1:
-        keyboard.add(previous_Page_Button)
-    elif not top_Data["current_Page"] >= top_Data["max_Pages"]:
-        keyboard.add(next_Page_Button)
-
-    time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
-    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
-
-    chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
-
-    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
-
-    for top_Item in top_Data["items"]: #Подготавливаем список песен
-        prefix = top_Data["items"][top_Item]["prefix"]
-        artists = top_Data["items"][top_Item]["artists"]
-        name = top_Data["items"][top_Item]["name"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
-        chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
-
-    if message_ID: #Если предоставлен ID сообщения, то редактируем сообщение, если нет, отправляем новое
-        spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
-    else:
-        spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")

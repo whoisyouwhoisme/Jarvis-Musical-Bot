@@ -31,7 +31,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -41,7 +41,7 @@ def to_Main_Menu(user_ID):
 
 
 def process_User_Language(language_Code):
-    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
+    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Russian, Ukrainian, Belarusian
         user_Language = "RUS"
     else:
         user_Language = "ENG"
@@ -52,9 +52,9 @@ def process_User_Language(language_Code):
 
 def logout_Command(message):
     """
-    Обработка команды выхода
+    Exit command processing
 
-    Удаление пользователя из всех таблиц в базе данных
+    Removing a user from all tables in the database
     """
     user_ID = message.from_user.id
     if db_Manager.check_Bot_Reg(user_ID):
@@ -74,7 +74,7 @@ def logout_Command(message):
 
 def language_Command(message):
     """
-    Обработка команды смены языка
+    Language change command processing
     """
     user_ID = message.from_user.id
     if db_Manager.check_Spotify_Login(user_ID):
@@ -87,9 +87,9 @@ def language_Command(message):
 
 def menu_Command(message):
     """
-    Обработка команды меню
+    Menu command processing
 
-    Если пользователь авторизован, вернуть его в главное меню
+    If the user is logged in, return him to the main menu
     """
     user_ID = message.from_user.id
 
@@ -100,9 +100,9 @@ def menu_Command(message):
 
 def contacts_Command(message):
     """
-    Обработка команды контактов
+    Contact command processing
 
-    Отправить пользователю контакты разработчика
+    Send developer contacts to user
     """
     user_ID = message.from_user.id
 
@@ -116,12 +116,11 @@ logger.info("Spotify Module Ready")
 
 
 
-
 def chat_Messages_Handler(message):
     user_ID = message.from_user.id
     logger.info(f"New Message: {message.text} From: {user_ID}")
 
-    if not db_Manager.check_Bot_Reg(user_ID): #Если в базе данных его нет, регистрируем
+    if not db_Manager.check_Bot_Reg(user_ID): #If the person is not in the database, then we add him Telegram to the database
         generated_Unique_ID = db_Manager.generate_Unique_ID()
         user_LanguageCode = message.from_user.language_code
 
@@ -136,13 +135,13 @@ def chat_Messages_Handler(message):
 
 
 
-    #Оптимизация для БД
-    user_Position_Cache = db_Manager.get_User_Position(user_ID) #Записать в переменную позицию пользователя
-    user_Language = db_Manager.get_User_Language(user_ID) #Записать в переменную язык пользователя
+    #Optimization for DB
+    user_Position_Cache = db_Manager.get_User_Position(user_ID) #Write the user position to the variable
+    user_Language = db_Manager.get_User_Language(user_ID) #Write the user language to the variable
 
 
 
-    if not db_Manager.check_Spotify_Login(user_ID): #Если пользователь еще не вошел в Spotify, предлагаем войти
+    if not db_Manager.check_Spotify_Login(user_ID): #If the user is not yet logged into Spotify, we suggest logging in
         logger.info(f"User {user_ID} Not In Spotify Table. Sending Offer For Login")
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
         spotify_Auth_Link = spotify_Oauth.generate_Auth_Link(user_Unique_ID)
@@ -154,12 +153,12 @@ def chat_Messages_Handler(message):
         logger.info(f"User {user_ID} Have Spotify Login")
 
 
-        #Заглушка если in Work позиция
+        #Checking for in_Work position
         if user_Position_Cache == "work_In_Progress":
             bot_Sender.denied_Work_Reason(user_ID, language_Name=user_Language)
 
 
-        #Меню смены языка
+        #Language change menu
         if user_Position_Cache == "language_Select":
             if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["language"]["ENG"]:
                 db_Manager.write_User_Language(user_ID, "ENG")
@@ -175,55 +174,55 @@ def chat_Messages_Handler(message):
                 bot_Sender.astray_Notification(user_ID, db_Manager.get_User_Language(user_ID))
 
 
-        if db_Manager.get_User_BotVersion(user_ID) < bot_Version: #Если версия клавиатуры пользователя старая, то перемещаем в главное меню
+        if db_Manager.get_User_BotVersion(user_ID) < bot_Version: #If the user's keyboard version is old, then move to the main menu
             to_Main_Menu(user_ID)
             bot_Sender.jarvis_Updated(user_ID, language_Name=user_Language, jarvis_Version=bot_Version)
             db_Manager.write_User_BotVersion(user_ID, bot_Version)
 
 
-        #ГЛАВНОЕ МЕНЮ
+        #MAIN MENU
 
 
         if user_Position_Cache == "main_Menu":
-            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"]: #Пункт Inline Help
+            if message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["inline_Help"]: #Inline Help
                 logger.info(f"Sending Inline Help for user {user_ID}")
                 bot_Sender.inline_Mode_Help(user_ID, language_Name=user_Language)
 
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Пункт Супер-шаффла
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["super_Shuffle"]: #Super-Shuffle
                 logger.info(f"User {user_ID} Entered To Super Shuffle")
                 db_Manager.write_User_Position(user_ID, "user_SuperShuffle")
                 bot_Sender.superShuffle_Description(user_ID, language_Name=user_Language)
                 bot_Sender.shuffle_Tracks_Count(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Super Shuffle Selector For User {user_ID}")
 
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"]: #Пункт топов
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["your_Tops"]: #Your Tops
                 logger.info(f"User {user_ID} Entered To Your Tops")
                 db_Manager.write_User_Position(user_ID, "user_YourTops")
                 bot_Sender.yourTops_Description(user_ID, language_Name=user_Language)
                 bot_Sender.tops_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Your Tops Selector For User {user_ID}")
             
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]: #Пункт музыкальной викторины
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["musicQuiz"]: #Music Quiz
                 logger.info(f"User {user_ID} Entered To Music Quiz")
                 db_Manager.write_User_Position(user_ID, "user_MusicQuiz_Type")
                 bot_Sender.musicQuiz_Rules(user_ID, language_Name=user_Language)
                 bot_Sender.musicQuiz_Type_Select(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Music Quiz Type Selector For User {user_ID}")
 
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"]: #Пункт заблокированных треков
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["blocked_Tracks"]: #Blocked Tracks
                 logger.info(f"User {user_ID} Entered To Blocked Tracks")
                 db_Manager.write_User_Position(user_ID, "user_BlockedTracks")
                 bot_Sender.blocked_Tracks_Description(user_ID, language_Name=user_Language)
                 bot_BlockedTracks.send_BlockedTracks(user_ID, language_Name=user_Language)
             
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"]: #Пункт статистики
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Statistics"]: #Library Statistics
                 logger.info(f"User {user_ID} Entered To Library Statistics")
                 db_Manager.write_User_Position(user_ID, "user_LibraryStatistics_Type")
                 bot_Sender.library_Statistics_Description(user_ID, language_Name=user_Language)
                 bot_Sender.library_Statistics_Type(user_ID, language_Name=user_Language)
                 logger.info(f"Sending Statistics Type Selector For User {user_ID}")
 
-            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Helper"]: #Пункт помощника библиотеки
+            elif message.text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Helper"]: #Library Helper
                 logger.info(f"User {user_ID} Entered To Library Helper")
                 db_Manager.write_User_Position(user_ID, "user_LibraryHelper_Menu")
                 bot_Sender.send_LibraryHelper_Menu(user_ID, language_Name=user_Language)
@@ -254,14 +253,14 @@ def chat_Messages_Handler(message):
                         bot_Sender.astray_Notification(user_ID, language_Name=user_Language)
 
 
-        #ПУНКТ СУПЕР-ШАФФЛА
+        #SUPER-SHUFFLE
 
 
         if user_Position_Cache == "user_SuperShuffle":
             bot_SuperShuffle.process_SuperShuffle_Message(user_ID, message_Text=message.text, user_Language=user_Language)
 
 
-        #ПУНКТ ТОПОВ
+        #YOUR TOPS
 
         if user_Position_Cache == "user_YourTops":
             bot_LibraryTops.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
@@ -273,7 +272,7 @@ def chat_Messages_Handler(message):
             bot_LibraryTops.process_TopArtists_Time_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
 
 
-        #ПУНКТ МУЗЫКАЛЬНОЙ ВИКТОРИНЫ
+        #MUSIC QUIZ
 
 
         if user_Position_Cache == "user_MusicQuiz_Type":
@@ -284,13 +283,18 @@ def chat_Messages_Handler(message):
         
         if user_Position_Cache == "user_MusicQuiz_inGame":
             bot_MusicQuiz.process_InGame_Message(user_ID, message_Text=message.text, user_Language=user_Language)
-        
 
-        #Пункт статистики
+
+        #LIBRARY STATISTICS
+
+
         if user_Position_Cache == "user_LibraryStatistics_Type":
             bot_LibraryStatistics.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
-        
-        #Пункт помощника библиотеки
+
+
+        #LIBRARY HELPER
+
+
         if user_Position_Cache == "user_LibraryHelper_Menu":
             bot_LibraryHelper.process_Type_Selector_Message(user_ID, message_Text=message.text, user_Language=user_Language)
         

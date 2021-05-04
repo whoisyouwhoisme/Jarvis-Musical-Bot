@@ -12,9 +12,9 @@ from spotify_Module import spotify_Exceptions
 
 def check_Token_Lifetime(user_Unique_ID):
     """
-    Проверить жив ли еще токен, если токен мертв, обновить его
+    Check if the token is still alive, if the token is dead, update it
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
     """
     current_Timestamp = int(time.time())
     last_Refresh_Timestamp = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][7]
@@ -26,14 +26,14 @@ def check_Token_Lifetime(user_Unique_ID):
 
 def get_Current_Playing(user_Unique_ID):
     """
-    Получить текущее проигрывание пользователя, в случае успеха возвращает словарь
+    Get the current playback of the user, if successful, returns a dictionary
 
-    В случае ошибки возвращает исключения:
-    no_Playback - ничего не играет
-    no_Data - не хватает мета-данных
-    private_Session_Enabled - активирована приватная сессия
+    Returns exceptions on error:
+    no_Playback - nothing plays
+    no_Data - not enough meta data
+    private_Session_Enabled - private session is activated
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -58,14 +58,14 @@ def get_Current_Playing(user_Unique_ID):
         playback_Data["images"] = user_Playback["item"]["album"]["images"]
 
         search_Keywords = ", ".join(playback_Data["artists"]) + " " + playback_Data["song_Name"]
-        try: #Костыль для обхода привышения квоты на поиск. КОГДА НИБУДЬ сделаю авторизацию через Гугл аккаунт... КОГДА НИБУДЬ))
-            search_Result = youtube_Lib.search_Youtube(search_Keywords) #Поиск Ютуб клипа для песни
+        try: #A crutch to bypass search quotas. Someday do the authorization through Google account...
+            search_Result = youtube_Lib.search_Youtube(search_Keywords) #Search YouTube clip for song
         
         except:
             playback_Data["youtube_URL"] = ""
         
         else:
-            if search_Result["items"]: #Если песня найдена
+            if search_Result["items"]: #If a song clip is found
                 first_Result_ID = search_Result["items"][0]["id"]["videoId"]
                 playback_Data["youtube_URL"] = "https://youtu.be/" + first_Result_ID
             else:
@@ -81,14 +81,14 @@ def get_Current_Playing(user_Unique_ID):
 
 def get_Current_Context(user_Unique_ID):
     """
-    Получить текущий контекст пользователя
+    Get the current user context
 
-    В случае ошибки возвращает исключения:
-    no_Playback - ничего не играет
-    no_Playing_Context - нет активного контекста
-    private_Session_Enabled - активирована приватная сессия
+    Returns exceptions on error:
+    no_Playback - nothing plays
+    no_Playing_Context - no active context
+    private_Session_Enabled - private session is activated
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -101,7 +101,7 @@ def get_Current_Context(user_Unique_ID):
 
     if user_Playback["context"]:
         playback_Data["context_URI"] = user_Playback["context"]["uri"]
-        playback_Data["context_Type"] = user_Playback["context"]["type"] #Context type может быть исполнитель, альбом, или плейлист
+        playback_Data["context_Type"] = user_Playback["context"]["type"]
 
         return playback_Data
     else:
@@ -112,25 +112,25 @@ def get_Current_Context(user_Unique_ID):
 
 def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
     """
-    Начинает воспроизведение контента, в случае успеха возвращает True
+    Starts playing content, returns True on success
 
-    В случае ошибки возвращает исключения:
-    no_ActiveDevices - Нет активных устройств
-    premium_Required - Требуется премиум-подписка
+    Returns exceptions on error:
+    no_ActiveDevices - No active devices
+    premium_Required - Premium subscription required
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    playback_Context - Контекст для проигрывания (плейлист, исполнитель)
-    
-    ИЛИ
+    playback_Context - Context for playback (playlist, artist)
 
-    playback_Uris - Список из URI треков Спотифай
+    OR
+
+    playback_Uris - List of Spotify track URIs
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Devices = spotify_Api.get_User_Devices(user_Auth_Token)
 
-    if not user_Devices["devices"]: #Проверка наличия активного устройства
+    if not user_Devices["devices"]: #Checking for an active device
         raise spotify_Exceptions.no_ActiveDevices
 
     try:
@@ -153,15 +153,15 @@ def start_Playback(user_Unique_ID, playback_Context=None, playback_Uris=None):
 
 def add_Track_To_Queue(user_Unique_ID, track_Uri):
     """
-    Добавить трек в очередь проигрывания пользователя
+    Add a track to the user's play queue
 
-    В случае ошибки возвращает исключения:
-    no_ActiveDevices - Нет активных устройств
-    premium_Required - Требуется премиум-подписка
+    Returns exceptions on error:
+    no_ActiveDevices - No active devices
+    premium_Required - Premium subscription required
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    track_Uri - URI песни
+    track_Uri - URI of the song
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -187,11 +187,11 @@ def add_Track_To_Queue(user_Unique_ID, track_Uri):
 
 def get_Playlist_Data(user_Unique_ID, playlist_ID):
     """
-    Возвращает информацию о плейлисте по ID
+    Returns information about a playlist by ID
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    playlist_ID - Уникальный ID плейлиста в Spotify
+    playlist_ID - Unique playlist ID in Spotify
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -211,11 +211,11 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
 
 def get_Album_Data(user_Unique_ID, album_ID):
     """
-    Возвращает информацию о альбоме по ID
+    Returns information about an album by ID
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    album_ID - Уникальный ID плейлиста в Spotify
+    album_ID - Unique playlist ID in Spotify
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -240,11 +240,11 @@ def get_Album_Data(user_Unique_ID, album_ID):
 
 def get_Artist_Data(user_Unique_ID, artist_ID):
     """
-    Возвращает информацию о исполнителе по ID
+    Returns information about the artist by ID
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    artist_ID - Уникальный ID исполнителя в Spotify
+    artist_ID - Unique artist ID on Spotify
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -267,13 +267,13 @@ def get_Artist_Data(user_Unique_ID, artist_ID):
 
 def check_User_Liked_Songs(user_Unique_ID, minimum_Count):
     """
-    Проверяет есть ли у пользователя минимальное кол-во Liked Songs, в случае успеха возвращает True
+    Checks if the user has a minimum number of Liked Songs, if successful, returns True
 
-    В случае ошибки возвращает исключение no_Tracks (треков не хватает)
+    Returns the exception no_Tracks (there are not enough tracks) in case of an error
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    minimum_Count - Кол-во треков
+    minimum_Count - Number of tracks
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -289,19 +289,17 @@ def check_User_Liked_Songs(user_Unique_ID, minimum_Count):
 
 def search_Item(user_Unique_ID, search_Query, search_Types="track", limit=5, offset=0):
     """
-    Поиск в Spotify
+    Search in Spotify
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    user_Unique_ID - Internal unique user ID
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    search_Query - Search query
 
-    search_Query - Поисковой запрос
+    search_Types - Types for search, artist, album, track
 
-    search_Types - Типы для поиска, исполнитель, альбом, трек
+    limit - Limit of search items
 
-    limit - Лимит элементов поиска
-
-    offset - Смещение элементов поиска
+    offset - Offset of the search items
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -403,7 +401,7 @@ def get_User_Blocked_Tracks(user_Unique_ID):
     if user_Data["total"] == 0:
         raise spotify_Exceptions.no_Tracks
 
-    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+    total_Iterations = math.ceil(user_Data["total"] / 50) #Divide the number of songs for requests by 50 songs
 
     offset = 0
     blocked_Tracks = {
@@ -413,12 +411,12 @@ def get_User_Blocked_Tracks(user_Unique_ID):
         "tracks":[]
         }
     
-    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
+    for user_Tracks in range(total_Iterations): #Upload all user songs
         user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
 
         offset += 50
 
-        for track in range(len(user_Tracks["items"])): #Перебрать все песни в текущей итерации
+        for track in range(len(user_Tracks["items"])): #Loop over all songs in the current iteration
                 if not user_Tracks["items"][track]["track"]["is_playable"]:
                     blocked_Tracks["tracks"].append(
                         {
@@ -434,21 +432,21 @@ def get_User_Blocked_Tracks(user_Unique_ID):
 
 def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range="short_term"):
     """
-    Получить список топ треков пользователя
+    Get a list of the user's top tracks
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    entities_Limit - Лимит выборки
+    entities_Limit - Selection limit
 
-    offset - Сдвиг выборки
+    offset - Offset of the sample
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "tracks", entities_Limit, offset, time_Range)
 
-    if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
+    if not user_Top["total"] >= 1: #Checking for the presence of at least one element
         raise spotify_Exceptions.no_Tops_Data
 
     current_Timestamp = int(time.time())
@@ -473,21 +471,21 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
             }
         )
 
-    database_User_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID") #Для сравнения подгружаем старый кэш топа пользователя
+    database_User_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID") #For comparison, we load the old cache of the user's top
 
-    if database_User_Tracks: #Если у пользователя есть топ
-        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+    if database_User_Tracks:
+        if time_Range == "short_term":
             user_Tracks = database_User_Tracks[0][1]
         elif time_Range == "medium_term":
             user_Tracks = database_User_Tracks[0][2]
         elif time_Range == "long_term":
             user_Tracks = database_User_Tracks[0][3]
         
-        if user_Tracks: #Проверяем есть ли старый кэш песен
-            OLD_TopData = json.loads(user_Tracks) #Десериализуем строку в словарь
+        if user_Tracks: #Check if there is an old cache of songs
+            OLD_TopData = json.loads(user_Tracks) #Deserialize the string into a dictionary
 
-            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #Если временной период выборки совпадает, то делаем сравнение
-                OLD_URIS = [] #Отслеживание изменений происходит по ID, поэтому делаем список старой выборки
+            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+                OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
                 for index in range(len(OLD_TopData["items"])):
                     OLD_URIS.append(OLD_TopData["items"][index]["URI"])
 
@@ -495,20 +493,20 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
                 for index in range(len(NEW_TopData["items"])):
                     NEW_URIS.append(NEW_TopData["items"][index]["URI"])
         
-                for index_New in range(len(NEW_URIS)): #Сравниваем выборку по новой выборке
+                for index_New in range(len(NEW_URIS)): #Comparing the sample for the new sample
                     try:
                         old_Index = OLD_URIS.index(NEW_URIS[index_New])
                     except:
-                        NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такой песни нет, ставим метку новой песни
+                        NEW_TopData["items"][index_New]["prefix"] = "● " #If there is no such song in the old sample, we mark the new song
                     else:
                         if old_Index < index_New:
                             index_Offset = str(index_New - old_Index)
-                            NEW_TopData["items"][index_New]["prefix"] = f" ▼ +{index_Offset}" #Если песня опустилась ниже
+                            NEW_TopData["items"][index_New]["prefix"] = f" ▼ +{index_Offset}" #If the song went down
                         elif old_Index > index_New:
                             index_Offset = str(index_New - old_Index)
-                            NEW_TopData["items"][index_New]["prefix"] = f" ▲ {index_Offset}" #Если песня поднялась выше
+                            NEW_TopData["items"][index_New]["prefix"] = f" ▲ {index_Offset}" #If the song went up
                         elif old_Index == index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "" #Если изменений не произошло
+                            NEW_TopData["items"][index_New]["prefix"] = "" #If no changes happened
 
     return NEW_TopData
 
@@ -516,21 +514,21 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
 
 def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range="short_term"):
     """
-    Получить список топ исполнителей пользователя
+    Get a list of the user's top performers
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    entities_Limit - Лимит выборки
+    entities_Limit - Selection limit
 
-    offset - Сдвиг выборки
+    offset - Offset of the sample
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "artists", entities_Limit, offset, time_Range)
 
-    if not user_Top["total"] >= 1: #Проверка на наличие хотя бы одного элемента
+    if not user_Top["total"] >= 1: #Checking for the presence of at least one element
         raise spotify_Exceptions.no_Tops_Data
 
     current_Timestamp = int(time.time())
@@ -554,42 +552,42 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
             }
         )
     
-    database_User_Artists = database_Manager.search_In_Database(user_Unique_ID, "users_TopArtists", "user_Unique_ID") #Для сравнения подгружаем старый кэш топа пользователя
+    database_User_Artists = database_Manager.search_In_Database(user_Unique_ID, "users_TopArtists", "user_Unique_ID") #For comparison, we load the old cache of the user's top
 
-    if database_User_Artists: #Если у пользователя есть топ
-        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+    if database_User_Artists:
+        if time_Range == "short_term":
             user_Artists = database_User_Artists[0][1]
         elif time_Range == "medium_term":
             user_Artists = database_User_Artists[0][2]
         elif time_Range == "long_term":
             user_Artists = database_User_Artists[0][3]
         
-        if user_Artists: #Проверяем есть ли старый кэш исполнителей
-            OLD_TopData = json.loads(user_Artists) #Десериализуем строку в словарь
+        if user_Artists: #Check if there is an old artists cache
+            OLD_TopData = json.loads(user_Artists) #Deserialize the string into a dictionary
 
-            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #Если временной период выборки совпадает, то делаем сравнение
-                OLD_URIS = [] #Отслеживание изменений происходит по ID, поэтому делаем список старой выборки
+            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+                OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
                 for index in range(len(OLD_TopData["items"])):
                     OLD_URIS.append(OLD_TopData["items"][index]["URI"])
 
-                NEW_URIS = [] #Список новой выборки
+                NEW_URIS = [] #New selection list
                 for index in range(len(NEW_TopData["items"])):
                     NEW_URIS.append(NEW_TopData["items"][index]["URI"])
         
-                for index_New in range(len(NEW_URIS)): #Сравниваем выборку по новой выборке
+                for index_New in range(len(NEW_URIS)): #Comparing the sample for the new sample
                     try:
                         old_Index = OLD_URIS.index(NEW_URIS[index_New])
                     except:
-                        NEW_TopData["items"][index_New]["prefix"] = "● " #Если в старой выборке такого исполнителя нет, ставим метку нового исполнителя
+                        NEW_TopData["items"][index_New]["prefix"] = "● " #If there is no such artist in the old sample, we put the label of the new artist
                     else:
                         if old_Index < index_New:
                             index_Offset = str(index_New - old_Index)
-                            NEW_TopData["items"][index_New]["prefix"] = f" ▼ +{index_Offset}" #Если исполнитель опустился ниже
+                            NEW_TopData["items"][index_New]["prefix"] = f" ▼ +{index_Offset}" #If the artist went up
                         elif old_Index > index_New:
                             index_Offset = str(index_New - old_Index)
-                            NEW_TopData["items"][index_New]["prefix"] = f" ▲ {index_Offset}" #Если исполнитель поднялся выше
+                            NEW_TopData["items"][index_New]["prefix"] = f" ▲ {index_Offset}" #If the artist went down
                         elif old_Index == index_New:
-                            NEW_TopData["items"][index_New]["prefix"] = "" #Если изменений не произошло
+                            NEW_TopData["items"][index_New]["prefix"] = "" #If no changes happened
 
     return NEW_TopData
 
@@ -597,9 +595,9 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
 
 def create_Top_Tracks_Playlist(user_Unique_ID, localization_Data, time_Range):
     """
-    Создать плейлист с топ песнями пользователя
+    Create a playlist with the user's top songs
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
     """
     check_Token_Lifetime(user_Unique_ID)
     database_User_Data = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")
@@ -608,15 +606,15 @@ def create_Top_Tracks_Playlist(user_Unique_ID, localization_Data, time_Range):
 
     database_User_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID")
 
-    if database_User_Tracks: #Если у пользователя есть топ
-        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+    if database_User_Tracks:
+        if time_Range == "short_term":
             user_Tracks = database_User_Tracks[0][1]
         elif time_Range == "medium_term":
             user_Tracks = database_User_Tracks[0][2]
         elif time_Range == "long_term":
             user_Tracks = database_User_Tracks[0][3]
 
-    top_Data = json.loads(user_Tracks) #Десериализуем строку в словарь
+    top_Data = json.loads(user_Tracks)
 
     playlist_Name = localization_Data["playlist_Name"].format(time_Range=localization_Data["playlist_TimeRange"])
     playlist_Name = time.strftime(playlist_Name)
@@ -635,41 +633,41 @@ def create_Top_Tracks_Playlist(user_Unique_ID, localization_Data, time_Range):
 
 def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
     """
-    Создать музыкальную викторину из топ треков
+    Create a music quiz from top tracks
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    В случае ошибки возвращает исключение musicQuiz_Error_NoTracks (не хватает треков для викторины)
+    Returns the musicQuiz_Error_NoTracks exception in case of an error (there are not enough tracks for the quiz)
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
     user_Top = spotify_Api.get_User_Tops(user_Auth_Token, "tracks", 50, 0, time_Range)
 
-    if not user_Top["total"] >= 50: #Проверка на наличие хотя бы одного элемента
+    if not user_Top["total"] >= 50: #Checking for a complete top
         raise spotify_Exceptions.no_Tops_Data
 
     top_Tracks = []
-    for item in range(50): #Привести все элементы в человеческий вид
-        if user_Top["items"][item]["preview_url"]: #Добавлять в список только песни с превью
+    for item in range(50): #Bring all elements to human form
+        if user_Top["items"][item]["preview_url"]: #Add only preview songs to the list
             top_Tracks.append({
                 "name":user_Top["items"][item]["name"],
                 "artists":user_Top["items"][item]["album"]["artists"][0]["name"],
                 "preview_URL":user_Top["items"][item]["preview_url"],
             })
     
-    random.shuffle(top_Tracks) #Перемешать элементы топа
+    random.shuffle(top_Tracks) #Shuffle the elements of the top
 
     right_Answers = []
-    for item in range(10): #Выбрать из элементов топа 10 песен для игры
+    for item in range(10): #Choose from the elements of the top 10 songs to play
         right_Answers.append({
             "name":top_Tracks[item]["name"],
             "artists":top_Tracks[item]["artists"],
             "audio_URL":top_Tracks[item]["preview_URL"],
         })
 
-        top_Tracks.pop(item) #Удалить их из выборки топа
+        top_Tracks.pop(item) #Remove them from the top selection
 
     musicQuiz_Items = {}
     musicQuiz_Items["right_Answers"] = right_Answers
@@ -684,24 +682,24 @@ def create_MusicQuiz_Top_Tracks(user_Unique_ID, time_Range):
 
 def download_User_LikedSongs(user_Unique_ID):
     """
-    Получить все треки пользователя из Любимые треки в виде списка
+    Get all user tracks from Favorite tracks as a list
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
 
     user_Country = spotify_Api.get_User_Profile(user_Auth_Token)["country"]
     user_Data = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country)
-    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+    total_Iterations = math.ceil(user_Data["total"] / 50) #Divide the number of songs for requests by 50 songs
 
     offset = 0
     liked_Tracks = []
-    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
+    for user_Tracks in range(total_Iterations): #Get all user tracks
         user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
 
         offset += 50
 
-        for track in range(len(user_Tracks["items"])): #Привести все элементы в человеческий вид
-            if user_Tracks["items"][track]["track"]["preview_url"]: #Добавлять в список только песни с превью
+        for track in range(len(user_Tracks["items"])): #Bring all elements to human form
+            if user_Tracks["items"][track]["track"]["preview_url"]: #Add only preview songs to the list
                 liked_Tracks.append({
                     "name":user_Tracks["items"][track]["track"]["name"],
                     "artists":user_Tracks["items"][track]["track"]["artists"][0]["name"],
@@ -715,25 +713,25 @@ def download_User_LikedSongs(user_Unique_ID):
 
 def create_MusicQuiz_Liked_Songs(user_Unique_ID):
     """
-    Создать музыкальную викторину из Liked Songs
+    Create a Music Quiz from Liked Songs
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    В случае ошибки возвращает исключение musicQuiz_Error_NoTracks (не хватает треков для викторины)
+    Returns the musicQuiz_Error_NoTracks exception in case of an error (there are not enough tracks for the quiz)
     """
     liked_Tracks = download_User_LikedSongs(user_Unique_ID)
 
-    random.shuffle(liked_Tracks) #Перемешать элементы топа
+    random.shuffle(liked_Tracks)
 
     right_Answers = []
-    for item in range(10): #Выбрать из элементов топа 10 песен для игры
+    for item in range(10): #Select 10 tracks for right answers
         right_Answers.append({
             "name":liked_Tracks[item]["name"],
             "artists":liked_Tracks[item]["artists"],
             "audio_URL":liked_Tracks[item]["preview_URL"],
         })
 
-        liked_Tracks.pop(item) #Удалить их из выборки топа
+        liked_Tracks.pop(item) #Remove them from the top selection
 
     musicQuiz_Items = {}
     musicQuiz_Items["right_Answers"] = right_Answers
@@ -748,9 +746,9 @@ def create_MusicQuiz_Liked_Songs(user_Unique_ID):
 
 def get_Saved_Raw_Tracks(user_Unique_ID):
     """
-    Получить все треки пользователя в виде списка
+    Get all user tracks as a list
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -761,11 +759,11 @@ def get_Saved_Raw_Tracks(user_Unique_ID):
     if user_Data["total"] == 0:
         raise spotify_Exceptions.no_Tracks
 
-    total_Iterations = math.ceil(user_Data["total"] / 50) #Поделить кол-во песен на запросы по 50 песен
+    total_Iterations = math.ceil(user_Data["total"] / 50) #Divide the number of songs for requests by 50 songs
 
     offset = 0
     liked_Tracks = []
-    for user_Tracks in range(total_Iterations): #Выгрузить все песни пользователя
+    for user_Tracks in range(total_Iterations): #Get all user tracks
         user_Tracks = spotify_Api.get_Saved_Tracks(user_Auth_Token, market=user_Country, limit=50, offset=offset)
 
         offset += 50
@@ -779,11 +777,11 @@ def get_Saved_Raw_Tracks(user_Unique_ID):
 
 def get_Several_Artists(user_Unique_ID, artists_IDs):
     """
-    Получить информацию об нескольких исполнителях
+    Get information about multiple artists
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    artists_IDs - СПИСОК уникальных ID исполнителей в Spotify
+    artists_IDs - LIST of Spotify Unique Artist IDs
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -796,7 +794,7 @@ def get_Several_Artists(user_Unique_ID, artists_IDs):
 
 def get_User_Playlists(user_Unique_ID):
     """
-    Получить все плейлисты доступные пользователю
+    Get all playlists available to the user
     """
     check_Token_Lifetime(user_Unique_ID)
     database_User_Data = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")
@@ -823,7 +821,7 @@ def get_User_Playlists(user_Unique_ID):
 
 def get_Playlist_Tracks(user_Unique_ID, playlist_Uri):
     """
-    Получить все треки из плейлиста в виде списка
+    Get all tracks from the playlist as a list
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -831,7 +829,7 @@ def get_Playlist_Tracks(user_Unique_ID, playlist_Uri):
 
     playlist_Data = spotify_Api.get_Playlist_Tracks(user_Auth_Token, playlist_Uri=playlist_Uri, entities_Limit=1, market=user_Country)
 
-    total_Iterations = math.ceil(playlist_Data["total"] / 100) #Поделить кол-во песен на запросы по 100 песен
+    total_Iterations = math.ceil(playlist_Data["total"] / 100) #Divide the number of songs for requests by 100 songs
     offset = 0
     playlist_Tracks = []
     for _ in range(total_Iterations):
@@ -852,12 +850,12 @@ def get_Playlist_Tracks(user_Unique_ID, playlist_Uri):
 
 def delete_Playlist_Tracks(user_Unique_ID, playlist_Uri, tracks_To_Delete):
     """
-    Удаляет треки из плейлиста
+    Removes tracks from the playlist
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
 
-    total_Iterations = math.ceil(len(tracks_To_Delete) / 100) #Поделить кол-во песен на запросы по 100 песен
+    total_Iterations = math.ceil(len(tracks_To_Delete) / 100) #Divide the number of songs for requests by 100 songs
 
     job_Successful = True
     for _ in range(total_Iterations):
@@ -874,7 +872,7 @@ def delete_Playlist_Tracks(user_Unique_ID, playlist_Uri, tracks_To_Delete):
 
 def delete_Liked_Tracks(user_Unique_ID, tracks_To_Delete):
     """
-    Удаляет треки из раздела Любимые треки
+    Removes tracks from Favorite Tracks section
     """
     check_Token_Lifetime(user_Unique_ID)
     user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
@@ -885,9 +883,9 @@ def delete_Liked_Tracks(user_Unique_ID, tracks_To_Delete):
         print(track_Item)
         print(track_Item[-1])
 
-        tracks_IDs.append(track_Item[-1]) #ID песни находится в конце
+        tracks_IDs.append(track_Item[-1]) #The song ID is at the end
 
-    total_Iterations = math.ceil(len(tracks_To_Delete) / 50) #Поделить кол-во песен на запросы по 50 песен
+    total_Iterations = math.ceil(len(tracks_To_Delete) / 50) #Divide the number of songs for requests by 50 songs
 
     job_Successful = True
     for _ in range(total_Iterations):
@@ -904,11 +902,11 @@ def delete_Liked_Tracks(user_Unique_ID, tracks_To_Delete):
 
 def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     """
-    Создать супер-шаффл из Liked Songs
+    Create Super Shuffle from Liked Songs
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    tracks_Count - Кол-во треков для супер-шаффла (не менее 100)
+    tracks_Count - Number of tracks for super-shuffle (at least 100)
     """
     check_Token_Lifetime(user_Unique_ID)
     database_User_Data = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")
@@ -918,24 +916,24 @@ def super_Shuffle(user_Unique_ID, localization_Data, tracks_Count=None):
     liked_Tracks_Data = download_User_LikedSongs(user_Unique_ID)
 
     liked_Tracks = []
-    for track in range(len(liked_Tracks_Data)): #Вытащить из списка песен только их uri
+    for track in range(len(liked_Tracks_Data)): #Pull only their uri from the list of songs
         liked_Tracks.append(liked_Tracks_Data[track]["uri"])
 
-    for _ in range(100): #Перемешать все песни 100 раз
+    for _ in range(100): #Shuffle all songs 100 times
         random.shuffle(liked_Tracks)
 
     playlist_Name = localization_Data["playlist_Name"]
     playlist_Name = time.strftime(playlist_Name)
     playlist_Description = localization_Data["playlist_Description"]
-    new_Playlist_ID = spotify_Api.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"] #Создать плейлист и получить его ID
+    new_Playlist_ID = spotify_Api.create_Playlist(user_Auth_Token, user_Spotify_ID, playlist_Name, playlist_Description)["id"] #Create a playlist and get its ID
 
     offset = 100
-    if tracks_Count: #Если указано кол-во треков то вырезаем кол-во треков, если нет - вся выборка
+    if tracks_Count: #If the number of tracks is specified, then we cut out the number of tracks, if not, the entire sample
         total_Iterations = math.ceil(tracks_Count / offset)
     else:
         total_Iterations = math.ceil(len(liked_Tracks) / offset)
 
-    for _ in range(total_Iterations): #Закидываем все песни в плейлист
+    for _ in range(total_Iterations): #We put all the songs in the playlist
         playlist_Tracks = liked_Tracks[offset - 100:offset]
         spotify_Api.add_Tracks_To_Playlist(user_Auth_Token, new_Playlist_ID, playlist_Tracks)
         offset += 100

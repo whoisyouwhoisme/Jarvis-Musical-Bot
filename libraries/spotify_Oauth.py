@@ -14,18 +14,18 @@ client_ID = bot_Keys["spotify"]["client_ID"]
 client_Secret = bot_Keys["spotify"]["client_Secret"]
 
 api_Scopes = [
-    "user-read-playback-state", 
-    "user-read-currently-playing", 
-    "user-modify-playback-state", 
-    "streaming user-library-read", 
-    "user-read-recently-played", 
-    "user-top-read", 
-    "playlist-modify-private", 
-    "user-read-private", 
-    "playlist-read-private", 
-    "playlist-modify-public", 
-    "playlist-modify-private", 
-    "user-library-modify"
+        "user-read-playback-state", 
+        "user-read-currently-playing", 
+        "user-modify-playback-state", 
+        "streaming user-library-read", 
+        "user-read-recently-played", 
+        "user-top-read", 
+        "playlist-modify-private", 
+        "user-read-private", 
+        "playlist-read-private", 
+        "playlist-modify-public", 
+        "playlist-modify-private", 
+        "user-library-modify"
     ]
 
 spotify_Redirect_URI = bot_Keys["spotify"]["redirect_URI"]
@@ -34,9 +34,9 @@ spotify_Redirect_URI = bot_Keys["spotify"]["redirect_URI"]
 
 def generate_Auth_Link(user_Unique_ID):
     """
-    Генерация ссылки для авторизации пользователя, возвращает строку-ссылку
+    Generating a link for user authorization, returns a URL string
 
-    user_Unique_ID - Уникальный ID пользователя
+    user_Unique_ID - Unique user ID
     """
     auth_Scopes = "+".join(api_Scopes)
 
@@ -48,11 +48,14 @@ def generate_Auth_Link(user_Unique_ID):
 
 def request_Access_Tokens(user_Auth_Code):
     """
-    Получение токенов авторизации и обновления, в случае успеха возвращает ответ в формате json
+    Receiving authorization and update tokens, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    user_Auth_Code - User authorization code
 
-    user_Auth_Code - Код авторизации пользователя
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     api_Access_Link = "https://accounts.spotify.com/api/token"
 
@@ -91,11 +94,14 @@ def request_Access_Tokens(user_Auth_Code):
 
 def request_Refreshed_Token(user_Refresh_Token):
     """
-    Запрос обновления токена доступа, в случае успеха возвращает ответ в формате json
+    Request to update the access token, if successful, returns a response in json format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    user_Refresh_Token - Token to refresh the API access token
 
-    user_Refresh_Token - Токен для обновления токена доступа к API
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     api_Access_Link = "https://accounts.spotify.com/api/token"
 
@@ -133,9 +139,14 @@ def request_Refreshed_Token(user_Refresh_Token):
 
 def refresh_Access_Token(user_Unique_ID):
     """
-    Получение обновленного токена доступа и запись его в базу данных
+    Retrieving the updated access token and writing it to the database
 
-    user_Unique_ID - Уникальный ID пользователя
+    user_Unique_ID - Unique user ID
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     get_Refresh_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][5]
 
@@ -148,11 +159,16 @@ def refresh_Access_Token(user_Unique_ID):
 
 def auth_User(user_Auth_Code, user_Unique_ID):
     """
-    Авторизация пользователя и запись всех данных в базу данных
+    User authorization and writing all data to the database
 
-    user_Auth_Code - код авторизации в Spotify
+    user_Auth_Code - Spotify authorization code
 
-    user_Unique_ID - Уникальный ID пользователя
+    user_Unique_ID - Unique user ID
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     payload_Data = request_Access_Tokens(user_Auth_Code)
     user_Profile = spotify_Api.get_User_Profile(payload_Data["access_token"])

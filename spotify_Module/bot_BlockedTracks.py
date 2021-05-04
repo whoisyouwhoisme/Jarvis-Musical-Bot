@@ -9,7 +9,7 @@ from spotify_Module.spotify_Logger import logger
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -20,7 +20,7 @@ def to_Main_Menu(user_ID):
 
 def in_Work(user_ID):
     """
-    Поставить пользователю позицию in Work
+    Set the user to an in Work position
     """
     logger.info(f"Sending In Work State For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "work_In_Progress")

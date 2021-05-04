@@ -17,7 +17,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -28,7 +28,7 @@ def to_Main_Menu(user_ID):
 
 def in_Work(user_ID):
     """
-    Поставить пользователю позицию in Work
+    Set the user to an in Work position
     """
     logger.info(f"Sending In Work State For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "work_In_Progress")
@@ -39,7 +39,7 @@ def in_Work(user_ID):
 
 def process_Type_Selector_Message(user_ID, message_Text, user_Language):
     """
-    Обработчик сообщений клавиатуры
+    Keyboard messages handler
     """
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["by_Decades"]:
         in_Work(user_ID)
@@ -63,7 +63,7 @@ def process_Type_Selector_Message(user_ID, message_Text, user_Language):
 
 def create_Decades_Statistic(user_ID, language_Name):
     """
-    Отправляет статистику по декадам
+    Sends statistics for decades
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -73,8 +73,8 @@ def create_Decades_Statistic(user_ID, language_Name):
         tracks_Decades = []
         for item in range(len(saved_Tracks)):
             release_Date = saved_Tracks[item]["track"]["album"]["release_date"]
-            track_Year = release_Date.split("-")[0] #Год всегда идет первым
-            track_Decade = int(int(track_Year) / 10) * 10 #Вычисление декады
+            track_Year = release_Date.split("-")[0] #The year always comes first
+            track_Decade = int(int(track_Year) / 10) * 10 #Calculating a decade
 
             tracks_Decades.append(track_Decade)
         
@@ -117,7 +117,7 @@ def create_Decades_Statistic(user_ID, language_Name):
 
 def create_Artists_Statistic(user_ID, language_Name):
     """
-    Отправляет статистику по исполнителям
+    Sends statistics on performers
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -169,7 +169,7 @@ def create_Artists_Statistic(user_ID, language_Name):
 
 def create_Genres_Statistic(user_ID, language_Name):
     """
-    Отправляет статистику по жанрам
+    Sends statistics by genre
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -181,11 +181,11 @@ def create_Genres_Statistic(user_ID, language_Name):
 
             artists_Uris.append(artist_Uri)
 
-        total_Iterations = math.ceil(len(saved_Tracks) / 50) #Поделить кол-во исполнителей на запросы по 50 исполнителей
+        total_Iterations = math.ceil(len(saved_Tracks) / 50) #Divide the number of artists into requests by 50 artists
 
         offset = 50
         genres = []
-        for _ in range(total_Iterations): #Получить всех исполнителей
+        for _ in range(total_Iterations): #Get all artists
             artists_Data = spotify_Service.get_Several_Artists(user_Unique_ID, artists_Uris[offset - 50:offset])
 
             offset += 50

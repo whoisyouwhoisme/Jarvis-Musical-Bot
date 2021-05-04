@@ -16,7 +16,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -80,26 +80,26 @@ def process_TopArtists_Time_Selector_Message(user_ID, message_Text, user_Languag
 
 def process_TopTracks_List(user_ID, time_Range, list_Page):
     """
-    Подготовить данные для новой страницы Топ треков
+    Prepare data for a new Top Tracks page
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
 
-    list_Page - Страница списка данных
+    list_Page - List data page
     """
     database_User_Tracks = db_Manager.search_In_Database(db_Manager.get_User_UniqueID(user_ID), "users_TopTracks", "user_Unique_ID")
 
-    if database_User_Tracks: #Если у пользователя есть топ
-        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+    if database_User_Tracks:
+        if time_Range == "short_term":
             user_Tracks = database_User_Tracks[0][1]
         elif time_Range == "medium_term":
             user_Tracks = database_User_Tracks[0][2]
         elif time_Range == "long_term":
             user_Tracks = database_User_Tracks[0][3]
 
-    top_Data = json.loads(user_Tracks) #Десериализуем строку в словарь
-    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
+    top_Data = json.loads(user_Tracks) #Deserialize the string into a dictionary
+    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Get the number of pages
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
@@ -108,7 +108,8 @@ def process_TopTracks_List(user_ID, time_Range, list_Page):
         "items":{},
     }
 
-    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
+    start_Index = (10 * list_Page) - 10
+    stop_Index = 10 * list_Page
     for item in range(start_Index, stop_Index):
         if item < len(top_Data["items"]):
             current_Page["items"][item] = {
@@ -123,26 +124,26 @@ def process_TopTracks_List(user_ID, time_Range, list_Page):
 
 def process_TopArtists_List(user_ID, time_Range, list_Page):
     """
-    Подготовить данные для новой страницы Топ исполнителей
+    Prepare data for a new Top Performers page
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
 
-    list_Page - Страница списка данных
+    list_Page - List data page
     """
     database_User_Artists = db_Manager.search_In_Database(db_Manager.get_User_UniqueID(user_ID), "users_TopArtists", "user_Unique_ID")
 
-    if database_User_Artists: #Если у пользователя есть топ
-        if time_Range == "short_term": #хахах, вот это костыли, вери найс гуд найс
+    if database_User_Artists:
+        if time_Range == "short_term":
             user_Artists = database_User_Artists[0][1]
         elif time_Range == "medium_term":
             user_Artists = database_User_Artists[0][2]
         elif time_Range == "long_term":
             user_Artists = database_User_Artists[0][3]
 
-    top_Data = json.loads(user_Artists) #Десериализуем строку в словарь
-    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Получаем кол-во страниц
+    top_Data = json.loads(user_Artists) #Deserialize the string into a dictionary
+    max_Pages = math.ceil(len(top_Data["items"]) / 10) #Get the number of pages
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
@@ -151,7 +152,8 @@ def process_TopArtists_List(user_ID, time_Range, list_Page):
         "items":{},
     }
 
-    start_Index, stop_Index = ((10 * list_Page) - 10), (10 * list_Page) #ПОВЫШАЕМ ЧИТАЕМОСТЬ!
+    start_Index = (10 * list_Page) - 10
+    stop_Index = 10 * list_Page
     for item in range(start_Index, stop_Index):
         if item < len(top_Data["items"]):
             current_Page["items"][item] = {
@@ -166,15 +168,15 @@ def process_TopArtists_List(user_ID, time_Range, list_Page):
 
 def create_TopTracks(user_ID, language_Name, time_Range):
     """
-    Создать топ треков для пользователя
+    Create top tracks for the user
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    language_Vocabluary - Словарь языков
+    language_Vocabluary - Language vocabulary
 
-    language_Name - Название языка пользователя
+    language_Name - User language name
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     try:
         top_Data = spotify_Service.get_User_Top_Tracks(db_Manager.get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
@@ -215,15 +217,15 @@ def create_TopTracks(user_ID, language_Name, time_Range):
 
 def create_TopArtists(user_ID, language_Name, time_Range):
     """
-    Создать топ исполнителей для пользователя
+    Create top performers for a user
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    language_Vocabluary - Словарь языков
+    language_Vocabluary - Language vocabulary
 
-    language_Name - Название языка пользователя
+    language_Name - User language name
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     try:
         top_Data = spotify_Service.get_User_Top_Artists(db_Manager.get_User_UniqueID(user_ID), entities_Limit=50, time_Range=time_Range)
@@ -264,15 +266,15 @@ def create_TopArtists(user_ID, language_Name, time_Range):
 
 def create_TopTracks_Playlist(user_ID, language_Name, time_Range):
     """
-    Создать плейлист из топ треков для пользователя
+    Create a playlist of top tracks for a user
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    language_Vocabluary - Словарь языков
+    language_Vocabluary - Language vocabulary
 
-    language_Name - Название языка пользователя
+    language_Name - User language name
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -300,7 +302,7 @@ def create_TopTracks_Playlist(user_ID, language_Name, time_Range):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING TOP TRACKS PLAYLIST FOR USER {user_ID}")
 
     else:
-        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read() #Скачивание обложки
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read()
 
         bot_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Top Tracks Playlist Created Successfuly For User {user_ID}")

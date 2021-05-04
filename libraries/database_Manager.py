@@ -10,7 +10,7 @@ database_Cursor = spotify_Database.cursor()
 
 def post_Sql_Query(sql_Query, arguments):
     """
-    Выполнение SQL запросов
+    Executing SQL queries
     """
     with sqlite3.connect("bot_Database.db") as connection:
         cursor = connection.cursor()
@@ -29,7 +29,7 @@ def post_Sql_Query(sql_Query, arguments):
 
 def generate_Unique_ID():
     """
-    Генерация уникального 42 символьного ID
+    Generation of a unique 42 character ID
     """
     return "".join(random.choice(string.ascii_letters + string.digits) for symbols in range(42))
 
@@ -37,13 +37,13 @@ def generate_Unique_ID():
 
 def search_In_Database(keyword_Search, search_Table, search_Row):
     """
-    Поиск по базе данных
+    Database search
 
-    keyword_Search - Ключ поиска
+    keyword_Search - Search Key
 
-    search_Table - Таблица для которой осуществляется поиск
+    search_Table - The table for which to search
 
-    search_Row - Столбец в котором осуществляется поиск ключа
+    search_Row - The column in which the key is searched
     """
     query_Arguments = (str(keyword_Search),)
     get_Query = f"SELECT * FROM {search_Table} WHERE {search_Row} = ?"
@@ -55,15 +55,15 @@ def search_In_Database(keyword_Search, search_Table, search_Row):
 
 def register_User(user_Telegram_ID, user_Unique_ID, user_Language, current_Bot_Version, reg_Timestamp):
     """
-    Регистрация пользователя в базе данных, таблица bot_Users
+    User registration in the database, bot_Users table
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    user_Language - Язык пользователя
+    user_Language - User language
 
-    reg_Timestamp - Временная метка регистрации пользователя
+    reg_Timestamp - User registration timestamp
     """
     if not search_In_Database(user_Unique_ID, "bot_Users", "user_Unique_ID"):
         query_Arguments = (str(user_Telegram_ID), str(user_Unique_ID), str(user_Language), float(current_Bot_Version), int(reg_Timestamp),)
@@ -74,23 +74,23 @@ def register_User(user_Telegram_ID, user_Unique_ID, user_Language, current_Bot_V
 
 def register_Spotify(user_Unique_ID, user_Spotify_ID, user_Nickname, spotify_Auth_Code, spotify_Auth_Token, spotify_Refresh_Token, auth_Timestamp, refresh_Timestamp):
     """
-    Регистрация пользователя в базе данных, таблица spotify_Users
+    User registration in the database, spotify_Users table
 
-    user_Unique_ID - Внутренний уникальный ID пользователя
+    user_Unique_ID - Internal unique user ID
 
-    user_Spotify_ID - Уникальный ID пользователя в Spotify
+    user_Spotify_ID - Unique user ID in Spotify
 
-    user_Nickname - Ник пользователя в Spotify
+    user_Nickname - Spotify username
 
-    spotify_Auth_Code - Код для получения первичной авторизации
+    spotify_Auth_Code - Code for getting primary authorization
 
-    spotify_Auth_Token - Токен доступа пользователя
+    spotify_Auth_Token - User access token
 
-    spotify_Refresh_Token - Токен для обновления токена доступа
+    spotify_Refresh_Token - Token for refreshing the access token
 
-    auth_Timestamp - Временная метка регистрации пользователя
+    auth_Timestamp - User registration timestamp
 
-    refresh_Timestamp - Временная метка последнего обновления токена
+    refresh_Timestamp - Timestamp of the last token refresh
     """
     if not search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID"):
         query_Arguments = (str(user_Unique_ID), str(user_Spotify_ID), str(user_Nickname), str(spotify_Auth_Code), str(spotify_Auth_Token), str(spotify_Refresh_Token), int(auth_Timestamp), int(refresh_Timestamp),)
@@ -101,11 +101,11 @@ def register_Spotify(user_Unique_ID, user_Spotify_ID, user_Nickname, spotify_Aut
 
 def delete_User(user_Unique_ID, table_For_Delete):
     """
-    Удаление пользователя из базы данных по уникальному ID
+    Removing a user from the database by unique ID
 
-    user_Unique_ID - Уникальный ID пользователя
+    user_Unique_ID - Unique user ID
 
-    table_For_Delete - Таблица в которой происходит удаление
+    table_For_Delete - The table in which the deletion occurs
     """
     query_Arguments = (str(user_Unique_ID),)
     register_Query = f"DELETE FROM {table_For_Delete} WHERE user_Unique_ID = ?"
@@ -115,11 +115,11 @@ def delete_User(user_Unique_ID, table_For_Delete):
 
 def write_User_Position(user_Telegram_ID, user_Position):
     """
-    Записать позицию пользователя в боте
+    Record the position of the user in the bot
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    user_Position - Позиция пользователя
+    user_Position - User position
     """
     query_Arguments = (str(user_Position), int(user_Telegram_ID),)
     register_Query = "UPDATE bot_Users SET user_Position = ? WHERE telegram_ID = ?"
@@ -129,11 +129,11 @@ def write_User_Position(user_Telegram_ID, user_Position):
 
 def write_User_Language(user_Telegram_ID, user_Language):
     """
-    Записать язык пользователя
+    Record user language
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    user_Language - Язык пользователя
+    user_Language - User language
     """
     query_Arguments = (str(user_Language), int(user_Telegram_ID),)
     register_Query = "UPDATE bot_Users SET language_Select = ? WHERE telegram_ID = ?"
@@ -143,11 +143,11 @@ def write_User_Language(user_Telegram_ID, user_Language):
 
 def write_User_BotVersion(user_Telegram_ID, bot_Version):
     """
-    Записать версию бота пользователя
+    Record the user's bot version
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    bot_Version - Версия бота
+    bot_Version - Bot version
     """
     query_Arguments = (str(bot_Version), int(user_Telegram_ID),)
     register_Query = "UPDATE bot_Users SET bot_Version = ? WHERE telegram_ID = ?"
@@ -157,13 +157,13 @@ def write_User_BotVersion(user_Telegram_ID, bot_Version):
 
 def write_User_TopTracks(user_Unique_ID, data_Period, top_Data):
     """
-    Записать строку с топ песнями пользователя
+    Record a line with the user's top songs
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    data_Period - Период выборки топа (short_term, medium_term, long_term)
+    data_Period - Top sampling period (short_term, medium_term, long_term)
 
-    top_Data - Сериализованная строка топ песен
+    top_Data - Serialized string of top songs
     """
     if not search_In_Database(user_Unique_ID, "users_TopTracks", "user_Unique_ID"):
         query_Arguments = (str(user_Unique_ID),)
@@ -178,13 +178,13 @@ def write_User_TopTracks(user_Unique_ID, data_Period, top_Data):
 
 def write_User_TopArtists(user_Unique_ID, data_Period, top_Data):
     """
-    Записать строку с топ исполнителями пользователя
+    Write a line with the user's top performers
 
-    user_Telegram_ID - Telegram ID пользователя
+    user_Telegram_ID - Telegram user ID
 
-    data_Period - Период выборки топа (short_term, medium_term, long_term)
+    data_Period - Top sampling period (short_term, medium_term, long_term)
 
-    top_Data - Сериализованная строка топ исполнителей
+    top_Data - Serialized string of top artists
     """
     if not search_In_Database(user_Unique_ID, "users_TopArtists", "user_Unique_ID"):
         query_Arguments = (str(user_Unique_ID),)
@@ -199,13 +199,13 @@ def write_User_TopArtists(user_Unique_ID, data_Period, top_Data):
 
 def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
     """
-    Запись обновленного токена доступа Spotify в базу данных
+    Writing Updated Spotify Access Token to Database
 
-    user_Unique_ID - Уникальный ID пользователя
+    user_Unique_ID - Unique user ID
 
-    refreshed_Token - Обновленный токен
+    refreshed_Token - Refreshed token
 
-    refresh_Timestamp - Временная метка последнего обновления токена
+    refresh_Timestamp - Timestamp of the last token refresh
     """
     query_Arguments = (str(refreshed_Token), int(refresh_Timestamp), str(user_Unique_ID),)
     register_Query = "UPDATE spotify_Users SET spotify_Auth_Token = ?, refresh_Timestamp = ? WHERE user_Unique_ID = ?"
@@ -215,7 +215,7 @@ def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
 
 def get_User_Position(user_Telegram_ID):
     """
-    Получить позицию пользователя из базы данных
+    Get user position from database
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
     
@@ -238,7 +238,7 @@ def get_User_Position(user_Telegram_ID):
 
 def get_User_Language(user_Telegram_ID):
     """
-    Получить язык пользователя из базы данных
+    Get user language from database
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
 
@@ -261,7 +261,7 @@ def get_User_Language(user_Telegram_ID):
 
 def get_User_BotVersion(user_Telegram_ID):
     """
-    Получить версию бота у пользователя
+    Get the bot version from the user
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
 
@@ -284,7 +284,7 @@ def get_User_BotVersion(user_Telegram_ID):
 
 def get_User_UniqueID(user_Telegram_ID):
     """
-    Получить уникальный ID пользователя из базы данных
+    Get a unique user ID from the database
     """
     search_Data = search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
 
@@ -301,7 +301,7 @@ def get_User_UniqueID(user_Telegram_ID):
 
 def check_Bot_Reg(user_Telegram_ID):
     """
-    Проверить регистрацию в боте
+    Check registration in the bot
     """
     logger.info(f"Check Bot Reg For User {user_Telegram_ID}")
     return search_In_Database(user_Telegram_ID, "bot_Users", "telegram_ID")
@@ -310,7 +310,7 @@ def check_Bot_Reg(user_Telegram_ID):
 
 def check_Spotify_Login(user_Telegram_ID):
     """
-    Проверить авторизован ли пользователь в Spotify
+    Check if a user is logged in to Spotify
     """
     logger.info(f"Check Spotify Login For User {user_Telegram_ID}")
     return search_In_Database(get_User_UniqueID(user_Telegram_ID), "spotify_Users", "user_Unique_ID")

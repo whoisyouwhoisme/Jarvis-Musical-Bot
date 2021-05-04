@@ -13,17 +13,17 @@ def process_Callback_Data(data):
     logger.info(f"New Callback Data: {data.data} From: {user_ID}")
 
     if db_Manager.check_Spotify_Login(user_ID):
-        user_Language = db_Manager.get_User_Language(user_ID) #Записать в переменную язык пользователя
-        callback_Request = data.data.split("#") #Парсим строку
+        user_Language = db_Manager.get_User_Language(user_ID)
+        callback_Request = data.data.split("#")
 
-        if callback_Request[0] == "player": #Если сообщение из раздела плеера
+        if callback_Request[0] == "player": #If the message from the player section
             if callback_Request[1] == "play":
                 bot_Player_Control.start_Playback(callback_Request[2], callback_Request[3], user_ID=user_ID, user_Language=user_Language)
         
-        if data.message: #По каким-то причинам у сообщений отправленных из Inline нету тела сообщения
+        if data.message: #For some reason, messages sent from Inline do not have a message body
             message_ID = data.message.message_id
 
-            if callback_Request[0] == "interface": #Если сообщение из раздела интерфейса
+            if callback_Request[0] == "interface": #If the message from the interface section
                 if callback_Request[1] == "topTracks":
                     if callback_Request[2] == "createPlaylist":
                             bot_LibraryTops.create_TopTracks_Playlist(user_ID, language_Name=user_Language, time_Range=callback_Request[3])

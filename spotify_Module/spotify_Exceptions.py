@@ -4,13 +4,13 @@ class http_Exception(Exception):
 
 class http_Connection_Error(http_Exception):
     """
-    Ошибка соединения с сервером
+    Server connection error
     """
     pass
 
 class http_Error(http_Exception):
     """
-    Ошибка HTTP
+    HTTP error
     """
     def __init__(self, http_Code, http_Reason):
         self.http_Code = http_Code
@@ -18,7 +18,7 @@ class http_Error(http_Exception):
 
 class http_Unknown_Error(http_Exception):
     """
-    Неизвестная ошибка
+    Unknown HTTP Error
     """
     pass
 
@@ -30,78 +30,78 @@ class spotify_Exception(Exception):
 
 class no_Playback(spotify_Exception):
     """
-    В данный момент ничего не играет
+    Nothing is currently playing
     """
     pass
 
 class no_Tops_Data(spotify_Exception):
     """
-    Не хватает данных для составления топа
+    Not enough data to compile the top
     """
     pass
 
 class no_Tracks(spotify_Exception):
     """
-    Не хватает песен для супер-шаффла
+    Not enough songs for a super-shuffle
     """
     pass
 
 class no_Data(spotify_Exception):
     """
-    Не хватает мета-данных песни
+    Song meta data missing
     """
     pass
 
 class no_Playing_Context(spotify_Exception):
     """
-    Нет контекста воспроизведения (например приватная сессия)
+    No playback context (e.g. private session)
     """
     pass
 
 class musicQuiz_Error_NoTracks(spotify_Exception):
     """
-    Ошибка MusicQuiz - не хватает песен для игры
+    MusicQuiz error - not enough songs to play
     """
     pass
 
 class premium_Required(spotify_Exception):
     """
-    Требуется Premium подписка
+    Premium subscription required
     """
     pass
 
 class no_ActiveDevices(spotify_Exception):
     """
-    Нет активных устройств
+    No active devices
     """
     pass
 
 class playback_Error(spotify_Exception):
     """
-    Нерабочие медиа-данные для запуска воспроизведения
+    Inoperative media to start playback
     """
     pass
 
 class private_Session_Enabled(spotify_Exception):
     """
-    Активирована приватная сессия
+    Private session activated
     """
     pass
 
 class search_No_Results(spotify_Exception):
     """
-    Нет результатов поиска
+    No search results
     """
     pass
 
 class no_Playlists(spotify_Exception):
     """
-    Нет доступных плейлистов
+    No playlists available
     """
     pass
 
 class playlist_Not_Found(spotify_Exception):
     """
-    Плейлист не найден
+    Playlist not found
     """
     pass

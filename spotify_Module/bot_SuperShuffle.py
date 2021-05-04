@@ -14,7 +14,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -25,7 +25,7 @@ def to_Main_Menu(user_ID):
 
 def in_Work(user_ID):
     """
-    Поставить пользователю позицию in Work
+    Set the user to an in Work position
     """
     logger.info(f"Sending In Work State For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "work_In_Progress")
@@ -54,11 +54,11 @@ def process_SuperShuffle_Message(user_ID, message_Text, user_Language):
 
 def create_SuperShuffle(user_ID, language_Name, tracks_Count=None):
     """
-    Создать супер-шаффл для пользователя
+    Create super shuffle for user
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    tracks_Count - Количество треков для супер-шафла (необязательный параметр, если параметра нет - выбираются все песни из Liked Songs)
+    tracks_Count - The number of tracks for the super-shuffle (optional parameter, if there is no parameter, all songs from Liked Songs are selected)
     """
     try:
         in_Work(user_ID)
@@ -91,7 +91,7 @@ def create_SuperShuffle(user_ID, language_Name, tracks_Count=None):
         logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING SUPER SHUFFLE FOR USER {user_ID}")
 
     else:
-        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read() #Скачивание обложки
+        playlist_Data["playlist_Cover"] = urllib.request.urlopen(playlist_Data["images"][1]["url"]).read()
 
         bot_Sender.playlist_Ready(user_ID, playlist_Data, language_Name=language_Name)
         logger.info(f"Super Shuffle Created Successfuly For User {user_ID}")

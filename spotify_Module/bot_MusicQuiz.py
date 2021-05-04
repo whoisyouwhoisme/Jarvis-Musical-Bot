@@ -21,7 +21,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -71,15 +71,15 @@ def process_Time_Selector_Message(user_ID, message_Text, user_Language):
 
 def process_InGame_Message(user_ID, message_Text, user_Language):
     try:
-        if message_Text == musicQuiz_User_Stats[user_ID]["round_Answer"]: #Если сообщение пользователя = правильный ответ
-            if (int(time.time()) - musicQuiz_User_Stats[user_ID]["round_Prepared_Timestamp"]) <= 10: #Если с момента создания раунда прошло не более 10 секунд включительно
-                bot_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Засчитать ответ
+        if message_Text == musicQuiz_User_Stats[user_ID]["round_Answer"]: #If user message = correct answer
+            if (int(time.time()) - musicQuiz_User_Stats[user_ID]["round_Prepared_Timestamp"]) <= 10: #If no more than 10 seconds have passed since the creation of the round
+                bot_Sender.musicQuiz_Correct_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Count the answer
                 musicQuiz_User_Stats[user_ID]["correct_Answers"] += 1
             else:
-                bot_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Иначе поражение
+                bot_Sender.musicQuiz_Answer_Timeout(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Otherwise, defeat
 
         else:
-            bot_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Поражение если ответ неправильный
+            bot_Sender.musicQuiz_Incorrect_Answer(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language) #Defeat if the answer is wrong
 
 
 
@@ -87,7 +87,7 @@ def process_InGame_Message(user_ID, message_Text, user_Language):
 
 
 
-        if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #Пока раунд < кол-во раундов, отправлять раунды, иначе отправить конец викторины и вернуть в главное меню
+        if musicQuiz_User_Stats[user_ID]["game_Round"] < musicQuiz_User_Stats[user_ID]["total_Rounds"]: #While round < number of rounds, send rounds, otherwise send the end of the quiz and return to the main menu
             process_MusicQuiz_Round(user_ID, language_Name=user_Language, game_Round=musicQuiz_User_Stats[user_ID]["game_Round"])
         else:
             bot_Sender.musicQuiz_End(user_ID, musicQuiz_User_Stats[user_ID], language_Name=user_Language)
@@ -102,11 +102,11 @@ def process_InGame_Message(user_ID, message_Text, user_Language):
 
 def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
     """
-    Подготовить массив данных для раунда музыкальной викторины
+    Prepare dataset for the music quiz round
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    game_Round - Номер раунда музыкальной викторины
+    game_Round - The round number of the music quiz
     """
     try:
         musicQuiz_Keyboard_Items = []
@@ -114,17 +114,17 @@ def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
 
         list_Size = len(musicQuiz_User_Songs[user_ID]["other_Answers"]) - 1
 
-        key_Indexes = [] #Генерация массива из 3 цифр для поиска 3 случайных ключей в клавиатуру
+        key_Indexes = [] #Generation of 3 random numbers to add WRONG answers to the keyboard
         while len(key_Indexes) < 3:
             index = random.randint(10, list_Size)
             if index not in key_Indexes:
                 key_Indexes.append(index)
 
-        for index in range(3): #Добавление 3 случайных вариантов ответа в клавиатуру
+        for index in range(3): #Adding 3 random answers to the keyboard
             answer_Item = key_Indexes[index]
             musicQuiz_Keyboard_Items.append(musicQuiz_User_Songs[user_ID]["other_Answers"][answer_Item])
 
-        random.shuffle(musicQuiz_Keyboard_Items) #Перемешивание клавиатуры
+        random.shuffle(musicQuiz_Keyboard_Items) #Shuffle keyboard
 
         audio_File = urllib.request.urlopen(musicQuiz_User_Songs[user_ID]["right_Answers"][game_Round]["audio_URL"]).read()
 
@@ -134,7 +134,7 @@ def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
         }
 
         keyboard_Keys = []
-        for key in range(4): #Перевод данных клавиатуры в человеческий вид
+        for key in range(4): #Translating keyboard data into human form
             keyboard_Keys.append(musicQuiz_Keyboard_Items[key]["artists"] + " - " + musicQuiz_Keyboard_Items[key]["name"])
 
         musicQuiz_Round_Data["keyboard"] = keyboard_Keys
@@ -156,11 +156,11 @@ def process_MusicQuiz_Round(user_ID, language_Name, game_Round):
 
 def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
     """
-    Подготовить выборку из топ треков для музыкальной викторины
+    Prepare a selection of top tracks for a music quiz
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    time_Range - Time range to sample (short_term, medium_term, long_term)
     """
     try:
         musicQuiz_Data = spotify_Service.create_MusicQuiz_Top_Tracks(db_Manager.get_User_UniqueID(user_ID), time_Range)
@@ -210,9 +210,9 @@ def create_MusicQuiz_Top_Tracks(user_ID, language_Name, time_Range):
 
 def create_MusicQuiz_Liked_Songs(user_ID, language_Name):
     """
-    Подготовить выборку из Liked Songs для музыкальной викторины
+    Prepare a selection of Liked Songs for a music quiz
 
-    user_ID - Telegram ID пользователя
+    user_ID - Telegram user ID
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)

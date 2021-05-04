@@ -7,7 +7,7 @@ from spotify_Module.spotify_Logger import logger
 
 
 def process_User_Language(language_Code):
-    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Русский, украинский, беларусский
+    if language_Code == "ru" or language_Code == "uk" or language_Code == "be": #Russian, Ukrainian, Belarusian
         user_Language = "RUS"
     else:
         user_Language = "ENG"
@@ -73,7 +73,7 @@ def context_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
     try:
         current_Context = spotify_Service.get_Current_Context(user_Unique_ID)
         context = current_Context["context_URI"].split(":")
-        context_ID = context[-1] #Обычно ID контекста находится в самом конце
+        context_ID = context[-1] #Usually the context ID is at the very end
 
         if current_Context["context_Type"] == "album":
             context_Data = spotify_Service.get_Album_Data(user_Unique_ID, context_ID)

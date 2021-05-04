@@ -17,10 +17,9 @@ duplicate_User_Liked_Songs = {}
 
 
 
-
 def to_Main_Menu(user_ID):
     """
-    Вернуть пользователя в главное меню
+    Return user to main menu
     """
     logger.info(f"Sending Main Menu Keyboard For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "main_Menu")
@@ -31,7 +30,7 @@ def to_Main_Menu(user_ID):
 
 def in_Work(user_ID):
     """
-    Поставить пользователю позицию in Work
+    Set the user to an in Work position
     """
     logger.info(f"Sending In Work State For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "work_In_Progress")
@@ -42,7 +41,7 @@ def in_Work(user_ID):
 
 def removing_Work(user_ID):
     """
-    Поставить пользователю позицию in Work
+    Set the user to an in Work position
     """    
     logger.info(f"Sending In Work State For User {user_ID}")
     db_Manager.write_User_Position(user_ID, "work_In_Progress")
@@ -53,7 +52,7 @@ def removing_Work(user_ID):
 
 def process_Type_Selector_Message(user_ID, message_Text, user_Language):
     """
-    Обработчик сообщений клавиатуры
+    Keyboard messages handler
     """
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["library_Duplicates"]:
         bot_Sender.duplicates_Remover_Description(user_ID, section_Name="liked_Songs", language_Name=user_Language)
@@ -76,9 +75,9 @@ def process_Type_Selector_Message(user_ID, message_Text, user_Language):
 
 def process_Removing_Choice(user_ID, message_Text, tracks_Section, user_Language):
     """
-    Обработка выбора действия удаления
+    Delete action selection processing
 
-    tracks_Section - playlist ИЛИ likedSongs
+    tracks_Section - playlist OR likedSongs
     """
     if message_Text == language_Vocabluary[user_Language]["keyboard_Buttons"]["menu_Buttons"]["delete"]:
         removing_Work(user_ID)
@@ -94,9 +93,9 @@ def process_Removing_Choice(user_ID, message_Text, tracks_Section, user_Language
 
 def delete_Tracks(user_ID, tracks_Section, user_Language):
     """
-    Удаляет треки из tracks_Section
+    Removes tracks from tracks_Section
 
-    tracks_Section - playlist ИЛИ likedSongs
+    tracks_Section - playlist OR likedSongs
     """
     user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
 
@@ -132,7 +131,7 @@ def delete_Tracks(user_ID, tracks_Section, user_Language):
 
 def analyze_Liked_Tracks(user_ID, user_Language):
     """
-    Проанализировать любимые треки на дубликаты
+    Analyze favorite tracks for duplicates
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)
@@ -196,7 +195,7 @@ def analyze_Liked_Tracks(user_ID, user_Language):
 
 def analyze_Playlist(user_ID, user_Language, playlist_Name):
     """
-    Проанализировать плейлист на дубликаты
+    Analyze playlist for duplicates
     """
     try:
         in_Work(user_ID)
@@ -273,7 +272,7 @@ def analyze_Playlist(user_ID, user_Language, playlist_Name):
 
 def get_Available_Playlists(user_ID, language_Name):
     """
-    Получить доступные пользователю плейлисты
+    Get playlists available to a user
     """
     try:
         user_Unique_ID = db_Manager.get_User_UniqueID(user_ID)

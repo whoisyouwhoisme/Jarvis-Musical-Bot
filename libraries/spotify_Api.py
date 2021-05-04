@@ -7,7 +7,7 @@ from spotify_Module import spotify_Exceptions
 
 def return_Request_Headers(auth_Token):
     """
-    Функция возвращает заголовок для API
+    The function returns the authorization header for the API
     """
     request_Headers = {
         "Accept":"application/json",
@@ -21,9 +21,12 @@ def return_Request_Headers(auth_Token):
 
 def get_Request(request_Link, headers, data=None):
     """
-    Функция выполняет GET запрос, в случае успеха возвращает ответ
+    The function performs a GET request, if successful, it returns a response
 
-    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     try:
         response = requests.get(request_Link, headers=headers, data=data, timeout=(3, 5))
@@ -45,9 +48,12 @@ def get_Request(request_Link, headers, data=None):
 
 def put_Request(request_Link, headers, data=None):
     """
-    Функция выполняет PUT запрос, в случае успеха возвращает ответ
+    The function performs a PUT request, if successful, it returns a response
 
-    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     try:
         response = requests.put(request_Link, headers=headers, data=data, timeout=(3, 5))
@@ -69,9 +75,12 @@ def put_Request(request_Link, headers, data=None):
 
 def post_Request(request_Link, headers, data=None):
     """
-    Функция выполняет POST запрос, в случае успеха возвращает ответ
+    The function performs a POST request, if successful, it returns a response
 
-    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     try:
         response = requests.post(request_Link, headers=headers, data=data, timeout=(3, 5))
@@ -93,9 +102,12 @@ def post_Request(request_Link, headers, data=None):
 
 def delete_Request(request_Link, headers, data=None):
     """
-    Функция выполняет DELETE запрос, в случае успеха возвращает ответ
+    The function performs a DELETE request, if successful, it returns a response
 
-    В случае ошибки, возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     try:
         response = requests.delete(request_Link, headers=headers, data=data, timeout=(3, 5))
@@ -117,11 +129,15 @@ def delete_Request(request_Link, headers, data=None):
 
 def get_Current_Playback(auth_Token):
     """
-    Получить текущее проигрывание пользователя, в случае успеха возвращает ответ в формате json
+    Get the current playback of the user, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения no_Playback, oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization token
 
-    auth_Token - Ключ авторизации
+    In case of an error, it returns the exceptions:
+    no_Playback
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
     response = get_Request("https://api.spotify.com/v1/me/player", headers=request_Headers)
@@ -135,15 +151,18 @@ def get_Current_Playback(auth_Token):
 
 def get_Saved_Tracks(auth_Token, market="US", limit=10, offset=0):
     """
-    Получить песни из раздела Liked Songs, в случае успеха возвращает ответ в формате json
+    Get songs from the Liked Songs section, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    limit - Limit of songs (no more than 50)
 
-    limit - Лимит песен (не более 50)
+    offset - Offset of the sample
 
-    offset - Смещение выборки
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
     response = get_Request(f"https://api.spotify.com/v1/me/tracks?market={market}&limit={limit}&offset={offset}", headers=request_Headers)
@@ -154,19 +173,22 @@ def get_Saved_Tracks(auth_Token, market="US", limit=10, offset=0):
 
 def create_Playlist(auth_Token, user_ID, playlist_Name, playlist_Description=None, public=False):
     """
-    Создать плейлист, в случае успеха возвращает ответ в формате json
+    Create a playlist, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    user_ID - Unique user ID in Spotify
 
-    user_ID - Уникальный ID пользователя в Spotify
+    playlist_Name - Playlist name
 
-    playlist_Name - Название плейлиста
+    playlist_Description - Playlist description (optional)
 
-    playlist_Description - Описание плейлиста (необязательный параметр)
+    public - Whether the playlist is public (by default, the playlist is private)
 
-    public - Публичный ли плейлист (по умолчанию - плейлист закрытый)
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
     request_Data = json.dumps({
@@ -183,11 +205,14 @@ def create_Playlist(auth_Token, user_ID, playlist_Name, playlist_Description=Non
 
 def get_User_Playlists(auth_Token, entities_Limit=20, offset=0):
     """
-    Получить все плейлисты доступные пользователю, в случае успеха возвращает ответ в формате json
+    Get all playlists available to the user, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -199,15 +224,18 @@ def get_User_Playlists(auth_Token, entities_Limit=20, offset=0):
 
 def get_Playlist_Tracks(auth_Token, playlist_Uri, entities_Limit=100, offset=0, market="US"):
     """
-    Получить треки из плейлиста, в случае успеха возвращает ответ в формате json
+    Get tracks from the playlist, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    entities_Limit - Limit of songs (no more than 100)
 
-    entities_Limit - Лимит песен (не более 100)
+    offset - Offset of the sample
 
-    offset - Смещение выборки
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -219,15 +247,18 @@ def get_Playlist_Tracks(auth_Token, playlist_Uri, entities_Limit=100, offset=0, 
 
 def add_Tracks_To_Playlist(auth_Token, playlist_ID, tracks_Uris):
     """
-    Добавить треки в плейлист, в случае успеха возвращает ответ в формате json
+    Add tracks to the playlist, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    playlist_ID - Unique playlist ID in Spotify
 
-    playlist_ID - Уникальный ID плейлиста в Spotify
+    tracks_Uris - list of song IDs
 
-    tracks_Uris - список идентификаторов песен
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
     request_Data = json.dumps({
@@ -242,19 +273,22 @@ def add_Tracks_To_Playlist(auth_Token, playlist_ID, tracks_Uris):
 
 def get_User_Tops(auth_Token, top_Type="tracks", entities_Limit=50, offset=0, time_Range="short_term"):
     """
-    Получить топ, в случае успеха возвращает ответ в формате json
+    Get top, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    top_Type - Top type (tracks, artists)
 
-    top_Type - Тип топа (tracks, artists)
+    entities_Limit - Entities limit (no more than 50)
 
-    entities_Limit - Лимит объектов (не более 50)
+    offset - Offset of the sample
 
-    offset - Смещение выборки
+    time_Range - Time range to sample (short_term, medium_term, long_term)
 
-    time_Range - Диапазон времени для выборки (short_term, medium_term, long_term)
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -266,13 +300,16 @@ def get_User_Tops(auth_Token, top_Type="tracks", entities_Limit=50, offset=0, ti
 
 def get_Playlist_Info(auth_Token, playlist_ID):
     """
-    Получить информацию о плейлисте, в случае успеха возвращает ответ в формате json
+    Get information about the playlist, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    playlist_ID - Unique playlist ID in Spotify
 
-    playlist_ID - Уникальный ID плейлиста в Spotify
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -284,13 +321,16 @@ def get_Playlist_Info(auth_Token, playlist_ID):
 
 def get_Album_Info(auth_Token, album_ID):
     """
-    Получить информацию о альбоме, в случае успеха возвращает ответ в формате json
+    Get information about the album, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    album_ID - Unique album ID on Spotify
 
-    album_ID - Уникальный ID альбома в Spotify
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -302,13 +342,16 @@ def get_Album_Info(auth_Token, album_ID):
 
 def get_Artist_Info(auth_Token, artist_ID):
     """
-    Получить информацию о исполнителе, в случае успеха возвращает ответ в формате json
+    Get information about the executor, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    artist_ID - Unique artist ID on Spotify
 
-    artist_ID - Уникальный ID исполнителя в Spotify
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -320,13 +363,16 @@ def get_Artist_Info(auth_Token, artist_ID):
 
 def get_Several_Artists_Info(auth_Token, artists_IDs):
     """
-    Получить информацию о НЕСКОЛЬКИХ исполнителях, в случае успеха возвращает ответ в формате json
+    Get information about MULTIPLE executors, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    artist_ID - LIST of Unique Artist IDs on Spotify
 
-    artist_ID - СПИСОК уникальных ID исполнителей в Spotify
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -341,11 +387,14 @@ def get_Several_Artists_Info(auth_Token, artists_IDs):
 
 def get_User_Devices(auth_Token):
     """ 
-    Получить информацию о доступных устройствах пользователя, в случае успеха возвращает ответ в формате json
+    Get information about the user's available devices, if successful, returns a response in JSON format
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -357,19 +406,22 @@ def get_User_Devices(auth_Token):
 
 def search_Item(auth_Token, search_Query, search_Types="track", limit=5, offset=0):
     """
-    Поиск в Spotify, в случае успеха возвращает ответ в формате json
+    Search Spotify, if successful, returns a JSON response
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    search_Query - Search query
 
-    search_Query - Поисковой запрос
+    search_Types - Types for search, artist, album, track
 
-    search_Types - Типы для поиска, исполнитель, альбом, трек
+    limit - Limit of search items
 
-    limit - Лимит элементов поиска
+    offset - Offset of the search items
 
-    offset - Смещение элементов поиска
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -381,17 +433,20 @@ def search_Item(auth_Token, search_Query, search_Types="track", limit=5, offset=
 
 def start_Playback(auth_Token, playback_Context=None, playback_Uris=None):
     """
-    Запустить новое проигрывание.
+    Start new playback.
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    playback_Context - Context for playback (playlist, artist)
 
-    playback_Context - Контекст для проигрывания (плейлист, исполнитель)
-    
-    ИЛИ
+    OR
 
-    playback_Uris - Список из URI треков Спотифай
+    playback_Uris - List of Spotify track URIs
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
     if playback_Context:
@@ -411,13 +466,16 @@ def start_Playback(auth_Token, playback_Context=None, playback_Uris=None):
 
 def add_Track_To_Queue(auth_Token, track_Uri):
     """
-    Добавить трек в очередь проигрывания пользователя
+    Add a track to the user's play queue
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Authorization key
 
-    auth_Token - Ключ авторизации
+    track_Uri - URI of the song
 
-    track_Uri - URI песни
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -429,11 +487,14 @@ def add_Track_To_Queue(auth_Token, track_Uri):
 
 def get_User_Profile(auth_Token):
     """
-    Получить профиль пользователя в Spotify, в случае успеха возвращает ответ в формате json
+    Get user profile in Spotify, if successful, returns a JSON response
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
+    auth_Token - Spotify API access token
 
-    auth_Token - Токен доступа к API Spotify
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -445,15 +506,18 @@ def get_User_Profile(auth_Token):
 
 def delete_Playlist_Tracks(auth_Token, playlist_ID, playlist_Tracks):
     """
-    Удаляет треки из плейлиста, возвращает HTTP код ответа
+    Removes tracks from the playlist, returns HTTP response code
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
-    
-    auth_Token - Токен доступа к API Spotify
+    auth_Token - Spotify API access token
 
-    playlist_ID - Уникальный ID плейлиста в Spotify
+    playlist_ID - Unique playlist ID in Spotify
 
-    playlist_Tracks - СПИСОК из URI треков Spotify
+    playlist_Tracks - LIST of Spotify track URIs
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 
@@ -471,13 +535,16 @@ def delete_Playlist_Tracks(auth_Token, playlist_ID, playlist_Tracks):
 
 def delete_Liked_Tracks(auth_Token, tracks_ID):
     """
-    Удаляет треки из раздела Любимые треки, возвращает HTTP код ответа
+    Removes tracks from the Favorite tracks section, returns an HTTP response code
 
-    В случае ошибки возвращает исключения oauth_Connection_Error, oauth_Http_Error, oauth_Unknown_Error
-    
-    auth_Token - Токен доступа к API Spotify
+    auth_Token - Spotify API access token
 
-    tracks_ID - СПИСОК из URI треков Spotify
+    tracks_ID - LIST of Spotify track URIs
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
     """
     request_Headers = return_Request_Headers(auth_Token)
 

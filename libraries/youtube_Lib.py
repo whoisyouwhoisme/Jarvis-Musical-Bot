@@ -16,9 +16,9 @@ youtube = googleapiclient.discovery.build(api_service_name, api_version, develop
 
 def search_Youtube(keywords):
     """
-    Поиск видео в YouTube по ключевым словам
+    Search YouTube videos by keywords
 
-    keywords - строка из ключевых слов
+    keywords - a string of keywords
     """
     request = youtube.search().list(
         part="snippet",

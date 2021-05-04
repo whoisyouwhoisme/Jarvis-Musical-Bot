@@ -15,7 +15,7 @@ language_Vocabluary = localization.load_Vocabluary()
 
 def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     """
-    Вывод сейчас играет
+    Now playing message
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
@@ -23,7 +23,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify"], callback_data=f"player#play#track#{song_ID}")
     keyboard.add(play_On_Spotify)
 
-    if playing_Data["youtube_URL"]: #Если клип песни есть, создаем кнопку
+    if playing_Data["youtube_URL"]: #If there is a song clip, create a button
         youtube_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["youtube_Clip"], url=playing_Data["youtube_URL"])
         keyboard.add(youtube_Button)
 
@@ -38,13 +38,13 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
     nowPlaying_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + playing_Data["release_Date"] + "\n"    
     nowPlaying_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(playing_Data["song_Duration"] / 1000))
     
-    if playing_Data["preview_URL"]: #Если превью нет, уведомляем об этом
+    if playing_Data["preview_URL"]: #If there is no preview, notify about it
         nowPlaying_Info["preview_URL"] = ""
     else:
         nowPlaying_Info["preview_URL"] = "\n\n" + language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["preview_Not_Available"]
 
-    if len(playing_Data["images"]) > 0: #Если существует обложка альбома
-        if len(playing_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+    if len(playing_Data["images"]) > 0: #If album cover exists
+        if len(playing_Data["images"]) > 1: #If there is more than 1, then there are 3 of them! (probably)
             nowPlaying_Info["full_Image"] = playing_Data["images"][1]
             nowPlaying_Info["preview_Image"] = playing_Data["images"][2]
             nowPlaying_Info["article_Cover"] = playing_Data["images"][2]["url"]
@@ -82,7 +82,7 @@ def share_Inline_NowPlaying(inline_ID, playing_Data, language_Name):
 
 def share_Inline_Album(inline_ID, album_Data, language_Name):
     """
-    Вывод альбома
+    Album context message
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
@@ -101,8 +101,8 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
     album_Info["release_Date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + album_Data["release_Date"] + "\n"
     album_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(album_Data["total_Tracks"]) + "\n"
 
-    if len(album_Data["images"]) > 0: #Если существует обложка альбома
-        if len(album_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+    if len(album_Data["images"]) > 0: #If album cover exists
+        if len(album_Data["images"]) > 1: #If there is more than 1, then there are 3 of them! (probably)
             album_Info["full_Image"] = album_Data["images"][1]
             album_Info["preview_Image"] = album_Data["images"][2]
             album_Info["article_Cover"] = album_Data["images"][2]["url"]
@@ -132,7 +132,7 @@ def share_Inline_Album(inline_ID, album_Data, language_Name):
 
 def share_Inline_Artist(inline_ID, artist_Data, language_Name):
     """
-    Вывод исполнителя
+    Artist context message
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
@@ -150,8 +150,8 @@ def share_Inline_Artist(inline_ID, artist_Data, language_Name):
     artist_Info["followers"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["followers"] + str(artist_Data["followers"]) + "\n"
     artist_Info["info_Summary"] = artist_Info["artist"] + artist_Info["genres"] + artist_Info["followers"]
 
-    if len(artist_Data["images"]) > 0: #Если существует обложка альбома
-        if len(artist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+    if len(artist_Data["images"]) > 0: #If album cover exists
+        if len(artist_Data["images"]) > 1: #If there is more than 1, then there are 3 of them! (probably)
             artist_Info["full_Image"] = artist_Data["images"][1]
             artist_Info["preview_Image"] = artist_Data["images"][2]
             artist_Info["article_Cover"] = artist_Data["images"][2]["url"]
@@ -179,7 +179,7 @@ def share_Inline_Artist(inline_ID, artist_Data, language_Name):
 
 def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
     """
-    Вывод плейлиста
+    Playlist context message
     """
     keyboard = telebot.types.InlineKeyboardMarkup()
 
@@ -202,8 +202,8 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
     playlist_Info["total_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["total_Tracks"] + str(playlist_Data["total_Tracks"]) + "\n"
     playlist_Info["playlist_Summary"] = playlist_Info["name"] + playlist_Info["description"] + playlist_Info["total_Tracks"]
 
-    if len(playlist_Data["images"]) > 0: #Если существует обложка альбома
-        if len(playlist_Data["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+    if len(playlist_Data["images"]) > 0: #If album cover exists
+        if len(playlist_Data["images"]) > 1: #If there is more than 1, then there are 3 of them! (probably)
             playlist_Info["full_Image"] = playlist_Data["images"][1]
             playlist_Info["preview_Image"] = playlist_Data["images"][2]
             playlist_Info["article_Cover"] = playlist_Data["images"][2]["url"]
@@ -231,7 +231,7 @@ def share_Inline_Playlist(inline_ID, playlist_Data, language_Name):
 
 def search_Results(inline_ID, search_Results, language_Name):
     """
-    Вывод результатов поиска
+    Searching message
     """
     answer_Results = []
     for song in range(len(search_Results["tracks"])):
@@ -253,8 +253,8 @@ def search_Results(inline_ID, search_Results, language_Name):
         song_Info["release_date"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["release_date"] + song_Item["release_Date"] + "\n"    
         song_Info["song_Duration"] = language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["duration"] + time.strftime("%M:%S", time.gmtime(song_Item["song_Duration"] / 1000))
 
-        if len(song_Item["images"]) > 0: #Если существует обложка альбома
-            if len(song_Item["images"]) > 1: #Если больше 1, то значит их там 3! (наверное)
+        if len(song_Item["images"]) > 0: #If album cover exists
+            if len(song_Item["images"]) > 1: #If there is more than 1, then there are 3 of them! (probably)
                 song_Info["full_Image"] = song_Item["images"][1]
                 song_Info["preview_Image"] = song_Item["images"][2]
                 song_Info["article_Cover"] = song_Item["images"][2]["url"]
@@ -291,7 +291,7 @@ def search_Results(inline_ID, search_Results, language_Name):
 
 def inline_NowPlaying_Error(inline_ID, language_Name):
     """
-    Ошибка, песня не содержит всех метаданных
+    Error, song does not contain all metadata
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_NoData"]["title"],
@@ -304,7 +304,7 @@ def inline_NowPlaying_Error(inline_ID, language_Name):
 
 def inline_NowPlaying_Nothing(inline_ID, language_Name):
     """
-    Ошибка, сейчас ничего не играет
+    Error, nothing is playing now
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["nowPlaying_Nothing"]["title"],
@@ -317,7 +317,7 @@ def inline_NowPlaying_Nothing(inline_ID, language_Name):
 
 def inline_Unknown_Error(inline_ID, language_Name):
     """
-    Ошибка, неизвестная ошибка
+    Error, unknown error
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["unknown_Error"]["title"],
@@ -330,7 +330,7 @@ def inline_Unknown_Error(inline_ID, language_Name):
 
 def inline_Spotify_Not_Authorized(inline_ID, language_Name):
     """
-    Ошибка, аккаунт Spotify не авторизован
+    Error, Spotify account is not authorized
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["spotify_Not_Authorized"]["title"],
@@ -343,7 +343,7 @@ def inline_Spotify_Not_Authorized(inline_ID, language_Name):
 
 def inline_Auth_Error(inline_ID, language_Name):
     """
-    Ошибка, ошибка авторизации Spotify аккаунта
+    Error, Spotify account authorization error
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["oauth_Error"]["title"],
@@ -356,7 +356,7 @@ def inline_Auth_Error(inline_ID, language_Name):
 
 def inline_No_Context(inline_ID, language_Name):
     """
-    Ошибка, невозможно получить контекст воспроизведения
+    Error, unable to get replay context
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["no_Playback_Context"]["title"],
@@ -369,7 +369,7 @@ def inline_No_Context(inline_ID, language_Name):
 
 def inline_Private_Session(inline_ID, language_Name):
     """
-    Ошибка, активна приватная сессия
+    Error, private session active
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["private_Session_Enabled"]["title"],
@@ -382,7 +382,7 @@ def inline_Private_Session(inline_ID, language_Name):
 
 def search_No_Results(inline_ID, language_Name):
     """
-    Ошибка, нет результатов поиска
+    Error, no search results
     """
     results = telebot.types.InlineQueryResultArticle(1,
     title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["no_Search_Results"]["title"],

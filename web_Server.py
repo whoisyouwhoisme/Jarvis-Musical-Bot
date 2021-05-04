@@ -21,7 +21,7 @@ def index():
 @flask_App.route("/telegram_Api", methods=["GET", "POST"])
 def receive_Updates():
     try:
-        secret = flask.request.args["secret"] #Используем секрет для защиты
+        secret = flask.request.args["secret"] #Using secret for protection (telegram bot key)
 
     except:
         return flask.Response(status=403)
@@ -49,7 +49,7 @@ def spotify_Auth():
     except:
         return flask.render_template("auth_Failed.html")
     else:
-        if database_Manager.search_In_Database(auth_State, "bot_Users", "user_Unique_ID"): #Если для пользователя подготовлен уникальный ID, то продолжаем авторизацию
+        if database_Manager.search_In_Database(auth_State, "bot_Users", "user_Unique_ID"): #If a unique ID has been prepared for the user, then we continue authorization
             spotify_Oauth.auth_User(auth_Code, auth_State)
             return flask.render_template("auth_Passed.html")
 
