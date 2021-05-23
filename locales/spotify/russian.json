@@ -131,9 +131,9 @@
 
             "not_Enough_Songs": "*В твоей медиатеке не хватает песен* \n\nСлушай и добавляй больше песен в свою медиатеку, и функция станет доступной.",
 
-            "no_Playlists": "*Error* \n\nYou do not have any playlists.",
+            "no_Playlists": "*Ошибка* \n\nУ тебя нет никаких плейлистов.",
 
-            "playlist_NotFound": "*Error* \n\nPlaylist not found.",
+            "playlist_NotFound": "*Ошибка* \n\nПлейлист не найден.",
 
             "database_Error": "*Возникла ошибка при загрузке данных.* \n\nПопробуй выйти *(/logout)*, и залогиниться повторно в Jarvis."
         },
@@ -229,7 +229,7 @@
         "blocked_Tracks": {
             "description": "В этом разделе ты можешь посмотреть какие треки заблокированы в твоем разделе Любимые песни. \n\n*Spotify имеет алгоритмы поиска заменителя заблокированной песни, так что если песня есть в этом списке, ее вообще нельзя никак проиграть.*",
 
-            "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
+            "message_Header": "Список твоих заблокированных песен <b>(Страница {current_Page} из {total_Pages})</b> \n\nСтрана твоего аккаунта: <b>{user_Country}</b> \n\nКоличество заблокированных песен: <b>{blocked_Number} / {total_Number}</b>"
         },
 
         "library_Statistics": {

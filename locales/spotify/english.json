@@ -229,7 +229,7 @@
         "blocked_Tracks": {
             "description": "In this section you can see which tracks are blocked in your Liked Songs section. \n\n*Spotify has algorithms to find a substitute for a blocked song, so if a song is on this list, it cannot be played at all.*",
 
-            "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
+            "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs: <b>{blocked_Number} / {total_Number}</b>"
         },
 
         "library_Statistics": {
