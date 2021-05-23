@@ -133,7 +133,9 @@
 
             "no_Playlists": "*Error* \n\nYou do not have any playlists.",
 
-            "playlist_NotFound": "*Error* \n\nPlaylist not found."            
+            "playlist_NotFound": "*Error* \n\nPlaylist not found.",
+
+            "database_Error": "*Возникла ошибка при загрузке данных.* \n\nПопробуй выйти *(/logout)*, и залогиниться повторно в Jarvis."
         },
 
         "sharing_Headers": {
@@ -181,8 +183,6 @@
 
             "insufficient_Data_For_Top": "*Не хватает песен для отображения топа.* \n\nСлушай больше песен, и данные появятся.",
 
-            "database_Error": "*Возникла ошибка при загрузке Топа.* \n\nПопробуй выйти *(/logout)*, и залогиниться повторно в Jarvis.",
-
             "top_Songs_Header": "Это твои Топ Песни <b>({time_Range}) (Страница {previous_Page} из {next_Page})</b>:",
     
             "top_Artists_Header": "Это твои Топ Исполнители <b>(Страница {previous_Page} из {next_Page})</b>:",
@@ -229,11 +229,7 @@
         "blocked_Tracks": {
             "description": "В этом разделе ты можешь посмотреть какие треки заблокированы в твоем разделе Любимые песни. \n\n*Spotify имеет алгоритмы поиска заменителя заблокированной песни, так что если песня есть в этом списке, ее вообще нельзя никак проиграть.*",
 
-            "message_Header": "<b>Список твоих заблокированных песен.</b>",
-
-            "your_Account_Country": "Твоя страна аккаунта: <b>{user_Country}</b>",
-
-            "blocked_Songs_Number": "Количество заблокированных песен (Из общего количества): <b>{blocked_Number} / {total_Number}</b>"
+            "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
         },
 
         "library_Statistics": {
@@ -321,7 +317,9 @@
 
             "spotify_URL": "<b>Spotify URL:</b> ",
 
-            "last_Update": "<b>Последнее обновление:</b> "
+            "creation_Date": "<b>Дата создания:</b> ",
+
+            "compared_With_Date": "<b>По сравнению на:</b> "
         }
     }
 }

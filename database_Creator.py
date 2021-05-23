@@ -37,4 +37,13 @@ database_Cursor.execute("""CREATE TABLE users_TopArtists
                         long_term TEXT)
                         """)
 
+
+
+database_Cursor.execute("""CREATE TABLE users_BlockedTracks
+                        (user_Unique_ID TEXT,
+                        blocked_Data TEXT)
+                        """)
+
+
+
 bot_Database.commit()

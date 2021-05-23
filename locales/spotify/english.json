@@ -133,7 +133,9 @@
 
             "no_Playlists": "*Error* \n\nYou do not have any playlists",
 
-            "playlist_NotFound": "*Error* \n\nPlaylist not found."
+            "playlist_NotFound": "*Error* \n\nPlaylist not found.",
+
+            "database_Error": "*Error occurred while loading data.* \n\nTry to *(/logout)*, and log in back to Jarvis."
         },
 
         "sharing_Headers": {
@@ -181,8 +183,6 @@
 
             "insufficient_Data_For_Top": "*Not enough data to display the tops.* \n\nListen to the songs more often, and someday the data will appear.",
 
-            "database_Error": "*Error occurred while loading the Top.* \n\nTry to *(/logout)*, and log in back to Jarvis.",
-
             "top_Songs_Header": "Here's your Top Songs <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
 
             "top_Artists_Header": "Here's your Top Artists <b>({time_Range}) (Page {previous_Page} of {next_Page})</b>:",
@@ -229,11 +229,7 @@
         "blocked_Tracks": {
             "description": "In this section you can see which tracks are blocked in your Liked Songs section. \n\n*Spotify has algorithms to find a substitute for a blocked song, so if a song is on this list, it cannot be played at all.*",
 
-            "message_Header": "<b>List of your blocked songs.</b>",
-
-            "your_Account_Country": "Your account country: <b>{user_Country}</b>",
-
-            "blocked_Songs_Number": "Number of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
+            "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs (Of the total): <b>{blocked_Number} / {total_Number}</b>"
         },
 
         "library_Statistics": {
@@ -321,7 +317,9 @@
 
             "spotify_URL": "<b>Spotify URL:</b> ",
 
-            "last_Update": "<b>Last update:</b> "
+            "creation_Date": "<b>Date of creation:</b> ",
+
+            "compared_With_Date": "<b>Compared to:</b> "
         }
     }
 }

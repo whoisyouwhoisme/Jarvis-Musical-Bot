@@ -180,11 +180,11 @@ def musicQuiz_Type_Select(chat_id, language_Name):
 
 
 
-def top_Database_Error(chat_id, language_Name):
+def database_Error(chat_id, language_Name):
     """
-    Tops database error
+    Database error
     """
-    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["database_Error"], parse_mode="Markdown")
+    spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["errors"]["database_Error"], parse_mode="Markdown")
 
 
 
@@ -500,7 +500,7 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
     chat_Top_Data = {}
     chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
 
-    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
+    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + last_Update + "\n\n"
 
     for top_Item in top_Data["items"]: #Подготавливаем список песен
         prefix = top_Data["items"][top_Item]["prefix"]
@@ -543,7 +543,7 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
     chat_Top_Data = {}
     chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
 
-    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["last_Update"] + last_Update + "\n\n"
+    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + last_Update + "\n\n"
 
     for top_Item in top_Data["items"]:
         prefix = top_Data["items"][top_Item]["prefix"]
@@ -559,23 +559,47 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
 
 
 
-def blocked_Tracks(chat_id, blocked_Data, language_Name):
+def blocked_Tracks(chat_id, blocked_Data, language_Name, message_ID=None):
     """
     Output of locked songs
     """
-    message = {}
-    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["message_Header"]
-    message["country"] = language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["your_Account_Country"].format(user_Country=blocked_Data["user_Country"])
-    message["blocked_Tracks"] = language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["blocked_Songs_Number"].format(blocked_Number=blocked_Data["blocked_Count"], total_Number=blocked_Data["tracks_Count"])
-    message["summary"] = message["header"] + "\n\n" + message["country"] + "\n\n" + message["blocked_Tracks"] + "\n\n"
+    keyboard = telebot.types.InlineKeyboardMarkup()
 
-    for blocked_Item in range(len(blocked_Data["tracks"])):
-        artist = blocked_Data["tracks"][blocked_Item]["artist"]
-        name = blocked_Data["tracks"][blocked_Item]["name"]
-        summary = f"<b>{blocked_Item + 1}.</b> {artist} - {name}\n\n"
+    previous_Page = blocked_Data["current_Page"] - 1 #Previous page index
+    previous_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["previous_Page"], callback_data=f"interface#blockedTracks#page#{previous_Page}")
+
+    next_Page = blocked_Data["current_Page"] + 1 #Next page index
+    next_Page_Button = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["next_Page"], callback_data=f"interface#blockedTracks#page#{next_Page}")
+
+    if not blocked_Data["current_Page"] <= 1 and not blocked_Data["current_Page"] >= blocked_Data["max_Pages"]: #Shit for making a pretty keyboard
+        keyboard.add(previous_Page_Button, next_Page_Button)
+    elif not blocked_Data["current_Page"] <= 1:
+        keyboard.add(previous_Page_Button)
+    elif not blocked_Data["current_Page"] >= blocked_Data["max_Pages"]:
+        keyboard.add(next_Page_Button)
+
+    message = {}
+    message["header"] = language_Vocabluary[language_Name]["chat_Messages"]["blocked_Tracks"]["message_Header"].format(current_Page=blocked_Data["current_Page"], total_Pages=blocked_Data["max_Pages"], user_Country=blocked_Data["user_Country"], blocked_Number=blocked_Data["blocked_Count"], total_Number=blocked_Data["tracks_Count"])
+    message["summary"] = message["header"] + "\n\n"
+
+    creation_Timestamp = datetime.utcfromtimestamp(int(blocked_Data["creation_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+    message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + creation_Timestamp + "\n\n"
+
+    if blocked_Data["comparsion_Timestamp"]:
+        comparsion_Timestamp = datetime.utcfromtimestamp(int(blocked_Data["comparsion_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+        message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["compared_With_Date"] + comparsion_Timestamp + "\n\n"
+
+    for blocked_Item in blocked_Data["items"]:
+        prefix = blocked_Data["items"][blocked_Item]["prefix"]
+        artists = blocked_Data["items"][blocked_Item]["artists"]
+        name = blocked_Data["items"][blocked_Item]["name"]
+        summary = f"<b>{blocked_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
         message["summary"] += summary
     
-    spotify_Bot.send_message(chat_id, message["summary"], parse_mode="HTML")
+    if message_ID:
+        spotify_Bot.edit_message_text(message["summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
+    else:
+        spotify_Bot.send_message(chat_id, message["summary"], reply_markup=keyboard, parse_mode="HTML")
 
 
 

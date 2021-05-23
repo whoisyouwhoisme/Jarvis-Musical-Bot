@@ -204,7 +204,7 @@ def create_TopTracks(user_ID, language_Name, time_Range):
             bot_Sender.tracks_Top(user_ID, process_TopTracks_List(user_ID, time_Range, 1), language_Name=language_Name)
         
         except:
-            bot_Sender.top_Database_Error(user_ID, language_Name=language_Name)
+            bot_Sender.database_Error(user_ID, language_Name=language_Name)
             logger.error(f"DATABASE ERROR OCCURED WHEN PREPARING TOP TRACKS LIST FOR USER {user_ID}")
         
         else:
@@ -253,7 +253,7 @@ def create_TopArtists(user_ID, language_Name, time_Range):
             bot_Sender.artists_Top(user_ID, process_TopArtists_List(user_ID, time_Range, 1), language_Name=language_Name)
         
         except:
-            bot_Sender.top_Database_Error(user_ID, language_Name=language_Name)
+            bot_Sender.database_Error(user_ID, language_Name=language_Name)
             logger.error(f"DATABASE ERROR OCCURED WHEN PREPARING TOP ARTISTS LIST FOR USER {user_ID}")
         
         else:

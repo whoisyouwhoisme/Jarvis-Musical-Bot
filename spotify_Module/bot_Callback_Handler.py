@@ -1,9 +1,8 @@
 from libraries import database_Manager as db_Manager
-from spotify_Module import spotify_Service
-from spotify_Module import spotify_Exceptions
 from spotify_Module import bot_Sender
 from spotify_Module import bot_LibraryTops
 from spotify_Module import bot_Player_Control
+from spotify_Module import bot_BlockedTracks
 from spotify_Module.spotify_Logger import logger
 
 
@@ -38,3 +37,9 @@ def process_Callback_Data(data):
                         page_Number = int(callback_Request[4])
                         top_Data = bot_LibraryTops.process_TopArtists_List(user_ID, time_Range=callback_Request[3], list_Page=page_Number)
                         bot_Sender.artists_Top(user_ID, top_Data, language_Name=user_Language, message_ID=message_ID)
+                
+                elif callback_Request[1] == "blockedTracks":
+                    if callback_Request[2] == "page":
+                        page_Number = int(callback_Request[3])
+                        blocked_Data = bot_BlockedTracks.process_BlockedTracks_List(user_ID, list_Page=page_Number)
+                        bot_Sender.blocked_Tracks(user_ID, blocked_Data=blocked_Data, language_Name=user_Language, message_ID=message_ID)

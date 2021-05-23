@@ -403,12 +403,16 @@ def get_User_Blocked_Tracks(user_Unique_ID):
 
     total_Iterations = math.ceil(user_Data["total"] / 50) #Divide the number of songs for requests by 50 songs
 
+    creation_Timestamp = int(time.time())
+
     offset = 0
-    blocked_Tracks = {
+    NEW_Blocked_Tracks = {
         "user_Country":user_Country,
         "blocked_Count":0,
         "tracks_Count":user_Data["total"],
-        "tracks":[]
+        "creation_Timestamp":creation_Timestamp,
+        "comparsion_Timestamp":None,
+        "items":[]
         }
     
     for user_Tracks in range(total_Iterations): #Upload all user songs
@@ -418,15 +422,35 @@ def get_User_Blocked_Tracks(user_Unique_ID):
 
         for track in range(len(user_Tracks["items"])): #Loop over all songs in the current iteration
                 if not user_Tracks["items"][track]["track"]["is_playable"]:
-                    blocked_Tracks["tracks"].append(
-                        {
+                    NEW_Blocked_Tracks["items"].append({
+                            "prefix":" ",
+                            "artists":user_Tracks["items"][track]["track"]["artists"][0]["name"],
                             "name":user_Tracks["items"][track]["track"]["name"],
-                            "artist":user_Tracks["items"][track]["track"]["artists"][0]["name"],
-                        }
-                    )
+                            "URI":user_Tracks["items"][track]["track"]["uri"]
+                        })
     
-    blocked_Tracks["blocked_Count"] = len(blocked_Tracks["tracks"])
-    return blocked_Tracks
+    NEW_Blocked_Tracks["blocked_Count"] = len(NEW_Blocked_Tracks["items"])
+
+    database_Blocked_Tracks = database_Manager.search_In_Database(user_Unique_ID, "users_BlockedTracks", "user_Unique_ID")
+
+    if database_Blocked_Tracks:
+        OLD_Blocked_Tracks = json.loads(database_Blocked_Tracks[0][1])
+
+        NEW_Blocked_Tracks["comparsion_Timestamp"] = OLD_Blocked_Tracks["creation_Timestamp"]
+
+        OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
+        for index in range(len(OLD_Blocked_Tracks["items"])):
+            OLD_URIS.append(OLD_Blocked_Tracks["items"][index]["URI"])
+
+        NEW_URIS = [] #New selection list
+        for index in range(len(NEW_Blocked_Tracks["items"])):
+            NEW_URIS.append(NEW_Blocked_Tracks["items"][index]["URI"])
+
+        for new_Item in range(len(NEW_URIS)):
+            if not NEW_URIS[new_Item] in OLD_URIS:
+                NEW_Blocked_Tracks["items"][new_Item]["prefix"] = "● "
+
+    return NEW_Blocked_Tracks
 
 
 
@@ -489,7 +513,7 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
                 for index in range(len(OLD_TopData["items"])):
                     OLD_URIS.append(OLD_TopData["items"][index]["URI"])
 
-                NEW_URIS = [] #Список новой выборки
+                NEW_URIS = [] #New selection list
                 for index in range(len(NEW_TopData["items"])):
                     NEW_URIS.append(NEW_TopData["items"][index]["URI"])
         

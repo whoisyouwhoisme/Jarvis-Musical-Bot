@@ -197,6 +197,25 @@ def write_User_TopArtists(user_Unique_ID, data_Period, top_Data):
 
 
 
+def write_User_BlockedTracks(user_Unique_ID, blocked_Data):
+    """
+    Write a line with the user's blocked tracks
+
+    user_Telegram_ID - Telegram user ID
+
+    blocked_Data - serialized string with blocked tracks
+    """
+    if not search_In_Database(user_Unique_ID, "users_BlockedTracks", "user_Unique_ID"):
+        query_Arguments = (str(user_Unique_ID),)
+        register_Query = "INSERT INTO users_BlockedTracks (user_Unique_ID) VALUES (?)"
+        post_Sql_Query(register_Query, query_Arguments)
+
+    query_Arguments = (str(blocked_Data), str(user_Unique_ID),)
+    register_Query = f"UPDATE users_BlockedTracks SET blocked_Data = ? WHERE user_Unique_ID = ?"
+    post_Sql_Query(register_Query, query_Arguments)
+
+
+
 def write_Refreshed_Token(user_Unique_ID, refreshed_Token, refresh_Timestamp):
     """
     Writing Updated Spotify Access Token to Database
