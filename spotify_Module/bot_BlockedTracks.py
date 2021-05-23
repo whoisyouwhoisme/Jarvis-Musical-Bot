@@ -84,6 +84,10 @@ def send_BlockedTracks(user_ID, language_Name):
         bot_Sender.servers_Link_Error(user_ID, language_Name=language_Name)
         logger.error(f"CONNECTION ERROR OCCURED WHEN PREPARING BLOCKED TRACKS FOR USER {user_ID}")
 
+    except:
+        bot_Sender.unknown_Error(user_ID, language_Name=language_Name)
+        logger.error(f"UNKNOWN ERROR OCCURED WHEN PREPARING BLOCKED TRACKS FOR USER {user_ID}")          
+
     else:
         db_Manager.write_User_BlockedTracks(user_Unique_ID, blocked_Data=json.dumps(blocked_Data))
 

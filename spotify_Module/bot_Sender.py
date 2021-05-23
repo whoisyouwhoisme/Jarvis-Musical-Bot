@@ -495,24 +495,28 @@ def tracks_Top(chat_id, top_Data, language_Name, message_ID=None):
         keyboard.add(next_Page_Button)
 
     time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
-    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
 
-    chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+    message = {}
+    message["summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Songs_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
 
-    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + last_Update + "\n\n"
+    creation_Timestamp = datetime.utcfromtimestamp(int(top_Data["creation_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+    message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + creation_Timestamp + "\n\n"
 
-    for top_Item in top_Data["items"]: #Подготавливаем список песен
+    if top_Data["comparsion_Timestamp"]:
+        comparsion_Timestamp = datetime.utcfromtimestamp(int(top_Data["comparsion_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+        message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["compared_With_Date"] + comparsion_Timestamp + "\n\n"
+
+    for top_Item in top_Data["items"]:
         prefix = top_Data["items"][top_Item]["prefix"]
         artists = top_Data["items"][top_Item]["artists"]
         name = top_Data["items"][top_Item]["name"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
-        chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
+        message[top_Item] = f"<b>{top_Item + 1}.</b> {artists} - {name} <b>{prefix}</b>\n\n"
+        message["summary"] += message[top_Item]
 
     if message_ID: #If a message ID is provided, then edit the message, if not, send a new one
-        spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
+        spotify_Bot.edit_message_text(message["summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
     else:
-        spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
+        spotify_Bot.send_message(chat_id, message["summary"], reply_markup=keyboard, parse_mode="HTML")
 
 
 
@@ -538,24 +542,28 @@ def artists_Top(chat_id, top_Data, language_Name, message_ID=None):
         keyboard.add(next_Page_Button)
 
     time_Range = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"][time_Range]
-    last_Update = datetime.utcfromtimestamp(int(top_Data["last_Update"])).strftime("%m-%d-%Y %H:%M")
 
-    chat_Top_Data = {}
-    chat_Top_Data["top_Summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
+    message = {}
+    message["summary"] = language_Vocabluary[language_Name]["chat_Messages"]["yourTops"]["top_Artists_Header"].format(time_Range=time_Range, previous_Page=top_Data["current_Page"], next_Page=top_Data["max_Pages"]) + "\n\n"
 
-    chat_Top_Data["top_Summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + last_Update + "\n\n"
+    creation_Timestamp = datetime.utcfromtimestamp(int(top_Data["creation_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+    message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["creation_Date"] + creation_Timestamp + "\n\n"
+
+    if top_Data["comparsion_Timestamp"]:
+        comparsion_Timestamp = datetime.utcfromtimestamp(int(top_Data["comparsion_Timestamp"])).strftime("%m-%d-%Y %H:%M")
+        message["summary"] += language_Vocabluary[language_Name]["chat_Messages"]["metadata"]["compared_With_Date"] + comparsion_Timestamp + "\n\n"
 
     for top_Item in top_Data["items"]:
         prefix = top_Data["items"][top_Item]["prefix"]
         artist = top_Data["items"][top_Item]["artist"]
         followers = top_Data["items"][top_Item]["followers"]
-        chat_Top_Data[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers <b>{prefix}</b>\n\n"
-        chat_Top_Data["top_Summary"] += chat_Top_Data[top_Item]
+        message[top_Item] = f"<b>{top_Item + 1}.</b> {artist} - {followers} Followers <b>{prefix}</b>\n\n"
+        message["summary"] += message[top_Item]
 
     if message_ID: #If a message ID is provided, then edit the message, if not, send a new one
-        spotify_Bot.edit_message_text(chat_Top_Data["top_Summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
+        spotify_Bot.edit_message_text(message["summary"], chat_id=chat_id, message_id=message_ID, reply_markup=keyboard, parse_mode="HTML")
     else:
-        spotify_Bot.send_message(chat_id, chat_Top_Data["top_Summary"], reply_markup=keyboard, parse_mode="HTML")
+        spotify_Bot.send_message(chat_id, message["summary"], reply_markup=keyboard, parse_mode="HTML")
 
 
 

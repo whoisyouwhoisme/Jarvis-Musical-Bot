@@ -103,8 +103,9 @@ def process_TopTracks_List(user_ID, time_Range, list_Page):
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
-        "time_Range":top_Data["top_Info"]["time_Range"],
-        "last_Update":top_Data["top_Info"]["timestamp"],
+        "time_Range":top_Data["time_Range"],
+        "creation_Timestamp":top_Data["creation_Timestamp"],
+        "comparsion_Timestamp":top_Data["comparsion_Timestamp"],
         "items":{},
     }
 
@@ -147,8 +148,9 @@ def process_TopArtists_List(user_ID, time_Range, list_Page):
     current_Page = {
         "current_Page":list_Page,
         "max_Pages":max_Pages,
-        "time_Range":top_Data["top_Info"]["time_Range"],
-        "last_Update":top_Data["top_Info"]["timestamp"],
+        "time_Range":top_Data["time_Range"],
+        "creation_Timestamp":top_Data["creation_Timestamp"],
+        "comparsion_Timestamp":top_Data["comparsion_Timestamp"],
         "items":{},
     }
 

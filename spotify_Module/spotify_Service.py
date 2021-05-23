@@ -473,15 +473,14 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
     if not user_Top["total"] >= 1: #Checking for the presence of at least one element
         raise spotify_Exceptions.no_Tops_Data
 
-    current_Timestamp = int(time.time())
+    creation_Timestamp = int(time.time())
 
     NEW_TopData = {
-        "top_Info":{
-            "entities_Limit":entities_Limit,
-            "offset":offset,
-            "time_Range":time_Range,
-            "timestamp":current_Timestamp,
-        },
+        "entities_Limit":entities_Limit,
+        "offset":offset,
+        "time_Range":time_Range,
+        "creation_Timestamp":creation_Timestamp,
+        "comparsion_Timestamp":None,
         "items":[],
     }
     for item in range(user_Top["total"]):
@@ -508,7 +507,9 @@ def get_User_Top_Tracks(user_Unique_ID, entities_Limit=50, offset=0, time_Range=
         if user_Tracks: #Check if there is an old cache of songs
             OLD_TopData = json.loads(user_Tracks) #Deserialize the string into a dictionary
 
-            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+            if OLD_TopData["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+                NEW_TopData["comparsion_Timestamp"] = OLD_TopData["creation_Timestamp"]
+
                 OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
                 for index in range(len(OLD_TopData["items"])):
                     OLD_URIS.append(OLD_TopData["items"][index]["URI"])
@@ -555,15 +556,14 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
     if not user_Top["total"] >= 1: #Checking for the presence of at least one element
         raise spotify_Exceptions.no_Tops_Data
 
-    current_Timestamp = int(time.time())
+    creation_Timestamp = int(time.time())
 
     NEW_TopData = {
-        "top_Info":{
-            "entities_Limit":entities_Limit,
-            "offset":offset,
-            "time_Range":time_Range,
-            "timestamp":current_Timestamp,
-        },
+        "entities_Limit":entities_Limit,
+        "offset":offset,
+        "time_Range":time_Range,
+        "creation_Timestamp":creation_Timestamp,
+        "comparsion_Timestamp":None,
         "items":[],
     }
     for artist in range(user_Top["total"]):
@@ -589,7 +589,9 @@ def get_User_Top_Artists(user_Unique_ID, entities_Limit=50, offset=0, time_Range
         if user_Artists: #Check if there is an old artists cache
             OLD_TopData = json.loads(user_Artists) #Deserialize the string into a dictionary
 
-            if OLD_TopData["top_Info"]["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+            if OLD_TopData["time_Range"] == time_Range: #If the sample time period is the same, then we make a comparison
+                NEW_TopData["comparsion_Timestamp"] = OLD_TopData["creation_Timestamp"] 
+
                 OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
                 for index in range(len(OLD_TopData["items"])):
                     OLD_URIS.append(OLD_TopData["items"][index]["URI"])
