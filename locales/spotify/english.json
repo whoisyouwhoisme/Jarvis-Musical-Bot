@@ -29,7 +29,8 @@
             "youtube_Clip": "YouTube clip",
             "create_Playlist": "Create playlist",
             "open_On_Spotify": "Open on Spotify Website",
-            "play_On_Spotify": "Play on Spotify",
+            "play_On_Spotify": "Listen on Spotify",
+            "play_On_Spotify_Again": "Listen on Spotify again",
             "previous_Page": "< Previous page",
             "next_Page": "Next page >"
         },
@@ -169,7 +170,9 @@
 
             "playback_Started": "*Playback has started.*",
 
-            "added_To_Queue": "*The song has been added to the play queue.*",
+            "added_To_Queue": "<b>The song has been added to the play queue.</b>",
+
+            "added_To_Queue_Detailed": "The song: \n<b>{song_Artists} - {song_Name}</b> \n\nHas been added to the play queue.",
 
             "jarvis_Updated": "*The Jarvis has been updated.* \n\nVersion *{jarvis_Version}* \n\nYou have been moved to the main menu."
         },

@@ -209,6 +209,28 @@ def get_Playlist_Data(user_Unique_ID, playlist_ID):
 
 
 
+def get_Track_Info(user_Unique_ID, track_URI):
+    """
+    Get information about track by track URI
+
+    user_Unique_ID - Internal unique user ID
+
+    playlist_ID - Unique playlist ID in Spotify
+    """
+    check_Token_Lifetime(user_Unique_ID)
+    user_Auth_Token = database_Manager.search_In_Database(user_Unique_ID, "spotify_Users", "user_Unique_ID")[0][4]
+    track_Data = spotify_Api.get_Track_Info(user_Auth_Token, track_URI)
+    
+    track_Info = {}
+    track_Info["name"] = track_Data["name"]
+    track_Info["artists"] = track_Data["artists"]
+    track_Info["images"] = track_Data["album"]["images"]
+    track_Info["id"] = track_Data["id"]
+
+    return track_Info
+
+
+
 def get_Album_Data(user_Unique_ID, album_ID):
     """
     Returns information about an album by ID

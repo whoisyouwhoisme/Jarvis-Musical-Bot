@@ -29,7 +29,8 @@
             "youtube_Clip": "YouTube клип",
             "create_Playlist": "Создать Плейлист",
             "open_On_Spotify": "Открыть на сайте Spotify",
-            "play_On_Spotify": "Играть в Spotify",
+            "play_On_Spotify": "Воспроизвести в Spotify",
+            "play_On_Spotify_Again": "Воспроизвести в Spotify ещё раз",
             "previous_Page": "< Предыдущая страница",
             "next_Page": "Следующая страница >"
         },
@@ -169,7 +170,9 @@
 
             "playback_Started": "*Воспроизведение началось.*",
 
-            "added_To_Queue": "*Песня была добавлена в очередь воспроизведения.*",
+            "added_To_Queue": "<b>Песня была добавлена в очередь воспроизведения.</b>",
+
+            "added_To_Queue_Detailed": "Песня: \n<b>{song_Artists} - {song_Name}</b> \n\nБыла добавлена в очередь воспроизведения.",
 
             "jarvis_Updated": "*Джарвис обновлён.* \n\nВерсия *{jarvis_Version}* \n\nТы перемещён в главное меню."
         },

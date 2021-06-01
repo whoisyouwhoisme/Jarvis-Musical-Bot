@@ -404,6 +404,25 @@ def get_User_Devices(auth_Token):
 
 
 
+def get_Track_Info(auth_Token, track_URI):
+    """ 
+    Get information about track, if successful, returns a response in JSON format
+
+    auth_Token - Authorization key
+
+    In case of an error, it returns the exceptions:
+    http_Connection_Error
+    http_Error(response code, reason)
+    http_Unknown_Error
+    """
+    request_Headers = return_Request_Headers(auth_Token)
+
+    response = get_Request(f"https://api.spotify.com/v1/tracks/{track_URI}", headers=request_Headers)
+
+    return response.json()
+
+
+
 def search_Item(auth_Token, search_Query, search_Types="track", limit=5, offset=0):
     """
     Search Spotify, if successful, returns a JSON response

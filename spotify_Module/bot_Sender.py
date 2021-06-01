@@ -1,6 +1,8 @@
+from os import replace
 import telebot
 import time
 import json
+import urllib
 from datetime import datetime
 from spotify_Module import localization
 
@@ -245,12 +247,32 @@ def playback_Started(chat_id, language_Name):
 
 
 
-def song_Added_To_Queue(chat_id, language_Name):
+def song_Added_To_Queue(chat_id, language_Name, track_Info=None):
     """
     The song has been added to the playlist
     """
-    playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["added_To_Queue"]
-    spotify_Bot.send_message(chat_id, playback_Text, parse_mode="Markdown")
+    if track_Info:
+        keyboard = telebot.types.InlineKeyboardMarkup()
+
+        song_ID = track_Info["id"]
+        play_On_Spotify = telebot.types.InlineKeyboardButton(text=language_Vocabluary[language_Name]["keyboard_Buttons"]["inline_Buttons"]["play_On_Spotify_Again"], callback_data=f"player#play#track#{song_ID}")
+        keyboard.add(play_On_Spotify)
+
+        song_Image_URL = None
+        if len(track_Info["images"]) == 3:
+            song_Image_URL = track_Info["images"][1]["url"]
+        
+        playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["added_To_Queue_Detailed"].format(song_Artists=track_Info["artists"][0]["name"], song_Name=track_Info["name"])
+
+        if song_Image_URL:
+            spotify_Bot.send_photo(chat_id, caption=playback_Text, photo=urllib.request.urlopen(song_Image_URL).read(), parse_mode="HTML", reply_markup=keyboard)
+        
+        else:
+            spotify_Bot.send_message(chat_id, text=playback_Text, parse_mode="HTML", reply_markup=keyboard)
+
+    else:
+        playback_Text = language_Vocabluary[language_Name]["chat_Messages"]["notifications"]["added_To_Queue"]
+        spotify_Bot.send_message(chat_id, playback_Text, parse_mode="HTML")
 
 
 
