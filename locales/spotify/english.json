@@ -86,7 +86,11 @@
             },
             "no_Search_Results": {
                 "title": "Search found nothing",
-                "description": "Looks like you're looking for some shit"                
+                "description": "Looks like you're looking for some shit"
+            },
+            "cannot_Share_Local_Playing": {
+                "title": "Error",
+                "description": "Not possible to share the uploaded song"
             }
         }
     },

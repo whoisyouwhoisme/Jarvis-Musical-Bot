@@ -34,6 +34,12 @@ class no_Playback(spotify_Exception):
     """
     pass
 
+class local_Playing(spotify_Exception):
+    """
+    Local files is playing
+    """
+    pass
+
 class no_Tops_Data(spotify_Exception):
     """
     Not enough data to compile the top

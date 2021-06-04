@@ -86,7 +86,11 @@
             },
             "no_Search_Results": {
                 "title": "Поиск ничего не нашел",
-                "description": "Похоже ты ищешь какое-то дерьмо"                
+                "description": "Похоже ты ищешь какое-то дерьмо"
+            },
+            "cannot_Share_Local_Playing": {
+                "title": "Ошибка",
+                "description": "Невозможно поделиться загруженной песней"
             }            
         }
     },

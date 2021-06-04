@@ -52,6 +52,9 @@ def song_Sharing(user_ID, inline_ID, user_Unique_ID, user_Language):
 
     except spotify_Exceptions.no_Playback:
         bot_Inline_Sender.inline_NowPlaying_Nothing(inline_ID, user_Language)
+    
+    except spotify_Exceptions.local_Playing:
+        bot_Inline_Sender.cannot_Share_Local_Playing(inline_ID, user_Language)
 
     except spotify_Exceptions.private_Session_Enabled:
         bot_Inline_Sender.inline_Private_Session(inline_ID, user_Language)

@@ -41,6 +41,9 @@ def get_Current_Playing(user_Unique_ID):
 
     if user_Playback["device"]["is_private_session"]:
         raise spotify_Exceptions.private_Session_Enabled
+    
+    if user_Playback["item"]["is_local"]:
+        raise spotify_Exceptions.local_Playing
 
     try:
         playback_Data = {"artists":[]}

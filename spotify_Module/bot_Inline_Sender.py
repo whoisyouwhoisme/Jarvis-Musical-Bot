@@ -367,6 +367,19 @@ def inline_No_Context(inline_ID, language_Name):
 
 
 
+def cannot_Share_Local_Playing(inline_ID, language_Name):
+    """
+    Error, cannot share downloaded song
+    """
+    results = telebot.types.InlineQueryResultArticle(1,
+    title=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["cannot_Share_Local_Playing"]["title"],
+    input_message_content=telebot.types.InputTextMessageContent(language_Vocabluary[language_Name]["inline_Messages"]["errors"]["cannot_Share_Local_Playing"]["description"]),
+    description=language_Vocabluary[language_Name]["inline_Messages"]["errors"]["cannot_Share_Local_Playing"]["description"])
+
+    spotify_Bot.answer_inline_query(inline_query_id=inline_ID, results=[results], cache_time=0)
+
+
+
 def inline_Private_Session(inline_ID, language_Name):
     """
     Error, private session active
