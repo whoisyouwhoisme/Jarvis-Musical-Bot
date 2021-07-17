@@ -13,6 +13,9 @@ spotify_Bot = telebot.TeleBot(bot_Keys["telegram"]["telegram_Key"])
 
 language_Vocabluary = localization.load_Vocabluary()
 
+with open("bot_Contacts.json") as bot_Contacts_File:
+    bot_Contacts = json.load(bot_Contacts_File)
+
 
 
 def controls_Main_Menu(chat_id, language_Name):
@@ -88,10 +91,12 @@ def send_Developer_Contacts(chat_id, language_Name):
     """
     Send developer contacts
     """
-    links_Keyboard = telebot.types.InlineKeyboardMarkup(row_width=2)
-    discord_Button = telebot.types.InlineKeyboardButton(text="Discord", url="https://discord.gg/Z4A4qdw")
-    vk_Button = telebot.types.InlineKeyboardButton(text="VK", url="https://vk.com/koteyk0o")
-    links_Keyboard.add(discord_Button, vk_Button)
+    links_Keyboard = telebot.types.InlineKeyboardMarkup(row_width=3)
+
+    for item in range(len(bot_Contacts)):
+        contact_Button = telebot.types.InlineKeyboardButton(text=bot_Contacts[item]["name"], url=bot_Contacts[item]["link"])
+        links_Keyboard.add(contact_Button)
+    
     spotify_Bot.send_message(chat_id, language_Vocabluary[language_Name]["chat_Messages"]["authorization"]["developer_Contacts"], parse_mode="Markdown", reply_markup=links_Keyboard)    
 
 

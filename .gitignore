@@ -12,3 +12,4 @@ bot_Database.db
 sqlite merge.txt
 curl.txt
 screenshots/psd/
+bot_Contacts.json
