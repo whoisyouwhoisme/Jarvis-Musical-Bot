@@ -71,11 +71,28 @@ The result of a successful WebHook connection will be the response:
 
 
 
-**4.** After that, run the **database_Creator.py** file which will create the sqlite3 database.
+**5.** Configure **bot_Contacts.json:**.
+```json
+[
+    {
+        "name": "LINK NAME 1",
+        "link": "LINK ADDRESS 1"
+    },
+    {
+        "name": "LINK NAME 2",
+        "link": "LINK ADDRESS 2"
+    }
+]
+```
+The data from this file is used when calling the **/contacts** command, the command displays contacts for communication with the developer. You can add multiple links.
 
 
 
-**5.** And just start the bot:
+**5.** After that, run the **database_Creator.py** file which will create the sqlite3 database.
+
+
+
+**6.** And just start the bot:
 
     $ python web_Server.py
 
