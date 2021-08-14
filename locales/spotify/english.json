@@ -182,7 +182,7 @@
         },
 
         "yourTops": {
-            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create *Top Songs* list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your *Top*.",
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create *Top Songs* list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your *Top*. \n\n*Legend:* \n*●* - New song / artist in Top \n*▲* - Listened more often \n*▼* - Listened less often",
 
             "select_Top_Time": "Over what period of time?",
 
@@ -234,7 +234,7 @@
         },
 
         "blocked_Tracks": {
-            "description": "In this section you can see which tracks are blocked in your Liked Songs section. \n\n*Spotify has algorithms to find a substitute for a blocked song, so if a song is on this list, it cannot be played at all.*",
+            "description": "In this section you can see which tracks are blocked in your Liked Songs section. \n\n*Spotify has algorithms to find a substitute for a blocked song, so if a song is on this list, it cannot be played at all.* \n\n*Legend:* \n*●* - New blocked song \n*■* - Song unblocked / removed from Your library",
 
             "message_Header": "List of your blocked songs <b>(Page {current_Page} of {total_Pages})</b> \n\nYour account country: <b>{user_Country}</b> \n\nNumber of blocked songs: <b>{blocked_Number} / {total_Number}</b>"
         },

@@ -461,6 +461,10 @@ def get_User_Blocked_Tracks(user_Unique_ID):
     if database_Blocked_Tracks:
         OLD_Blocked_Tracks = json.loads(database_Blocked_Tracks[0][1])
 
+        for index in range(len(OLD_Blocked_Tracks["items"])): #Correct all prefixes
+            if OLD_Blocked_Tracks["items"][index]["prefix"] != " ":
+                OLD_Blocked_Tracks["items"][index]["prefix"] = " "
+
         NEW_Blocked_Tracks["comparsion_Timestamp"] = OLD_Blocked_Tracks["creation_Timestamp"]
 
         OLD_URIS = [] #Changes are tracked by ID, so we make a list of the old selection
@@ -470,6 +474,15 @@ def get_User_Blocked_Tracks(user_Unique_ID):
         NEW_URIS = [] #New selection list
         for index in range(len(NEW_Blocked_Tracks["items"])):
             NEW_URIS.append(NEW_Blocked_Tracks["items"][index]["URI"])
+
+        for old_Item in range(len(OLD_URIS)): #If the track is unblocked / deleted from the library
+            if not OLD_URIS[old_Item] in NEW_URIS:
+                NEW_Blocked_Tracks["items"].append({
+                        "prefix":"■ ",
+                        "artists":OLD_Blocked_Tracks["items"][old_Item]["artists"],
+                        "name":OLD_Blocked_Tracks["items"][old_Item]["name"],
+                        "URI":OLD_Blocked_Tracks["items"][old_Item]["URI"]
+                    })
 
         for new_Item in range(len(NEW_URIS)):
             if not NEW_URIS[new_Item] in OLD_URIS:
