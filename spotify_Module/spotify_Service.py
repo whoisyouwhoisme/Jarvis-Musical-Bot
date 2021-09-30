@@ -451,7 +451,8 @@ def get_User_Blocked_Tracks(user_Unique_ID):
                             "prefix":" ",
                             "artists":user_Tracks["items"][track]["track"]["artists"][0]["name"],
                             "name":user_Tracks["items"][track]["track"]["name"],
-                            "URI":user_Tracks["items"][track]["track"]["uri"]
+                            "URI":user_Tracks["items"][track]["track"]["uri"],
+                            "still_Blocked":True
                         })
     
     NEW_Blocked_Tracks["blocked_Count"] = len(NEW_Blocked_Tracks["items"])
@@ -461,9 +462,12 @@ def get_User_Blocked_Tracks(user_Unique_ID):
     if database_Blocked_Tracks:
         OLD_Blocked_Tracks = json.loads(database_Blocked_Tracks[0][1])
 
-        for index in range(len(OLD_Blocked_Tracks["items"])): #Correct all prefixes
-            if OLD_Blocked_Tracks["items"][index]["prefix"] != " ":
+        for index in range(len(OLD_Blocked_Tracks["items"])): #Correct all prefixes, and delete outdated blocked tracks
+            if OLD_Blocked_Tracks["items"][index]["prefix"]:
                 OLD_Blocked_Tracks["items"][index]["prefix"] = " "
+
+            if not OLD_Blocked_Tracks["items"][index]["still_Blocked"]:
+                OLD_Blocked_Tracks["items"].pop(index)
 
         NEW_Blocked_Tracks["comparsion_Timestamp"] = OLD_Blocked_Tracks["creation_Timestamp"]
 
@@ -481,10 +485,11 @@ def get_User_Blocked_Tracks(user_Unique_ID):
                         "prefix":"■ ",
                         "artists":OLD_Blocked_Tracks["items"][old_Item]["artists"],
                         "name":OLD_Blocked_Tracks["items"][old_Item]["name"],
-                        "URI":OLD_Blocked_Tracks["items"][old_Item]["URI"]
+                        "URI":OLD_Blocked_Tracks["items"][old_Item]["URI"],
+                        "still_Blocked":False
                     })
 
-        for new_Item in range(len(NEW_URIS)):
+        for new_Item in range(len(NEW_URIS)): #If the new track blocked
             if not NEW_URIS[new_Item] in OLD_URIS:
                 NEW_Blocked_Tracks["items"][new_Item]["prefix"] = "● "
 

@@ -182,7 +182,7 @@
         },
 
         "yourTops": {
-            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create *Top Songs* list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your *Top*. \n\n*Legend:* \n*●* - New song / artist in Top \n*▲* - Listened more often \n*▼* - Listened less often",
+            "yourTops_Description": "In this section, you can find your *Top Artists*, and your *Top Songs* for a certain period of time. \n\nIf you create *Top Songs* list again a little later, you will see which songs you listened more often, less often, or which new songs appeared in your *Top*. \n\n*Legend:* \n* ●* - New song / artist in Top \n*▲* - Listened more often \n*▼* - Listened less often",
 
             "select_Top_Time": "Over what period of time?",
 
