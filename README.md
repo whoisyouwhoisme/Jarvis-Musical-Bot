@@ -1,7 +1,7 @@
 # Jarvis Telegram Musical Bot for Spotify
 This **Telegram** bot allows the user to authorize their **Spotify** account and get cool features.
 
-**[TRY IT!](https://t.me/JarvisMusicalBot "TRY IT!")**
+**(End-Of-Life)**
 
 Authorization practically does not collect any private data, except user nickname.
 
