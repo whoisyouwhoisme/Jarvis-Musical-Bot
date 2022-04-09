@@ -8,7 +8,7 @@ Authorization practically does not collect any private data, except user nicknam
 
 ## Its features:
 - Share the current song. You can share any song currently playing on your Spotify client. If your friend is logged into Jarvis, when your friend clicks on the "Play on Spotify" button in Telegram, your shared content will be added to his playing queue.
-- Share the current playback context. Jarvis automatically detects what is playing (album, artist, playlist) and allows you to share it with your friends. Also, when you click on the "Play on Spotify" button, the playback context will be played.
+- Share the current playback context. Jarvis automatically detects what is playing (album, artist, playlist) and allows you to share it with your friends.
 - Share the song using search. You can simply find the song through a search using inline mode while in any chat.
 - Super Shuffle. Spotify-alghoritms-less. Just shuffles songs from Liked Songs section many times.
 - Your Tops. Displays the tops of songs / artists for a certain period of time. Shows changes in the top, which tracks listened more often, less often, or what new tracks appeared in the tops. You can create a playlist from tops of top songs.
