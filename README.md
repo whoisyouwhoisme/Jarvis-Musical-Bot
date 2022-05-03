@@ -6,7 +6,7 @@ This **Telegram** bot allows the user to authorize their **Spotify** account and
 Authorization practically does not collect any private data, except user nickname.
 
 
-## Its features:
+## Features:
 - Share the current song. You can share any song currently playing on your Spotify client. If your friend is logged into Jarvis, when your friend clicks on the "Play on Spotify" button in Telegram, your shared content will be added to his playing queue.
 - Share the current playback context. Jarvis automatically detects what is playing (album, artist, playlist) and allows you to share it with your friends.
 - Share the song using search. You can simply find the song through a search using inline mode while in any chat.
