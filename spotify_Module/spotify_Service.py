@@ -462,12 +462,15 @@ def get_User_Blocked_Tracks(user_Unique_ID):
     if database_Blocked_Tracks:
         OLD_Blocked_Tracks = json.loads(database_Blocked_Tracks[0][1])
 
-        for index in range(len(OLD_Blocked_Tracks["items"])): #Correct all prefixes, and delete outdated blocked tracks
+        for index in range(len(OLD_Blocked_Tracks["items"])): #Correct all prefixes
             if OLD_Blocked_Tracks["items"][index]["prefix"]:
                 OLD_Blocked_Tracks["items"][index]["prefix"] = " "
 
+        index = 0
+        while index < len(OLD_Blocked_Tracks["items"]): #Delete outdated blocked tracks
             if not OLD_Blocked_Tracks["items"][index]["still_Blocked"]:
                 OLD_Blocked_Tracks["items"].pop(index)
+            index += 1
 
         NEW_Blocked_Tracks["comparsion_Timestamp"] = OLD_Blocked_Tracks["creation_Timestamp"]
 
@@ -928,8 +931,6 @@ def delete_Liked_Tracks(user_Unique_ID, tracks_To_Delete):
     tracks_IDs = []
     for track in range(len(tracks_To_Delete)):
         track_Item = tracks_To_Delete[track].split(":")
-        print(track_Item)
-        print(track_Item[-1])
 
         tracks_IDs.append(track_Item[-1]) #The song ID is at the end
 
